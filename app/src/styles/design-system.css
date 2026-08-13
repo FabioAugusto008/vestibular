@@ -1,0 +1,194 @@
+:root {
+  --color-bg: #f6f8fb;
+  --color-bg-subtle: #edf1f6;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8fafc;
+  --color-surface-muted: #f1f5f9;
+  --color-border: #d8e0ea;
+  --color-border-strong: #b8c5d6;
+  --color-primary: #092b57;
+  --color-primary-hover: #000c1f;
+  --color-secondary: #1765ff;
+  --color-text: #17212b;
+  --color-text-secondary: #475569;
+  --color-text-muted: #667085;
+  --color-success: #16825d;
+  --color-warning: #9a6700;
+  --color-danger: #b42318;
+  --color-focus: rgba(23, 101, 255, 0.2);
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 22px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.12);
+  --transition-fast: 140ms ease;
+  --transition-base: 220ms ease;
+}
+
+html.dark {
+  --color-bg: #0f1720;
+  --color-bg-subtle: #121c27;
+  --color-surface: #172331;
+  --color-surface-soft: #1a2837;
+  --color-surface-muted: #1d2b3a;
+  --color-border: #2d3f52;
+  --color-border-strong: #3f556b;
+  --color-primary: #85bff9;
+  --color-primary-hover: #b9d9ff;
+  --color-secondary: #3f8cff;
+  --color-text: #f8fafc;
+  --color-text-secondary: #c7d2de;
+  --color-text-muted: #93a4b5;
+  --color-focus: rgba(125, 181, 232, 0.22);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+[tabindex]:not([tabindex="-1"]) {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+.ds-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base), color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.ds-button:hover {
+  transform: translateY(-1px);
+}
+
+.ds-button:active {
+  transform: translateY(0);
+}
+
+.ds-button-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: #ffffff;
+}
+
+.ds-button-secondary {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.ds-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+}
+
+.ds-input:hover {
+  border-color: var(--color-border-strong);
+}
+
+.ds-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ds-alert {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  padding: 0.85rem 1rem;
+}
+
+.ds-alert-success {
+  border-color: rgba(22, 130, 93, 0.24);
+  background: rgba(22, 130, 93, 0.08);
+  color: var(--color-success);
+}
+
+.ds-alert-error {
+  border-color: rgba(180, 35, 24, 0.24);
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--color-danger);
+}
+
+.ds-modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "EstudAI",
+  "short_name": "EstudAI",
+  "description": "EstudAI usa IA para analisar rotina e montar calendario de estudos. Exercicios vêm de uma base propria organizada.",
+  "version": "0.1.0-alpha",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#092b57",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "../src/assets/brand/estudai-mark-light.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../src/assets/icons/estudai-icon.svg",
+      "sizes": "1254x1254",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

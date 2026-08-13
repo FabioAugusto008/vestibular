@@ -1,0 +1,30 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local backups and generated archives
+backup/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+# Runtime storage
+storage/logs/*
+storage/cache/*
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep
+
+# v0 runtime files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+
+# Dependencies and build output
+node_modules
+.next/
+
+# OS/editor noise
+.DS_Store

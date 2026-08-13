@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EstudAI - Painel</title>
+<meta name="description" content="EstudAI e uma plataforma inteligente para organizacao, planejamento e acompanhamento da rotina de estudos.">
+<meta name="theme-color" content="#092b57">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../src/assets/brand/favicon.ico" sizes="any">
+<link rel="icon" href="../src/assets/icons/estudai-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../src/assets/brand/estudai-mark-light.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/design-system.css">
+<link rel="stylesheet" href="../src/styles/app.css">
+
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo" aria-label="EstudAI">
+    <img class="logo-brand-img logo-brand-light" src="../src/assets/visual-identity/.png/Deitada%20modo%20claro%20sem%20fundo.png" alt="EstudAI">
+    <img class="logo-brand-img logo-brand-dark" src="../src/assets/visual-identity/.png/deitada%20modo%20escuro%20sem%20fundo.png" alt="" aria-hidden="true">
+  </div>
+  <div class="header-right">
+    <button class="btn-icon" onclick="toggleTheme()" title="Alternar tema" id="theme-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" id="theme-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    </button>
+    <button class="btn-icon" onclick="openSettings()" title="Configuracoes">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    </button>
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <span id="user-name-display">...</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+      Sair
+    </button>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-tab active" onclick="showSection('dashboard')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    </svg>
+    <span>Inicio</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('calendario')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    <span>Calendario</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('plano')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />
+    </svg>
+    <span>Plano</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('rotina')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7H5v12a2 2 0 002 2z" />
+    </svg>
+    <span>Rotina</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('exercicios')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h8l5 5v11a2 2 0 01-2 2z" />
+    </svg>
+    <span>Pratica</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('questoes')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <span>Questoes</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('revisao')" id="nav-revisao">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+    <span>Revisao</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('simulados')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+    </svg>
+    <span>Simulados</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('redacao')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L8.25 18.402 4.5 19.5l1.098-3.75L16.862 4.487z" />
+    </svg>
+    <span>Redacao</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('estatisticas')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+    <span>Estatisticas</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('conquistas')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+    </svg>
+    <span>Conquistas</span>
+  </button>
+  <button class="nav-tab" onclick="showSection('anotacoes')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    </svg>
+    <span>Anotacoes</span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" aria-label="Navegacao principal mobile">
+  <button class="mobile-nav-tab active" data-section="dashboard" onclick="showSection('dashboard')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10h14V10" />
+    </svg>
+    <span>Inicio</span>
+  </button>
+  <button class="mobile-nav-tab" data-section="calendario" onclick="showSection('calendario')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+    <span>Calendario</span>
+  </button>
+  <button class="mobile-nav-tab" data-section="rotina" onclick="showSection('rotina')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7H5v12a2 2 0 002 2z" />
+    </svg>
+    <span>Rotina</span>
+  </button>
+  <button class="mobile-nav-tab" data-section="redacao" onclick="showSection('redacao')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L8.25 18.402 4.5 19.5l1.098-3.75L16.862 4.487z" />
+    </svg>
+    <span>Redacao</span>
+  </button>
+  <button class="mobile-nav-tab" data-section="perfil" onclick="showSection('perfil')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 21a7.5 7.5 0 0115 0" />
+    </svg>
+    <span>Perfil</span>
+  </button>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <section id="sec-dashboard" class="section active">
+
+    <div class="dashboard-hero">
+      <div>
+        <p class="eyebrow">Organizador inteligente</p>
+        <h2 id="dashboard-greeting">Planeje, acompanhe e revise sua rotina de estudos</h2>
+        <p>O EstudAI usa IA para analisar sua rotina e montar seu calendario de estudos. A pratica usa questoes de uma base propria organizada por materia, conteudo e dificuldade.</p>
+      </div>
+      <div class="dashboard-hero-actions">
+        <button class="btn-primary" type="button" onclick="openOnboardingModal()">
+          Configurar perfil
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
+        <button class="btn-secondary" type="button" onclick="showSection('rotina')">
+          Ver rotina
+        </button>
+        <button class="btn-secondary" type="button" onclick="showSection('calendario')">
+          Abrir calendario
+        </button>
+        <button class="btn-secondary" type="button" onclick="showSection('estatisticas')">
+          Estatisticas detalhadas
+        </button>
+      </div>
+    </div>
+
+    <div id="streak-banner" class="streak-banner hidden">
+      <div class="streak-fire" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v4m0 0l3-3m-3 3L9 4m9 9a6 6 0 11-12 0c0-2.5 1.5-4.5 3.2-5.8.8 1.8 2.2 3.2 4.1 4.1A8.1 8.1 0 0018 13z" />
+        </svg>
+      </div>
+      <div class="streak-text">
+        <strong id="streak-val">0 dias seguidos!</strong>
+        <p>Continue assim para nao perder sua sequencia</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-icon accent">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="stat-dias" style="color:var(--accent)">-</div>
+        <div class="stat-label">Dias estudados</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="stat-acertos" style="color:var(--green)">-</div>
+        <div class="stat-label">Total de acertos</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </div>
+        <div class="stat-value" id="stat-pct" style="color:var(--blue)">-%</div>
+        <div class="stat-label">Taxa de acerto</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="stat-streak" style="color:var(--purple)">-</div>
+        <div class="stat-label">Streak atual</div>
+      </div>
+    </div>
+
+    <div class="notice-card warning hidden" id="estudai-profile-alert" role="status" aria-live="polite">
+      <div>
+        <strong>Complete seu perfil de estudo</strong>
+        <p>O diagnostico, o plano e as tarefas reais dependem do onboarding salvo no banco.</p>
+      </div>
+      <button class="btn-primary btn-sm" type="button" onclick="openOnboardingModal()">Completar perfil</button>
+    </div>
+
+    <div class="core-progress-grid" aria-live="polite">
+      <div class="core-card">
+        <span class="core-label">Perfil</span>
+        <strong id="core-perfil-status">Pendente</strong>
+        <small id="core-perfil-detail">Aguardando onboarding</small>
+      </div>
+      <div class="core-card">
+        <span class="core-label">Plano ativo</span>
+        <strong id="core-plano-status">Nao</strong>
+        <small id="core-plano-detail">Nenhum plano salvo</small>
+      </div>
+      <div class="core-card">
+        <span class="core-label">Tarefas da semana</span>
+        <strong id="core-tarefas-status">0/0</strong>
+        <small id="core-tempo-detail">0 min planejados</small>
+      </div>
+      <div class="core-card">
+        <span class="core-label">Conclusao semanal</span>
+        <strong id="core-conclusao-status">0%</strong>
+        <small id="core-atrasadas-detail">0 atrasadas</small>
+      </div>
+    </div>
+
+    <div class="dashboard-decision-grid">
+      <div class="card plan-summary-card">
+        <div class="section-card-header">
+          <div>
+            <h3 class="card-title" style="margin-bottom:0.35rem">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              Resumo da semana
+            </h3>
+            <p class="text-muted" id="dashboard-week-summary">Carregando progresso semanal...</p>
+          </div>
+        </div>
+        <div class="mini-metric-grid">
+          <div><span>Concluidas</span><strong id="dash-week-done">0</strong></div>
+          <div><span>Pendentes</span><strong id="dash-week-pending">0</strong></div>
+          <div><span>Atrasadas</span><strong id="dash-week-late">0</strong></div>
+          <div><span>Tempo</span><strong id="dash-week-time">0min</strong></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom:0.75rem">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Atalhos
+        </h3>
+        <div class="shortcut-grid">
+          <button class="shortcut-chip" type="button" onclick="showSection('rotina')">Rotina</button>
+          <button class="shortcut-chip" type="button" onclick="showSection('plano')">Plano</button>
+          <button class="shortcut-chip" type="button" onclick="showSection('calendario')">Calendario</button>
+          <button class="shortcut-chip" type="button" onclick="showSection('exercicios')">Pratica</button>
+          <button class="shortcut-chip" type="button" onclick="showSection('revisao')">Revisao</button>
+          <button class="shortcut-chip" type="button" onclick="showSection('simulados')">Simulados</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card ai-suggestion-card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" />
+            </svg>
+            Sugestao da IA
+          </h3>
+          <p class="text-muted" id="dashboard-ai-suggestion">Complete o perfil e gere um plano para receber uma proxima acao clara.</p>
+        </div>
+        <button class="btn-secondary btn-sm" type="button" onclick="showSection('calendario')">Ver calendario</button>
+      </div>
+    </div>
+
+    <div class="card study-profile-card" id="study-profile-card">
+      <div>
+        <h3 class="card-title" style="margin-bottom:0.4rem">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h7M4 6h.01M4 12h.01M4 18h.01" />
+          </svg>
+          Perfil de estudo
+        </h3>
+        <p class="text-muted" id="study-profile-summary">Responda ao onboarding para preparar diagnostico, plano de estudos e rotina personalizada.</p>
+      </div>
+      <button class="btn-secondary btn-sm" type="button" onclick="openOnboardingModal()">Atualizar perfil</button>
+    </div>
+
+    <div class="card diagnostic-card" id="diagnostic-card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Diagnostico do Estudante
+          </h3>
+          <p class="text-muted" id="diagnostic-summary">Gere um diagnostico depois de salvar o perfil.</p>
+        </div>
+        <button class="btn-primary btn-sm" id="btn-gerar-diagnostico" type="button" onclick="gerarDiagnostico()">Gerar diagnostico com IA</button>
+      </div>
+      <div id="diagnostic-content" class="structured-content empty">
+        <p class="text-muted">Nenhum diagnostico gerado ainda.</p>
+      </div>
+    </div>
+
+    <div class="card plan-summary-card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />
+            </svg>
+            Plano ativo e proxima tarefa
+          </h3>
+          <p class="text-muted" id="dashboard-plan-summary">Nenhum plano ativo ainda.</p>
+        </div>
+        <button class="btn-secondary btn-sm" type="button" onclick="showSection('plano')">Abrir plano</button>
+      </div>
+      <div id="dashboard-next-task" class="next-task-box">
+        <span class="text-muted">Gere um plano para criar tarefas reais.</span>
+      </div>
+    </div>
+
+    <div class="card routine-summary-card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7H5v12a2 2 0 002 2z" />
+            </svg>
+            Estudo do dia
+          </h3>
+          <p class="text-muted" id="dashboard-routine-summary">Carregando tarefas de hoje...</p>
+        </div>
+        <button class="btn-secondary btn-sm" type="button" onclick="showSection('rotina')">Ver rotina</button>
+      </div>
+    </div>
+
+    <!-- Meta Semanal -->
+    <div class="card meta-card" id="meta-card">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="card-title" style="margin-bottom:0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+          Meta Semanal
+        </h3>
+        <button class="btn-secondary btn-sm" onclick="openMetaModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Ajustar
+        </button>
+      </div>
+      <div class="meta-progress">
+        <div class="meta-progress-fill" id="meta-progress" style="width:0%"></div>
+      </div>
+      <div class="meta-stats">
+        <span><strong id="meta-feitas">0</strong> de <strong id="meta-total">100</strong> questoes</span>
+        <span id="meta-pct">0%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Progresso de hoje
+      </h3>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">
+            <span class="dot" style="background:var(--mat-clr)"></span>
+            Matematica
+          </span>
+          <span class="progress-val" id="prog-mat-txt" style="color:var(--mat-clr)">0/10</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog-mat" style="width:0%;background:var(--mat-clr)"></div>
+        </div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">
+            <span class="dot" style="background:var(--por-clr)"></span>
+            Portugues
+          </span>
+          <span class="progress-val" id="prog-por-txt" style="color:var(--por-clr)">0/10</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog-por" style="width:0%;background:var(--por-clr)"></div>
+        </div>
+      </div>
+      <div class="mt-2 flex gap-2 flex-wrap">
+        <button class="btn-primary" onclick="showSection('questoes')">
+          <span id="dash-btn-txt">Comecar questoes</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
+        <button class="btn-secondary" onclick="showSection('revisao')" id="btn-revisao">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span id="revisao-count">Revisao</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Historico Resumido -->
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Ultimos dias
+      </h3>
+      <div id="hist-list">
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p>Carregando...</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CALENDARIO -->
+  <section id="sec-calendario" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Calendario</p>
+      <h2>Plano por data</h2>
+      <p>Veja tarefas, pratica com questoes, revisoes e simulados derivados do plano salvo.</p>
+    </div>
+
+    <div class="card calendar-shell">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span id="calendar-title">Calendario</span>
+          </h3>
+          <p class="text-muted" id="calendar-status">Carregando eventos...</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn-secondary btn-sm" type="button" onclick="calendarPrevMonth()">Anterior</button>
+          <button class="btn-secondary btn-sm" type="button" onclick="calendarToday()">Hoje</button>
+          <button class="btn-secondary btn-sm" type="button" onclick="calendarNextMonth()">Proximo</button>
+        </div>
+      </div>
+
+      <div class="calendar-filters" id="calendar-filters" aria-label="Filtros do calendario">
+        <label><input type="checkbox" value="teoria" checked onchange="renderCalendar()"> Teoria</label>
+        <label><input type="checkbox" value="exercicio" checked onchange="renderCalendar()"> Questoes</label>
+        <label><input type="checkbox" value="revisao" checked onchange="renderCalendar()"> Revisao</label>
+        <label><input type="checkbox" value="simulado" checked onchange="renderCalendar()"> Simulado</label>
+        <label><input type="checkbox" value="resumo" checked onchange="renderCalendar()"> Resumo</label>
+        <label><input type="checkbox" value="concluido" checked onchange="renderCalendar()"> Concluidas</label>
+        <label><input type="checkbox" value="atrasado" checked onchange="renderCalendar()"> Atrasadas</label>
+      </div>
+
+      <div class="calendar-layout">
+        <div class="calendar-board">
+          <div class="calendar-weekdays">
+            <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span><span>Dom</span>
+          </div>
+          <div id="calendar-grid" class="calendar-grid" aria-live="polite"></div>
+        </div>
+        <aside class="calendar-day-panel">
+          <div class="section-card-header">
+            <div>
+              <h3 id="calendar-day-title">Hoje</h3>
+              <p class="text-muted" id="calendar-day-summary">Selecione um dia para ver as atividades.</p>
+            </div>
+          </div>
+          <div id="calendar-day-events" class="task-list compact"></div>
+        </aside>
+      </div>
+
+      <div class="annual-strip">
+        <div class="section-card-header">
+          <h3 class="card-title" style="margin-bottom:0">Visao anual</h3>
+          <button class="btn-secondary btn-sm" type="button" onclick="loadCalendarYear()">Atualizar ano</button>
+        </div>
+        <div id="calendar-year-summary" class="year-summary-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUESTOES -->
+  <section id="sec-questoes" class="section">
+
+    <!-- Dots navigator -->
+    <div class="card" style="padding:1rem 1.25rem;">
+      <div class="dots-nav" id="dots-nav"></div>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <span class="text-muted" style="font-size:.85rem;" id="progress-txt">Carregando...</span>
+        <div class="timer-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="card" id="question-card">
+      <div class="question-meta" id="q-meta"></div>
+      <p class="question-text" id="q-enunciado">Carregando questao...</p>
+      <div class="options" id="q-options"></div>
+      
+      <!-- Anotacao inline -->
+      <div class="mt-2" id="anotacao-section" style="display:none;">
+        <button class="btn-secondary btn-sm" onclick="toggleAnotacao()" id="btn-anotacao">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Anotacao
+        </button>
+        <div class="mt-1 hidden" id="anotacao-box">
+          <textarea class="anotacao-textarea" id="anotacao-text" placeholder="Escreva sua anotacao sobre esta questao..."></textarea>
+          <div class="flex gap-1 mt-1">
+            <button class="btn-secondary btn-sm" onclick="salvarAnotacao()">Salvar</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="explanation" id="q-explanation"></div>
+      <div class="q-nav">
+        <button class="btn-nav" id="btn-prev" onclick="navigateQ(-1)" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Anterior
+        </button>
+        <button class="btn-finish" id="btn-finish" onclick="finalizarDia()" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Finalizar dia
+        </button>
+        <button class="btn-nav" id="btn-next" onclick="navigateQ(1)">
+          Proxima
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result card (hidden until finished) -->
+    <div class="card hidden" id="result-card">
+      <div class="result-hero">
+        <div class="result-icon" id="res-icon" aria-hidden="true"></div>
+        <div class="result-score" id="res-score">-/20</div>
+        <div class="result-feedback" id="res-feedback"></div>
+        <div class="result-chips">
+          <div class="result-chip chip-acerto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="res-acertos">0</span> acertos
+          </div>
+          <div class="result-chip chip-erro">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="res-erros">0</span> erros
+          </div>
+          <div class="result-chip chip-tempo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="res-tempo">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- REVISAO -->
+  <section id="sec-revisao" class="section">
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Modo Revisao
+      </h3>
+      <p class="text-muted mb-2">Revise as questoes que voce errou anteriormente para reforcar seu aprendizado.</p>
+      
+      <div class="tabs" id="revisao-tabs">
+        <button class="tab active" data-revisao="todas" onclick="loadRevisao('todas', this)">Todas</button>
+        <button class="tab" data-revisao="matematica" onclick="loadRevisao('matematica', this)">Matematica</button>
+        <button class="tab" data-revisao="portugues" onclick="loadRevisao('portugues', this)">Portugues</button>
+      </div>
+      
+      <div id="revisao-stats" class="flex gap-2 mb-2">
+        <span class="badge badge-mat" id="revisao-mat">0 matematica</span>
+        <span class="badge badge-por" id="revisao-por">0 portugues</span>
+      </div>
+    </div>
+    
+    <div id="revisao-content">
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p>Nenhuma questao para revisar. Continue praticando!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXERCICIOS -->
+  <section id="sec-exercicios" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Questoes</p>
+      <h2>Pratica vinculada ao plano</h2>
+      <p>A pratica vem da base aprovada de questoes e e reutilizada ao recarregar a pagina.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h8l5 5v11a2 2 0 01-2 2z" />
+            </svg>
+            Questoes da tarefa
+          </h3>
+          <p class="text-muted" id="exercises-status">Abra uma tarefa de questoes pela rotina ou calendario.</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn-secondary btn-sm" type="button" onclick="showSection('rotina')">Voltar a rotina</button>
+          <button class="btn-secondary btn-sm" type="button" onclick="regenerarExerciciosTarefa()">Gerar novamente</button>
+        </div>
+      </div>
+      <div id="exercises-content" class="exercise-list" aria-live="polite">
+        <div class="empty-state">
+          <p>Nenhuma tarefa selecionada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULADOS -->
+  <section id="sec-simulados" class="section">
+    <div class="card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Simulados do Plano
+          </h3>
+          <p class="text-muted" id="planned-sims-status">Carregando simulados vinculados ao plano...</p>
+        </div>
+        <button class="btn-secondary btn-sm" type="button" onclick="loadPlannedSimulados()">Atualizar</button>
+      </div>
+      <div id="planned-sims-list" class="task-list compact" aria-live="polite"></div>
+      <div id="planned-sim-active" class="hidden planned-sim-active"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+        </svg>
+        Simulados Disponiveis
+      </h3>
+      <p class="text-muted mb-2">Teste seus conhecimentos com simulados completos cronometrados.</p>
+    </div>
+    
+    <div class="grid-2" id="simulados-list">
+      <div class="empty-state">
+        <p>Carregando simulados...</p>
+      </div>
+    </div>
+    
+    <!-- Simulado em andamento -->
+    <div id="simulado-active" class="hidden">
+      <div class="card" style="padding:1rem 1.25rem;">
+        <div class="flex items-center justify-between flex-wrap gap-1">
+          <h3 class="card-title" style="margin-bottom:0" id="simulado-titulo">Simulado</h3>
+          <div class="timer-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="simulado-timer">00:00</span>
+          </div>
+        </div>
+        <div class="dots-nav mt-1" id="simulado-dots"></div>
+        <span class="text-muted" style="font-size:.85rem;" id="simulado-progress">0/0 respondidas</span>
+      </div>
+      
+      <div class="card" id="simulado-question">
+        <div class="question-meta" id="sim-q-meta"></div>
+        <p class="question-text" id="sim-q-enunciado">Carregando...</p>
+        <div class="options" id="sim-q-options"></div>
+        <div class="explanation hidden" id="sim-q-explanation"></div>
+        <div class="q-nav">
+          <button class="btn-nav" id="sim-btn-prev" onclick="navigateSimulado(-1)" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Anterior
+          </button>
+          <button class="btn-finish" id="sim-btn-finish" onclick="finalizarSimulado()" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+            Finalizar
+          </button>
+          <button class="btn-nav" id="sim-btn-next" onclick="navigateSimulado(1)">
+            Proxima
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="card hidden" id="simulado-result">
+        <div class="result-hero">
+          <div class="result-icon" id="sim-res-icon" aria-hidden="true"></div>
+          <div class="result-score" id="sim-res-score">-/-</div>
+          <div class="result-feedback" id="sim-res-feedback"></div>
+          <div class="result-chips">
+            <div class="result-chip chip-acerto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span id="sim-res-acertos">0</span> acertos
+            </div>
+            <div class="result-chip chip-erro">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span id="sim-res-erros">0</span> erros
+            </div>
+            <div class="result-chip chip-tempo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span id="sim-res-tempo">-</span>
+            </div>
+          </div>
+          <div class="mt-2">
+            <button class="btn-secondary" onclick="voltarSimulados()">Voltar aos simulados</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTATISTICAS -->
+  <section id="sec-estatisticas" class="section">
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-icon accent">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="est-total" style="color:var(--accent)">-%</div>
+        <div class="stat-label">Progresso da semana</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="est-acertos" style="color:var(--green)">-</div>
+        <div class="stat-label">Tarefas concluidas</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="est-dias" style="color:var(--blue)">-%</div>
+        <div class="stat-label">Taxa de acerto</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+          </svg>
+        </div>
+        <div class="stat-value" id="est-questoes-respondidas" style="color:var(--purple)">-</div>
+        <div class="stat-label">Questoes respondidas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value stat-value-text" id="est-proximo-foco" style="color:var(--accent)">-</div>
+        <div class="stat-label">Proximo foco</div>
+      </div>
+    </div>
+
+    <details class="details-panel stats-details">
+      <summary>Estatisticas detalhadas</summary>
+
+    <div class="stats-grid stats-grid-secondary">
+      <div class="stat-card">
+        <div class="stat-value" id="est-erros" style="color:var(--red)">-</div>
+        <div class="stat-label">Erros</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-pct-geral" style="color:var(--accent)">-%</div>
+        <div class="stat-label">Percentual geral</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-tarefas" style="color:var(--green)">-</div>
+        <div class="stat-label">Tarefas concluidas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-atrasadas" style="color:var(--red)">-</div>
+        <div class="stat-label">Tarefas atrasadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-simulados" style="color:var(--blue)">-</div>
+        <div class="stat-label">Simulados finalizados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-tempo-planejado" style="color:var(--purple)">-</div>
+        <div class="stat-label">Tempo planejado</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-tempo-realizado" style="color:var(--green)">-</div>
+        <div class="stat-label">Tempo realizado</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="est-progresso-semanal" style="color:var(--accent)">-%</div>
+        <div class="stat-label">Progresso semanal</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          Por Materia
+        </h3>
+        <div class="stat-row">
+          <span class="stat-row-label">
+            <span class="dot" style="width:10px;height:10px;background:var(--mat-clr);border-radius:50%"></span>
+            Matematica
+          </span>
+          <span class="stat-row-value" id="est-mat-pct" style="color:var(--mat-clr)">-%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-row-label">
+            <span class="dot" style="width:10px;height:10px;background:var(--por-clr);border-radius:50%"></span>
+            Portugues
+          </span>
+          <span class="stat-row-value" id="est-por-pct" style="color:var(--por-clr)">-%</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          Por Dificuldade
+        </h3>
+        <div class="stat-row">
+          <span class="stat-row-label">Facil</span>
+          <span class="stat-row-value" id="est-facil-pct" style="color:var(--green)">-%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-row-label">Medio</span>
+          <span class="stat-row-value" id="est-medio-pct" style="color:var(--accent)">-%</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-row-label">Dificil</span>
+          <span class="stat-row-value" id="est-dificil-pct" style="color:var(--red)">-%</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+        Evolucao (ultimos 14 dias)
+      </h3>
+      <div class="chart-container">
+        <div class="chart-bars" id="evolucao-chart"></div>
+      </div>
+    </div>
+
+    </details>
+  </section>
+
+  <!-- CONQUISTAS -->
+  <section id="sec-conquistas" class="section">
+    <div class="card">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="card-title" style="margin-bottom:0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Suas Conquistas
+        </h3>
+        <span class="badge badge-success" id="conquistas-count">0/0</span>
+      </div>
+      <p class="text-muted">Continue estudando para desbloquear mais conquistas!</p>
+      <div class="xp-strip">
+        <span>Nivel <strong id="conquistas-nivel">1</strong></span>
+        <span><strong id="conquistas-xp">0</strong> XP</span>
+      </div>
+    </div>
+    
+    <div class="conquista-grid" id="conquistas-grid">
+      <div class="empty-state">
+        <p>Carregando conquistas...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANOTACOES -->
+  <section id="sec-anotacoes" class="section">
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        Anotacoes de questoes
+      </h3>
+      <p class="text-muted mb-2">Veja todas as anotacoes que voce fez nas questoes.</p>
+    </div>
+    
+    <div id="anotacoes-list">
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        <p>Voce ainda nao fez nenhuma anotacao. Ao responder questoes, clique em "Anotacao" para adicionar notas!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANO -->
+  <section id="sec-plano" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Plano de estudos</p>
+      <h2>Organize a semana de estudos</h2>
+      <p>Plano semanal salvo no banco com tarefas e calendario. Questoes e simulados usam a base aprovada.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />
+            </svg>
+            Plano de Estudos
+          </h3>
+          <p class="text-muted" id="plan-status-text">Carregando plano ativo...</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn-secondary btn-sm" type="button" onclick="loadPlanoAtivo()">Atualizar</button>
+          <button class="btn-secondary btn-sm" type="button" onclick="openReplanModal()">Replanejar semana</button>
+          <button class="btn-primary btn-sm" id="btn-gerar-plano" type="button" onclick="gerarPlanoEstudos()">Gerar plano semanal</button>
+        </div>
+      </div>
+      <div id="plan-content" class="plan-content" aria-live="polite">
+        <div class="empty-state">
+          <p>Carregando plano...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROTINA -->
+  <section id="sec-rotina" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Rotina</p>
+      <h2>Tarefas de hoje</h2>
+      <p>Checklist real gerado a partir do plano salvo no banco.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7H5v12a2 2 0 002 2z" />
+            </svg>
+            Hoje
+          </h3>
+          <p class="text-muted" id="routine-status-text">Carregando tarefas...</p>
+        </div>
+        <button class="btn-secondary btn-sm" type="button" onclick="loadRotina()">Atualizar</button>
+      </div>
+      <div id="routine-today-list" class="task-list" aria-live="polite"></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Proximas tarefas
+        </h3>
+        <div id="routine-week-list" class="task-list compact" aria-live="polite"></div>
+      </div>
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M12 3a9 9 0 019 9m-2.64 6.36A9 9 0 013 12" />
+          </svg>
+          Atrasadas
+        </h3>
+        <div id="routine-late-list" class="task-list compact" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Concluidas recentemente
+      </h3>
+      <div id="routine-done-list" class="task-list compact" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- REDACAO -->
+  <section id="sec-redacao" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Redacao ENEM</p>
+      <h2>Escreva, revise e acompanhe sua evolucao</h2>
+      <p>Analise orientativa para apoiar seus estudos. Ela nao substitui corretor humano e nao representa correcao oficial.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h7M4 6h.01M4 12h.01M4 18h.01" />
+          </svg>
+          Competencias avaliadas
+        </h3>
+        <div class="structured-content">
+          <ul class="clean-list">
+            <li>C1: dominio da norma-padrao.</li>
+            <li>C2: compreensao do tema e repertorio.</li>
+            <li>C3: organizacao de argumentos.</li>
+            <li>C4: coesao e encadeamento textual.</li>
+            <li>C5: proposta de intervencao.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="card-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7 4h10a2 2 0 012 2v14l-7-3-7 3V6a2 2 0 012-2z" />
+          </svg>
+          Checklist antes de escrever
+        </h3>
+        <div class="checklist-grid">
+          <label><input type="checkbox"> Tese clara na introducao</label>
+          <label><input type="checkbox"> Dois argumentos desenvolvidos</label>
+          <label><input type="checkbox"> Repertorio pertinente</label>
+          <label><input type="checkbox"> Conectivos entre ideias</label>
+          <label><input type="checkbox"> Proposta com agente, acao, meio e finalidade</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-card-header">
+        <div>
+          <h3 class="card-title" style="margin-bottom:0.35rem">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L8.25 18.402 4.5 19.5l1.098-3.75L16.862 4.487z" />
+            </svg>
+            Tema e texto
+          </h3>
+          <p class="text-muted" id="redacao-status">Prepare um rascunho para receber sugestoes de melhoria.</p>
+        </div>
+        <div class="section-actions">
+          <button class="btn-secondary btn-sm" type="button" onclick="salvarRedacao()">Salvar rascunho</button>
+          <button class="btn-primary btn-sm" type="button" onclick="analisarRedacao()">Analise orientativa</button>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="redacao-tema">Tema</label>
+        <input class="input" id="redacao-tema" placeholder="Ex.: Desafios para democratizar o acesso a educacao no Brasil">
+      </div>
+      <div class="form-field">
+        <label for="redacao-texto">Redacao</label>
+        <textarea class="input textarea-large" id="redacao-texto" rows="12" placeholder="Digite sua redacao aqui..."></textarea>
+      </div>
+      <div id="redacao-analise" class="structured-content empty">
+        <p class="text-muted">A analise aparecera aqui com comentarios por competencia, pontos fortes e proximos passos.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Historico
+      </h3>
+      <div id="redacao-historico" class="task-list compact">
+        <div class="empty-state"><p>Nenhuma redacao salva ainda.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERFIL MOBILE -->
+  <section id="sec-perfil" class="section mobile-workflow-section">
+    <div class="mobile-screen-head">
+      <p class="eyebrow">Perfil</p>
+      <h2>Preferencias e conta</h2>
+      <p>Acesse configuracoes essenciais com controles maiores para toque.</p>
+    </div>
+
+    <div class="profile-panel">
+      <div class="profile-avatar" id="mobile-user-avatar">?</div>
+      <div>
+        <strong id="mobile-user-name">Estudante</strong>
+        <p class="text-muted" id="mobile-profile-study-summary">Conta conectada ao EstudAI</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 21a7.5 7.5 0 0115 0" />
+        </svg>
+        Perfil de estudo
+      </h3>
+      <div id="profile-study-details" class="structured-content">
+        <p class="text-muted">Complete o onboarding para salvar seu perfil no banco.</p>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button class="btn-secondary" onclick="openOnboardingModal()">Perfil de estudo</button>
+      <button class="btn-secondary" onclick="openSettings()">Abrir configuracoes</button>
+      <button class="btn-secondary" onclick="showSection('estatisticas')">Ver estatisticas</button>
+      <button class="btn-logout profile-logout" onclick="logout()">Sair da conta</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- MODAL META -->
+<div class="modal-overlay" id="modal-meta">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Definir Meta Semanal</h3>
+      <button class="modal-close" onclick="closeModal('modal-meta')">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted mb-2">Quantas questoes voce quer responder por semana?</p>
+      <input type="number" class="input" id="meta-input" value="100" min="10" max="500" step="10">
+      <p class="text-muted mt-1" style="font-size:0.8rem;">Minimo: 10 | Maximo: 500</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-meta')">Cancelar</button>
+      <button class="btn-primary" onclick="salvarMeta()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAREFA -->
+<div class="modal-overlay" id="modal-tarefa">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Editar tarefa</h3>
+      <button class="modal-close" onclick="closeModal('modal-tarefa')" aria-label="Fechar edicao de tarefa">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="task-edit-id">
+      <div class="form-field">
+        <label for="task-edit-title">Titulo</label>
+        <input class="input" id="task-edit-title" maxlength="160">
+      </div>
+      <div class="form-field">
+        <label for="task-edit-desc">Descricao</label>
+        <textarea class="input" id="task-edit-desc" rows="3" maxlength="1500"></textarea>
+      </div>
+      <div class="onboarding-grid">
+        <div class="form-field">
+          <label for="task-edit-date">Data</label>
+          <input type="date" class="input" id="task-edit-date">
+        </div>
+        <div class="form-field">
+          <label for="task-edit-start">Inicio</label>
+          <input type="time" class="input" id="task-edit-start">
+        </div>
+        <div class="form-field">
+          <label for="task-edit-end">Fim</label>
+          <input type="time" class="input" id="task-edit-end">
+        </div>
+        <div class="form-field">
+          <label for="task-edit-duration">Duracao</label>
+          <input type="number" min="5" max="720" class="input" id="task-edit-duration">
+        </div>
+        <div class="form-field">
+          <label for="task-edit-priority">Prioridade</label>
+          <select class="input" id="task-edit-priority">
+            <option value="baixa">Baixa</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-tarefa')">Cancelar</button>
+      <button class="btn-primary" onclick="salvarEdicaoTarefa()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REPLANEJAR -->
+<div class="modal-overlay" id="modal-replanejar">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Replanejar semana</h3>
+      <button class="modal-close" onclick="closeModal('modal-replanejar')" aria-label="Fechar replanejamento">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted mb-2">A IA ajusta rotina e planejamento, sem gerar questoes ou gabaritos.</p>
+      <div class="form-field">
+        <label for="replan-motivo">Motivo</label>
+        <select class="input" id="replan-motivo">
+          <option value="minha_rotina_mudou">Minha rotina mudou</option>
+          <option value="o_plano_ficou_pesado">O plano ficou pesado</option>
+          <option value="o_plano_ficou_leve">O plano ficou leve</option>
+          <option value="estou_atrasado">Estou atrasado</option>
+          <option value="quero_focar_em_outra_materia">Quero focar em outra materia</option>
+          <option value="outro_motivo">Outro motivo</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="replan-detalhes">Detalhes opcionais</label>
+        <textarea class="input" id="replan-detalhes" rows="3" maxlength="600" placeholder="Explique rapidamente o que mudou."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-replanejar')">Cancelar</button>
+      <button class="btn-primary" id="btn-replanejar" onclick="replanejarSemana()">Replanejar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ONBOARDING -->
+<div class="modal-overlay" id="modal-onboarding">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h3>Antes de gerar seu plano</h3>
+      <button class="modal-close" type="button" onclick="closeModal('modal-onboarding')" aria-label="Fechar onboarding">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted mb-2">Antes de gerar seu plano, precisamos entender sua rotina de estudos.</p>
+      <div id="onboarding-alert" class="form-alert" aria-live="polite"></div>
+
+      <div class="onboarding-steps-nav">
+        <button type="button" data-onb-step="0">Objetivo</button>
+        <button type="button" data-onb-step="1">Disponibilidade</button>
+        <button type="button" data-onb-step="2">Reforcos</button>
+        <button type="button" data-onb-step="3">Preferencias</button>
+        <button type="button" data-onb-step="4">Revisao</button>
+      </div>
+
+      <section class="onboarding-step active">
+        <div class="onboarding-step-card">
+          <h4>Objetivo</h4>
+          <div class="onboarding-grid">
+            <div class="form-field">
+              <label for="onb-objetivo">Qual e seu principal objetivo de estudo?</label>
+              <select class="input" id="onb-objetivo">
+                <option value="enem">ENEM</option>
+                <option value="vestibular">Vestibular</option>
+                <option value="prova_escolar">Prova escolar</option>
+                <option value="concurso">Concurso</option>
+                <option value="faculdade">Faculdade</option>
+                <option value="curso_tecnico">Curso tecnico</option>
+                <option value="habilidade">Aprender habilidade especifica</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="onb-data-prova">Voce tem uma data de prova ou meta?</label>
+              <input type="date" class="input" id="onb-data-prova">
+            </div>
+            <div class="form-field" id="onb-lingua-field">
+              <label for="onb-lingua">Lingua estrangeira</label>
+              <select class="input" id="onb-lingua">
+                <option value="ingles">Ingles</option>
+                <option value="espanhol">Espanhol</option>
+              </select>
+            </div>
+            <div class="form-field hidden" id="onb-materias-field">
+              <label for="onb-materias-manuais">Materias, disciplinas ou conteudos</label>
+              <input type="text" class="input" id="onb-materias-manuais" placeholder="Ex.: matematica, historia, programacao">
+            </div>
+          </div>
+          <p class="text-muted">No modo ENEM, as materias entram automaticamente. Voce so escolhe os reforcos.</p>
+          <div class="chip-row mt-1" id="onb-materias-base-list"></div>
+        </div>
+      </section>
+
+      <section class="onboarding-step">
+        <div class="onboarding-step-card">
+          <h4>Disponibilidade</h4>
+          <p class="text-muted">Selecione os dias e informe horarios reais de inicio e fim.</p>
+          <div class="choice-grid" id="onb-dias">
+            <label><input type="checkbox" value="segunda"> Segunda</label>
+            <label><input type="checkbox" value="terca"> Terca</label>
+            <label><input type="checkbox" value="quarta"> Quarta</label>
+            <label><input type="checkbox" value="quinta"> Quinta</label>
+            <label><input type="checkbox" value="sexta"> Sexta</label>
+            <label><input type="checkbox" value="sabado"> Sabado</label>
+            <label><input type="checkbox" value="domingo"> Domingo</label>
+          </div>
+          <div class="schedule-list" id="onb-horarios"></div>
+        </div>
+      </section>
+
+      <section class="onboarding-step">
+        <div class="onboarding-step-card">
+          <h4>Onde voce precisa de mais reforco?</h4>
+          <p class="text-muted">Normal mantem a materia na grade. Medio e alto aumentam aparicoes sem excluir o restante.</p>
+          <div class="reinforcement-list" id="onb-reforcos-list"></div>
+          <div class="form-field mt-1">
+            <label for="onb-conteudos-reforco">Conteudos especificos de reforco</label>
+            <input type="text" class="input" id="onb-conteudos-reforco" placeholder="Ex.: funcoes, interpretacao, cinetica">
+          </div>
+          <p class="text-muted">A IA identificara seu nivel conforme voce concluir tarefas, responder questoes, fazer revisoes e simulados.</p>
+        </div>
+      </section>
+
+      <section class="onboarding-step">
+        <div class="onboarding-step-card">
+          <h4>Preferencias</h4>
+          <div class="onboarding-grid">
+            <div class="form-field">
+              <label for="onb-intensidade">Intensidade</label>
+              <select class="input" id="onb-intensidade">
+                <option value="ia">Deixe a IA decidir</option>
+                <option value="leve">Leve</option>
+                <option value="moderada">Moderada</option>
+                <option value="intensa">Intensa</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="onb-exercicios-dia">Questoes por dia</label>
+              <select class="input" id="onb-exercicios-dia">
+                <option value="ia">Sugerido pelo plano</option>
+                <option value="3_5">3 a 5</option>
+                <option value="6_10">6 a 10</option>
+                <option value="11_20">11 a 20</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="onb-frequencia-simulados">Frequencia de simulados</label>
+              <select class="input" id="onb-frequencia-simulados">
+                <option value="ia">Sugerido pelo plano</option>
+                <option value="quando_liberar">Quando o plano liberar</option>
+                <option value="semanal">Semanal</option>
+                <option value="quinzenal">Quinzenal</option>
+                <option value="mensal">Mensal</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="onb-preferencia">Formato preferido</label>
+              <select class="input" id="onb-preferencia">
+                <option value="misto">Misto</option>
+                <option value="questoes">Questoes</option>
+                <option value="teoria">Teoria</option>
+                <option value="revisao">Revisao</option>
+                <option value="resumo">Resumo</option>
+                <option value="ia">Deixe a IA decidir</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Principais obstaculos</label>
+            <div class="choice-grid" id="onb-obstaculos">
+              <label><input type="checkbox" value="procrastinacao"> Procrastinacao</label>
+              <label><input type="checkbox" value="falta_foco"> Falta de foco</label>
+              <label><input type="checkbox" value="falta_tempo"> Falta de tempo</label>
+              <label><input type="checkbox" value="cansaco"> Cansaco</label>
+              <label><input type="checkbox" value="ansiedade_pre_prova"> Ansiedade pre-prova</label>
+              <label><input type="checkbox" value="teoria"> Dificuldade em teoria</label>
+              <label><input type="checkbox" value="exercicios"> Dificuldade em questoes</label>
+              <label><input type="checkbox" value="rotina"> Falta de rotina</label>
+              <label><input type="checkbox" value="celular"> Uso excessivo de celular</label>
+            </div>
+          </div>
+          <div class="onboarding-grid">
+            <div class="form-field">
+              <label for="onb-meta-semanal">Meta semanal opcional</label>
+              <input type="text" class="input" id="onb-meta-semanal" placeholder="Ex.: manter 4 dias de estudo">
+            </div>
+            <div class="form-field">
+              <label for="onb-informacao-livre">Informacao final livre</label>
+              <textarea class="input" id="onb-informacao-livre" rows="3" maxlength="1200" placeholder="Conte algo que ajude a IA a montar uma semana realista."></textarea>
+            </div>
+          </div>
+          <label class="routine-item onboarding-toggle">
+            <input type="checkbox" id="onb-notificacoes">
+            <span>
+              <strong>Quero lembretes de estudo</strong>
+              <small>A permissao real de notificacao sera solicitada apenas em uma etapa futura.</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section class="onboarding-step">
+        <div class="onboarding-step-card">
+          <h4>Revisao final</h4>
+          <div id="onb-review"></div>
+        </div>
+      </section>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="onboarding-prev-btn" type="button" onclick="prevOnboardingStep()">Voltar</button>
+      <button class="btn-primary" id="onboarding-next-btn" type="button" onclick="nextOnboardingStep()">Continuar</button>
+      <button class="btn-primary hidden" id="onboarding-save-btn" type="button" onclick="saveOnboarding()">Salvar perfil e gerar plano</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SETTINGS -->
+<div class="modal-overlay" id="modal-settings">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Configuracoes</h3>
+      <button class="modal-close" onclick="closeModal('modal-settings')">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-section">
+        <div class="settings-title">Aparencia</div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Tema escuro</h4>
+            <p>Alterna entre tema claro e escuro</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-theme" checked onchange="handleThemeChange()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <div class="settings-title">Notificacoes</div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Lembrete diario</h4>
+            <p>Receba um lembrete para estudar</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-notif" onchange="handleNotifChange()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item" id="horario-setting" style="display:none;">
+          <div class="setting-info">
+            <h4>Horario do lembrete</h4>
+            <p>Escolha o melhor horario</p>
+          </div>
+          <div class="select-wrapper">
+            <select class="select" id="setting-horario" onchange="handleHorarioChange()">
+              <option value="06:00">06:00</option>
+              <option value="07:00">07:00</option>
+              <option value="08:00" selected>08:00</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+              <option value="21:00">21:00</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../src/config/api.js"></script>
+<script src="../src/services/http.js"></script>
+<script src="../src/services/pwa.js"></script>
+<script src="../src/services/ia.js"></script>
+<script src="../src/pages/app.js"></script>
+</body>
+</html>
