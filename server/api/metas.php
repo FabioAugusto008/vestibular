@@ -9,6 +9,7 @@ header('Content-Type: application/json; charset=utf-8');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db     = getDB();
 $uid    = currentUserId();
+beginDashboardReadOnlyGet($db, ['carregar']);
 
 // Calcula início da semana (segunda-feira)
 function inicioSemana($data = null): string {
@@ -45,32 +46,11 @@ switch ($action) {
         $questoes_feitas = (int)$resultado['total'];
         $acertos = (int)$resultado['acertos'];
 
-        // Atualiza ou cria meta
-        if ($meta) {
-            // Atualiza progresso
-            $upd = $db->prepare("
-                UPDATE metas_semanais 
-                SET questoes_feitas = ?, acertos = ?, concluida = IF(? >= meta_questoes, 1, 0)
-                WHERE usuario_id = ? AND semana_inicio = ?
-            ");
-            $upd->execute([$questoes_feitas, $acertos, $questoes_feitas, $uid, $semana]);
-            $meta['questoes_feitas'] = $questoes_feitas;
-            $meta['acertos'] = $acertos;
-            $meta['concluida'] = $questoes_feitas >= $meta['meta_questoes'];
-        } else {
-            // Cria meta padrão
-            $ins = $db->prepare("
-                INSERT INTO metas_semanais (usuario_id, semana_inicio, meta_questoes, questoes_feitas, acertos)
-                VALUES (?, ?, 100, ?, ?)
-            ");
-            $ins->execute([$uid, $semana, $questoes_feitas, $acertos]);
-            $meta = [
-                'meta_questoes' => 100,
-                'questoes_feitas' => $questoes_feitas,
-                'acertos' => $acertos,
-                'concluida' => false
-            ];
-        }
+        // Compute current progress without persisting it during a read.
+        $meta = $meta ?: ['meta_questoes' => 100];
+        $meta['questoes_feitas'] = $questoes_feitas;
+        $meta['acertos'] = $acertos;
+        $meta['concluida'] = $questoes_feitas >= $meta['meta_questoes'];
 
         jsonResponse([
             'ok' => true,

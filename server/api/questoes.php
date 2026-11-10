@@ -10,6 +10,7 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db = getDB();
 $uid = currentUserId();
 $hoje = date('Y-m-d');
+beginDashboardReadOnlyGet($db, ['carregar']);
 
 function questoesDoDia(PDO $db, string $data): array {
     $stmt = $db->prepare("
@@ -48,7 +49,12 @@ try {
         jsonResponse(['erro' => 'Banco de questoes indisponivel. Aplique database/schema.sql.'], 503);
     }
 
-    gerarQuestoesDodia($hoje);
+    // Preserve preparation for existing authenticated POST flows, never for GET.
+    // Those writes remain blocked by the stage 07 HTTP allowlist.
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && in_array($action, ['responder', 'finalizar'], true)) {
+        validateCsrfToken();
+        gerarQuestoesDodia($hoje);
+    }
 
     switch ($action) {
         case 'carregar':
@@ -84,7 +90,7 @@ try {
                 'respondidas' => count($respostas),
                 'desempenho' => $desempenho ?: null,
                 'gabarito' => $gabarito,
-                'aviso' => count($questoes) < 20 ? 'Não encontramos questões suficientes para completar o treino de hoje ainda.' : null,
+                'aviso' => !$questoes ? 'O treino de hoje ainda nao foi preparado.' : (count($questoes) < 20 ? 'Não encontramos questões suficientes para completar o treino de hoje ainda.' : null),
             ]);
             break;
 

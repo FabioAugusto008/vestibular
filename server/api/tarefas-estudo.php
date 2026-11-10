@@ -10,6 +10,7 @@ date_default_timezone_set('America/Sao_Paulo');
 $db = getDB();
 $uid = currentUserId();
 $action = $_GET['action'] ?? $_POST['action'] ?? 'hoje';
+beginDashboardReadOnlyGet($db, ['hoje', 'semana', 'atrasadas', 'recentes']);
 
 function tarefasTempoExpr(PDO $db): string {
     return dbColumnExists($db, 'tarefas_estudo', 'tempo_estimado_min')

@@ -6,6 +6,8 @@
     appName: 'EstudAI',
     apiBase: API_BASE,
     csrfToken: '',
+    // Recovery stage 07: initial dashboard reads must not trigger writes or IA.
+    recovery: { readOnlyDashboard: true },
     pwa: {
       manifest: 'manifest.webmanifest',
       serviceWorker: 'sw.js'

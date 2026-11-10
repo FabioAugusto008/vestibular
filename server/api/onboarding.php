@@ -264,7 +264,7 @@ function onboardingLoadRespostas(PDO $db, int $uid): ?array {
         SELECT respostas_json
         FROM onboarding_respostas
         WHERE usuario_id = ?
-        ORDER BY concluido_em DESC, id DESC
+        ORDER BY criado_em DESC, id DESC
         LIMIT 1
     ');
     $stmt->execute([$uid]);

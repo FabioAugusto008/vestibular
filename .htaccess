@@ -1,0 +1,35 @@
+# Stage 07: authentication/onboarding and explicit dashboard GET actions only.
+Require local
+Options -Indexes -MultiViews
+
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
+RewriteRule ^server/api/(?:auth|onboarding)\.php$ - [F,END]
+RewriteRule ^server/api/(?:auth|onboarding)\.php$ - [END]
+
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=carregar(&|$)
+RewriteRule ^server/api/(?:preferencias|questoes|metas)\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} !(^|&)action=
+RewriteRule ^server/api/historico\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:estatisticas|carregar)(&|$)
+RewriteRule ^server/api/revisao\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=estudai_geral(&|$)
+RewriteRule ^server/api/estatisticas\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=listar(&|$)
+RewriteRule ^server/api/conquistas\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=carregar_ativo(&|$)
+RewriteRule ^server/api/plano-estudos\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:hoje|semana|atrasadas|recentes)(&|$)
+RewriteRule ^server/api/tarefas-estudo\.php$ - [END]
+RewriteRule !^app/(?:public|src)/ - [F,END]
+
+# These dot-prefixed directories contain existing visual identity assets.
+RewriteRule "(^|/)\.(?!png(?:/|$)|svg(?:/|$)|ico(?:/|$))" - [F,END,NC]
+RewriteRule "\.(?:php[0-9]?|phtml|phps|phar|sql|log|ini|conf|env|bak|backup|zip|tar|gz|7z|rar)(?:$|[./])" - [F,END,NC]

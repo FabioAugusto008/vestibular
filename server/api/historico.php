@@ -8,6 +8,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 $db  = getDB();
 $uid = currentUserId();
+beginDashboardReadOnlyGet($db, ['']);
 
 // ── HISTÓRICO DOS ÚLTIMOS 30 DIAS ─────────────────────────
 $hist = $db->prepare("

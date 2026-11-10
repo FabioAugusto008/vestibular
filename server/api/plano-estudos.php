@@ -10,6 +10,7 @@ header('Content-Type: application/json; charset=utf-8');
 $db = getDB();
 $uid = currentUserId();
 $action = $_GET['action'] ?? $_POST['action'] ?? (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' ? 'gerar' : 'carregar_ativo');
+beginDashboardReadOnlyGet($db, ['carregar_ativo']);
 
 function planoDecodeList($value): array {
     $decoded = json_decode((string)($value ?? ''), true);

@@ -10,6 +10,8 @@ const state = {
   timerInterval: null,
   timerSec: 0,
   theme: 'light',
+  sessionExpired: false,
+  moduleErrors: {},
   // Revisao
   revisaoQuestoes: [],
   revisaoIdx: 0,
@@ -192,10 +194,76 @@ function taskActionLabel(task) {
 // ====================================
 // INIT
 // ====================================
-(async function init() {
-  const r = await apiFetch(apiEndpoint('auth', 'action=status'));
-  const d = await r.json();
-  if (!d.logado) { window.location.href = 'index.html'; return; }
+function dashboardReadOnlyMode() {
+  return window.EstudAIConfig?.recovery?.readOnlyDashboard === true;
+}
+
+function redirectToLogin() {
+  if (state.sessionExpired) return;
+  state.sessionExpired = true;
+  window.location.href = 'index.html';
+}
+
+window.addEventListener('estudai:session-expired', redirectToLogin);
+
+function dashboardModuleUnavailable(name, error) {
+  if (error?.status === 401) { redirectToLogin(); return; }
+  state.moduleErrors[name] = true;
+  const fields = {
+    perfil: ['core-perfil-status', 'core-perfil-detail'],
+    questoes: ['prog-mat-txt', 'prog-por-txt', 'dash-btn-txt', 'q-enunciado'],
+    historico: ['stat-dias', 'stat-acertos', 'stat-pct', 'stat-streak'],
+    metas: ['meta-feitas', 'meta-total', 'meta-pct'],
+    revisao: ['revisao-count', 'revisao-mat', 'revisao-por'],
+    estatisticas: ['core-tarefas-status', 'core-tempo-detail', 'core-conclusao-status', 'core-atrasadas-detail', 'dashboard-week-summary', 'dash-week-done', 'dash-week-pending', 'dash-week-late', 'dash-week-time'],
+    conquistas: ['conquistas-count', 'conquistas-nivel', 'conquistas-xp']
+  };
+  (fields[name] || []).forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = 'Indisponivel';
+  });
+  if (name === 'historico') {
+    const list = document.getElementById('hist-list');
+    if (list) list.innerHTML = '<p class="text-muted">Historico indisponivel neste momento.</p>';
+  }
+}
+
+async function loadDashboardReadModules() {
+  const modules = [
+    ['preferencias', loadPreferencias], ['questoes', loadQuestoes],
+    ['historico', loadHistorico], ['metas', loadMeta], ['revisao', loadRevisaoStats],
+    ['estatisticas', loadEstudaiStats], ['plano', loadPlanoAtivo],
+    ['rotina', loadRotina], ['conquistas', loadConquistas]
+  ];
+  const results = await Promise.allSettled(modules.map(([name, load]) => Promise.resolve().then(() => {
+    delete state.moduleErrors[name];
+    return load();
+  })));
+  results.forEach((result, index) => {
+    if (result.status === 'rejected') dashboardModuleUnavailable(modules[index][0], result.reason);
+  });
+  if (state.sessionExpired) return false;
+  renderDashboardPlan();
+  renderDashboardRoutine();
+  if (Object.keys(state.moduleErrors).length) {
+    showToast('warning', 'Carregamento parcial', 'Alguns dados estao indisponiveis. As demais secoes continuam acessiveis.');
+  }
+  if (!dashboardReadOnlyMode()) await verificarConquistas();
+  return true;
+}
+
+async function initializeDashboard() {
+  let d;
+  try {
+    const r = await apiFetch(apiEndpoint('auth', 'action=status'));
+    d = await r.json();
+    if (!r.ok || !d.logado) { redirectToLogin(); return false; }
+    if (typeof d.nome !== 'string' || !d.nome.trim()) throw new Error('Sessao invalida.');
+  } catch (error) {
+    if (error.status === 401) redirectToLogin();
+    else showToast('error', 'Sessao indisponivel', 'Nao foi possivel verificar sua sessao. Recarregue para tentar novamente.');
+    return false;
+  }
 
   state.csrfToken = d.csrf_token || '';
   window.EstudAICsrfToken = state.csrfToken;
@@ -209,25 +277,22 @@ function taskActionLabel(task) {
   document.getElementById('mobile-user-name').textContent = d.nome;
   document.getElementById('mobile-user-avatar').textContent = d.nome[0].toUpperCase();
   setupRoutineChecklist();
-  await loadOnboarding();
+  const onboardingLoaded = await loadOnboarding();
+  if (state.sessionExpired) return false;
   setupOnboardingWizard();
 
-  if (!state.onboardingCompleto) {
+  if (onboardingLoaded && !state.onboardingCompleto) {
     renderOnboardingSummary();
     renderDashboardPlan();
     renderDashboardRoutine();
     openOnboardingModal(true);
-    return;
+    return true;
   }
 
-  await loadPreferencias();
-  await loadQuestoes();
-  await loadHistorico();
-  await loadMeta();
-  await loadRevisaoStats();
-  await loadEstudaiCore();
-  verificarConquistas();
-})();
+  return loadDashboardReadModules();
+}
+
+window.EstudAIDashboardReady = initializeDashboard();
 
 // ====================================
 // THEME
@@ -275,7 +340,7 @@ async function loadPreferencias() {
       document.getElementById('setting-horario').value = d.preferencias.horario_lembrete;
       document.getElementById('horario-setting').style.display = d.preferencias.notificacoes ? 'flex' : 'none';
     }
-  } catch (e) {}
+  } catch (e) { dashboardModuleUnavailable('preferencias', e); }
 }
 
 async function salvarPreferencias() {
@@ -343,12 +408,20 @@ function showSection(id) {
 
 function setupRoutineChecklist() {
   const items = document.querySelectorAll('#sec-rotina .routine-item input');
-  const saved = JSON.parse(localStorage.getItem('estudai:routine') || '{}');
+  let saved = {};
+  try {
+    const parsed = JSON.parse(localStorage.getItem('estudai:routine') || '{}');
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) saved = parsed;
+  } catch (error) {
+    // Keep the original local value; an unavailable/corrupt store must not stop init.
+    console.warn('Preferencias locais da rotina indisponiveis.');
+  }
   items.forEach((input, index) => {
     input.checked = !!saved[index];
     input.addEventListener('change', () => {
       saved[index] = input.checked;
-      localStorage.setItem('estudai:routine', JSON.stringify(saved));
+      try { localStorage.setItem('estudai:routine', JSON.stringify(saved)); }
+      catch (error) { console.warn('Nao foi possivel salvar a rotina local.'); }
     });
   });
 }
@@ -401,14 +474,17 @@ async function loadOnboarding() {
   try {
     const r = await apiFetch(apiEndpoint('onboarding', 'action=status'));
     const d = await r.json();
+    if (!d.ok) throw new Error('Perfil indisponivel.');
     state.onboardingCompleto = !!(d.ok && d.onboarding_completo);
+    delete state.moduleErrors.perfil;
     state.onboarding = state.onboardingCompleto ? normalizeOnboardingData(d.perfil) : null;
     if (state.onboarding) fillOnboardingForm(state.onboarding);
   } catch (e) {
-    state.onboardingCompleto = false;
-    state.onboarding = null;
+    dashboardModuleUnavailable('perfil', e);
+    return false;
   }
   renderOnboardingSummary();
+  return true;
 }
 
 function splitList(value) {
@@ -694,7 +770,7 @@ async function saveOnboarding() {
   const btn = document.getElementById('onboarding-save-btn');
   btn.disabled = true;
   btn.classList.add('loading-state');
-  setOnboardingAlert('Salvando perfil e preparando diagnostico...', 'info');
+  setOnboardingAlert(dashboardReadOnlyMode() ? 'Salvando perfil...' : 'Salvando perfil e preparando diagnostico...', 'info');
 
   try {
     const r = await apiFetch(apiEndpoint('onboarding', 'action=salvar'), {
@@ -710,14 +786,10 @@ async function saveOnboarding() {
     renderOnboardingSummary();
     closeModal('modal-onboarding');
     showToast('success', 'Perfil salvo', 'Agora gere seu plano semanal.');
-    try { await gerarDiagnostico(); } catch (e) {}
-    await loadPreferencias();
-    await loadQuestoes();
-    await loadHistorico();
-    await loadMeta();
-    await loadRevisaoStats();
-    await loadEstudaiCore();
-    verificarConquistas();
+    if (!dashboardReadOnlyMode()) {
+      try { await gerarDiagnostico(); } catch (e) {}
+    }
+    await loadDashboardReadModules();
     showSection('plano');
   } catch (e) {
     setOnboardingAlert(e.message || 'Erro ao salvar o perfil.', 'error');
@@ -806,7 +878,7 @@ function renderProfileDetails() {
 async function loadEstudaiCore() {
   await Promise.allSettled([
     loadEstudaiStats(),
-    loadDiagnosticoUltimo(),
+    ...(dashboardReadOnlyMode() ? [] : [loadDiagnosticoUltimo()]),
     loadPlanoAtivo(),
     loadRotina()
   ]);
@@ -820,7 +892,7 @@ async function loadEstudaiStats() {
       state.estudaiStats = d;
       renderEstudaiStats(d);
     }
-  } catch (e) {}
+  } catch (e) { dashboardModuleUnavailable('estatisticas', e); }
 }
 
 function renderEstudaiStats(d) {
@@ -829,8 +901,10 @@ function renderEstudaiStats(d) {
   const tarefas = d.tarefas || {};
   const tempo = d.tempo || {};
 
-  document.getElementById('core-perfil-status').textContent = perfil.tem_perfil ? 'Concluido' : 'Pendente';
-  document.getElementById('core-perfil-detail').textContent = perfil.tem_perfil ? 'Perfil salvo no banco' : 'Aguardando onboarding';
+  if (!state.moduleErrors.perfil) {
+    document.getElementById('core-perfil-status').textContent = perfil.tem_perfil ? 'Concluido' : 'Pendente';
+    document.getElementById('core-perfil-detail').textContent = perfil.tem_perfil ? 'Perfil salvo no banco' : 'Aguardando onboarding';
+  }
   document.getElementById('core-plano-status').textContent = plano.tem_plano_ativo ? 'Sim' : 'Nao';
   document.getElementById('core-plano-detail').textContent = plano.tem_plano_ativo ? (plano.titulo || 'Plano ativo') : 'Nenhum plano salvo';
   document.getElementById('core-tarefas-status').textContent = `${tarefas.concluidas_semana || 0}/${tarefas.total_semana || 0}`;
@@ -948,6 +1022,7 @@ async function loadPlanoAtivo() {
     renderPlano();
     renderDashboardPlan();
   } catch (e) {
+    dashboardModuleUnavailable('plano', e);
     renderPlano(e.message);
   }
 }
@@ -1097,6 +1172,7 @@ async function loadRotina() {
     renderRotina();
     renderDashboardRoutine();
   } catch (e) {
+    dashboardModuleUnavailable('rotina', e);
     renderRotina(e.message);
   }
 }
@@ -1205,6 +1281,12 @@ function renderDashboardPlan() {
   const next = document.getElementById('dashboard-next-task');
   if (!summary || !next) return;
 
+  if (state.moduleErrors.perfil || state.moduleErrors.plano) {
+    summary.textContent = 'Plano indisponivel neste momento.';
+    next.innerHTML = '<span class="text-muted">Nao foi possivel consultar o perfil ou plano agora.</span>';
+    return;
+  }
+
   if (!state.onboardingCompleto) {
     summary.textContent = 'Complete seu perfil de estudo.';
     next.innerHTML = '<strong>Complete seu perfil de estudo</strong><span>Antes de gerar seu plano, precisamos entender sua rotina de estudos.</span><button class="btn-primary btn-sm" type="button" onclick="openOnboardingModal(true)">Preencher formulario</button>';
@@ -1270,6 +1352,10 @@ function renderDashboardPlan() {
 function renderDashboardRoutine() {
   const summary = document.getElementById('dashboard-routine-summary');
   if (!summary) return;
+  if (state.moduleErrors.rotina) {
+    summary.textContent = 'Tarefas indisponiveis neste momento.';
+    return;
+  }
   const done = state.tarefasHoje.filter(task => task.status === 'concluida').length;
   summary.textContent = state.tarefasHoje.length
     ? `${done}/${state.tarefasHoje.length} tarefa${state.tarefasHoje.length === 1 ? '' : 's'} de hoje concluidas.`
@@ -2098,7 +2184,7 @@ async function loadQuestoes() {
     const options = document.getElementById('q-options');
     const progress = document.getElementById('progress-txt');
     if (questionText) questionText.textContent = d.aviso;
-    if (options) options.innerHTML = '<div class="empty-state"><p>A base de questoes ainda precisa ser alimentada para este treino.</p></div>';
+    if (options) options.innerHTML = '<div class="empty-state"><p>O treino de hoje ainda nao foi preparado.</p></div>';
     if (progress) progress.textContent = '0/0 respondidas';
   }
 }
@@ -2106,21 +2192,24 @@ async function loadQuestoes() {
 function updateDashboard(d) {
   const qs = d.questoes || [];
   const rs = d.respostas || {};
-  const mat = qs.filter(q => q.materia === 'matematica');
-  const por = qs.filter(q => q.materia === 'portugues');
+  const materiaKey = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const mat = qs.filter(q => materiaKey(q.materia) === 'matematica');
+  const por = qs.filter(q => materiaKey(q.materia) === 'portugues');
   const matResp = mat.filter(q => rs[q.id]).length;
   const porResp = por.filter(q => rs[q.id]).length;
 
-  document.getElementById('prog-mat').style.width = (matResp / 10 * 100) + '%';
-  document.getElementById('prog-por').style.width = (porResp / 10 * 100) + '%';
-  document.getElementById('prog-mat-txt').textContent = matResp + '/10';
-  document.getElementById('prog-por-txt').textContent = porResp + '/10';
+  document.getElementById('prog-mat').style.width = (mat.length ? matResp / mat.length * 100 : 0) + '%';
+  document.getElementById('prog-por').style.width = (por.length ? porResp / por.length * 100 : 0) + '%';
+  document.getElementById('prog-mat-txt').textContent = `${matResp}/${mat.length}`;
+  document.getElementById('prog-por-txt').textContent = `${porResp}/${por.length}`;
 
   const total = Object.keys(rs).length;
   if (d.finalizado) {
     document.getElementById('dash-btn-txt').textContent = 'Ver resultado';
   } else if (total > 0) {
-    document.getElementById('dash-btn-txt').textContent = `Continuar (${total}/20)`;
+    document.getElementById('dash-btn-txt').textContent = `Continuar (${total}/${qs.length})`;
+  } else if (!qs.length) {
+    document.getElementById('dash-btn-txt').textContent = 'Treino ainda nao preparado';
   }
 }
 
@@ -2324,9 +2413,9 @@ async function loadHistorico() {
   const d = await r.json();
 
   const t = d.totais || {};
-  const dias = t.dias_estudados || 0;
-  const acertos = t.total_acertos || 0;
-  const total = (acertos + (t.total_erros || 0)) || 1;
+  const dias = Number(t.dias_estudados) || 0;
+  const acertos = Number(t.total_acertos) || 0;
+  const total = (acertos + (Number(t.total_erros) || 0)) || 1;
   const pct = Math.round(acertos / total * 100);
 
   document.getElementById('stat-dias').textContent = dias;
@@ -2386,7 +2475,7 @@ async function loadMeta() {
         document.getElementById('meta-pct').innerHTML = '<span style="color:var(--green)">Concluida!</span>';
       }
     }
-  } catch (e) {}
+  } catch (e) { dashboardModuleUnavailable('metas', e); }
 }
 
 function openMetaModal() {
@@ -2427,7 +2516,7 @@ async function loadRevisaoStats() {
         }
       }
     }
-  } catch (e) {}
+  } catch (e) { dashboardModuleUnavailable('revisao', e); }
 }
 
 async function loadRevisao(materia, trigger) {
@@ -2925,7 +3014,7 @@ async function loadConquistas() {
       
       document.getElementById('conquistas-grid').innerHTML = html || '<p class="text-muted">Nenhuma conquista disponivel.</p>';
     }
-  } catch (e) {}
+  } catch (e) { dashboardModuleUnavailable('conquistas', e); }
 }
 
 async function verificarConquistas() {

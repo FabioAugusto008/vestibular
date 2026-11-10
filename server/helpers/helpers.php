@@ -55,11 +55,28 @@ function isAjax(): bool {
 }
 
 function jsonResponse(array $data, int $code = 200): void {
-    http_response_code($code);
+    // Apache needs an explicit status line for this nonstandard CSRF status.
+    if ($code === 419) {
+        header('HTTP/1.1 419 Page Expired');
+    } else {
+        http_response_code($code);
+    }
     header('Content-Type: application/json; charset=utf-8');
     header('X-Content-Type-Options: nosniff');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+function beginDashboardReadOnlyGet(PDO $db, array $allowedActions): void {
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+        return; // Existing POST handlers stay behind the HTTP recovery allowlist.
+    }
+    $action = $_GET['action'] ?? '';
+    if (!is_string($action) || !in_array($action, $allowedActions, true)) {
+        jsonResponse(['erro' => 'Acao de leitura nao autorizada nesta etapa.'], 403);
+    }
+    $db->exec('SET TRANSACTION READ ONLY');
+    $db->beginTransaction(); // Closing the request releases this read-only transaction.
 }
 
 function csrfToken(): string {

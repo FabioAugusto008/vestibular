@@ -4,19 +4,19 @@
 // Edite as credenciais abaixo conforme seu ambiente
 // ============================================================
 
-function envValue(string $key, string $default = ''): string {
+function envValue(string $key, string $default = '', bool $allowEmpty = false): string {
     static $dotenv = null;
 
     $value = getenv($key);
-    if ($value !== false && $value !== '') {
+    if ($value !== false && ($allowEmpty || $value !== '')) {
         return $value;
     }
 
-    if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
+    if (isset($_ENV[$key]) && ($allowEmpty || $_ENV[$key] !== '')) {
         return (string) $_ENV[$key];
     }
 
-    if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') {
+    if (isset($_SERVER[$key]) && ($allowEmpty || $_SERVER[$key] !== '')) {
         return (string) $_SERVER[$key];
     }
 
@@ -35,7 +35,7 @@ function envValue(string $key, string $default = ''): string {
         }
     }
 
-    if (isset($dotenv[$key]) && $dotenv[$key] !== '') {
+    if (isset($dotenv[$key]) && ($allowEmpty || $dotenv[$key] !== '')) {
         return (string) $dotenv[$key];
     }
 
@@ -81,7 +81,7 @@ if ($dbUrl !== '' && ($parsedUrl = parse_url($dbUrl))) {
     define('DB_PORT', envValue('DB_PORT', '3306'));
     define('DB_NAME', envValue('DB_NAME', 'vestibular_estudos'));
     define('DB_USER', envValue('DB_USER', 'root'));
-    define('DB_PASS', envValue('DB_PASS', 'root'));
+    define('DB_PASS', envValue('DB_PASS', 'root', true));
     define('DB_CHARSET', envValue('DB_CHARSET', 'utf8mb4'));
     define('DB_SSL', envValue('DB_SSL', 'false') === 'true');
 }

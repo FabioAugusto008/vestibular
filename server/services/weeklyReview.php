@@ -615,7 +615,7 @@ function estudaiWeeklyLatest(PDO $db, int $uid): ?array {
         SELECT *
         FROM revisoes_semanais_ia
         WHERE usuario_id = ?
-        ORDER BY executada_em DESC, id DESC
+        ORDER BY criado_em DESC, id DESC
         LIMIT 1
     ');
     $stmt->execute([$uid]);
@@ -628,7 +628,7 @@ function estudaiWeeklyLatest(PDO $db, int $uid): ?array {
         'plano_id' => $row['plano_id'] ? (int)$row['plano_id'] : null,
         'semana_inicio' => $row['semana_inicio'],
         'semana_fim' => $row['semana_fim'],
-        'executada_em' => $row['executada_em'],
+        'executada_em' => $row['criado_em'],
         'origem' => $row['origem'],
         'tarefas_total' => (int)$row['tarefas_total'],
         'tarefas_concluidas' => (int)$row['tarefas_concluidas'],

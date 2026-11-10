@@ -5,6 +5,10 @@ class OpenRouterRateLimitException extends RuntimeException {}
 function openrouterChatCompletion(array $messages, array $options = []): array {
     $config = require __DIR__ . '/../../config/openrouter.php';
 
+    if (empty($config['enabled'])) {
+        throw new RuntimeException('Chamadas de IA desativadas neste ambiente local.');
+    }
+
     if (!function_exists('curl_init')) {
         throw new RuntimeException('Extensao cURL do PHP nao esta habilitada.');
     }

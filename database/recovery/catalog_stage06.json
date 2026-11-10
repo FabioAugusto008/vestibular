@@ -1,0 +1,2363 @@
+{
+  "questoes_alternativas": [
+    {
+      "id": 1,
+      "letra": "A",
+      "texto": "informar que livros antigos perdem valor quando não são lidos.",
+      "correta": 0,
+      "questao_id": 1
+    },
+    {
+      "id": 2,
+      "letra": "B",
+      "texto": "defender que a leitura deve ser uma prática individual e silenciosa.",
+      "correta": 0,
+      "questao_id": 1
+    },
+    {
+      "id": 3,
+      "letra": "C",
+      "texto": "estimular a circulação de livros como forma de ampliar o acesso à leitura.",
+      "correta": 1,
+      "questao_id": 1
+    },
+    {
+      "id": 4,
+      "letra": "D",
+      "texto": "criticar leitores que preferem textos digitais a livros impressos.",
+      "correta": 0,
+      "questao_id": 1
+    },
+    {
+      "id": 5,
+      "letra": "E",
+      "texto": "explicar o processo de conservação de obras em bibliotecas.",
+      "correta": 0,
+      "questao_id": 1
+    },
+    {
+      "id": 6,
+      "letra": "A",
+      "texto": "referencial, pois apresenta dados científicos detalhados.",
+      "correta": 0,
+      "questao_id": 2
+    },
+    {
+      "id": 7,
+      "letra": "B",
+      "texto": "metalinguística, pois explica o significado da palavra água.",
+      "correta": 0,
+      "questao_id": 2
+    },
+    {
+      "id": 8,
+      "letra": "C",
+      "texto": "emotiva, pois revela sentimentos íntimos do emissor.",
+      "correta": 0,
+      "questao_id": 2
+    },
+    {
+      "id": 9,
+      "letra": "D",
+      "texto": "conativa, pois busca influenciar o comportamento do receptor.",
+      "correta": 1,
+      "questao_id": 2
+    },
+    {
+      "id": 10,
+      "letra": "E",
+      "texto": "poética, pois privilegia exclusivamente a sonoridade da mensagem.",
+      "correta": 0,
+      "questao_id": 2
+    },
+    {
+      "id": 11,
+      "letra": "A",
+      "texto": "Nós entregaremos o trabalho amanhã, pois estava difícil concluir tudo hoje.",
+      "correta": 1,
+      "questao_id": 3
+    },
+    {
+      "id": 12,
+      "letra": "B",
+      "texto": "A gente entregava o trabalho amanhã, porque fechou tudo hoje.",
+      "correta": 0,
+      "questao_id": 3
+    },
+    {
+      "id": 13,
+      "letra": "C",
+      "texto": "Nós entregaríamos o trabalho ontem, já que estava tudo concluído.",
+      "correta": 0,
+      "questao_id": 3
+    },
+    {
+      "id": 14,
+      "letra": "D",
+      "texto": "Eles entregarão o trabalho amanhã, porque estava fácil finalizar hoje.",
+      "correta": 0,
+      "questao_id": 3
+    },
+    {
+      "id": 15,
+      "letra": "E",
+      "texto": "A gente vai entregar o trabalho hoje, pois amanhã será difícil.",
+      "correta": 0,
+      "questao_id": 3
+    },
+    {
+      "id": 16,
+      "letra": "A",
+      "texto": "decoração neutra, sem relação com a experiência do espaço.",
+      "correta": 0,
+      "questao_id": 4
+    },
+    {
+      "id": 17,
+      "letra": "B",
+      "texto": "produto de luxo, restrito à observação distante do público.",
+      "correta": 0,
+      "questao_id": 4
+    },
+    {
+      "id": 18,
+      "letra": "C",
+      "texto": "ação que transforma o uso do espaço e provoca reflexão sobre convivência urbana.",
+      "correta": 1,
+      "questao_id": 4
+    },
+    {
+      "id": 19,
+      "letra": "D",
+      "texto": "reprodução fiel da natureza, sem intenção social ou política.",
+      "correta": 0,
+      "questao_id": 4
+    },
+    {
+      "id": 20,
+      "letra": "E",
+      "texto": "registro histórico de técnicas tradicionais de pintura.",
+      "correta": 0,
+      "questao_id": 4
+    },
+    {
+      "id": 21,
+      "letra": "A",
+      "texto": "descartar o cartão de embarque após a chegada.",
+      "correta": 0,
+      "questao_id": 5
+    },
+    {
+      "id": 22,
+      "letra": "B",
+      "texto": "manter o cartão de embarque pronto para apresentação.",
+      "correta": 1,
+      "questao_id": 5
+    },
+    {
+      "id": 23,
+      "letra": "C",
+      "texto": "solicitar um novo cartão antes de sair do aeroporto.",
+      "correta": 0,
+      "questao_id": 5
+    },
+    {
+      "id": 24,
+      "letra": "D",
+      "texto": "guardar a bagagem de mão no balcão de atendimento.",
+      "correta": 0,
+      "questao_id": 5
+    },
+    {
+      "id": 25,
+      "letra": "E",
+      "texto": "confirmar a reserva em outro terminal.",
+      "correta": 0,
+      "questao_id": 5
+    },
+    {
+      "id": 26,
+      "letra": "A",
+      "texto": "Arcadismo, pela idealização da vida pastoril.",
+      "correta": 0,
+      "questao_id": 6
+    },
+    {
+      "id": 27,
+      "letra": "B",
+      "texto": "Realismo, pela crítica aos comportamentos sociais e psicológicos.",
+      "correta": 1,
+      "questao_id": 6
+    },
+    {
+      "id": 28,
+      "letra": "C",
+      "texto": "Trovadorismo, pela valorização das cantigas medievais.",
+      "correta": 0,
+      "questao_id": 6
+    },
+    {
+      "id": 29,
+      "letra": "D",
+      "texto": "Quinhentismo, pela descrição da terra recém-encontrada.",
+      "correta": 0,
+      "questao_id": 6
+    },
+    {
+      "id": 30,
+      "letra": "E",
+      "texto": "Barroco, pela oposição religiosa entre céu e inferno apenas.",
+      "correta": 0,
+      "questao_id": 6
+    },
+    {
+      "id": 31,
+      "letra": "A",
+      "texto": "a exclusão dos alunos com menor desempenho esportivo.",
+      "correta": 0,
+      "questao_id": 7
+    },
+    {
+      "id": 32,
+      "letra": "B",
+      "texto": "a padronização do corpo ideal para todos.",
+      "correta": 0,
+      "questao_id": 7
+    },
+    {
+      "id": 33,
+      "letra": "C",
+      "texto": "a participação inclusiva e o respeito às diferenças corporais.",
+      "correta": 1,
+      "questao_id": 7
+    },
+    {
+      "id": 34,
+      "letra": "D",
+      "texto": "a eliminação de qualquer atividade física da rotina escolar.",
+      "correta": 0,
+      "questao_id": 7
+    },
+    {
+      "id": 35,
+      "letra": "E",
+      "texto": "a competição como único objetivo da educação física.",
+      "correta": 0,
+      "questao_id": 7
+    },
+    {
+      "id": 36,
+      "letra": "A",
+      "texto": "priorizar a aparência dos espaços em vez da educação ambiental.",
+      "correta": 0,
+      "questao_id": 8
+    },
+    {
+      "id": 37,
+      "letra": "B",
+      "texto": "limitar-se à compra de equipamentos de coleta seletiva.",
+      "correta": 0,
+      "questao_id": 8
+    },
+    {
+      "id": 38,
+      "letra": "C",
+      "texto": "associar infraestrutura a formação crítica sobre o ciclo dos resíduos.",
+      "correta": 1,
+      "questao_id": 8
+    },
+    {
+      "id": 39,
+      "letra": "D",
+      "texto": "substituir aulas de ciências por campanhas publicitárias.",
+      "correta": 0,
+      "questao_id": 8
+    },
+    {
+      "id": 40,
+      "letra": "E",
+      "texto": "responsabilizar apenas estudantes pela gestão municipal do lixo.",
+      "correta": 0,
+      "questao_id": 8
+    },
+    {
+      "id": 41,
+      "letra": "A",
+      "texto": "812",
+      "correta": 0,
+      "questao_id": 9
+    },
+    {
+      "id": 42,
+      "letra": "B",
+      "texto": "850",
+      "correta": 0,
+      "questao_id": 9
+    },
+    {
+      "id": 43,
+      "letra": "C",
+      "texto": "875",
+      "correta": 0,
+      "questao_id": 9
+    },
+    {
+      "id": 44,
+      "letra": "D",
+      "texto": "900",
+      "correta": 1,
+      "questao_id": 9
+    },
+    {
+      "id": 45,
+      "letra": "E",
+      "texto": "925",
+      "correta": 0,
+      "questao_id": 9
+    },
+    {
+      "id": 46,
+      "letra": "A",
+      "texto": "1 litro",
+      "correta": 0,
+      "questao_id": 10
+    },
+    {
+      "id": 47,
+      "letra": "B",
+      "texto": "2 litros",
+      "correta": 0,
+      "questao_id": 10
+    },
+    {
+      "id": 48,
+      "letra": "C",
+      "texto": "3 litros",
+      "correta": 1,
+      "questao_id": 10
+    },
+    {
+      "id": 49,
+      "letra": "D",
+      "texto": "5 litros",
+      "correta": 0,
+      "questao_id": 10
+    },
+    {
+      "id": 50,
+      "letra": "E",
+      "texto": "6 litros",
+      "correta": 0,
+      "questao_id": 10
+    },
+    {
+      "id": 51,
+      "letra": "A",
+      "texto": "V = 6x + 2,40",
+      "correta": 0,
+      "questao_id": 11
+    },
+    {
+      "id": 52,
+      "letra": "B",
+      "texto": "V = 2,40x + 6",
+      "correta": 1,
+      "questao_id": 11
+    },
+    {
+      "id": 53,
+      "letra": "C",
+      "texto": "V = 8,40x",
+      "correta": 0,
+      "questao_id": 11
+    },
+    {
+      "id": 54,
+      "letra": "D",
+      "texto": "V = 6 + x/2,40",
+      "correta": 0,
+      "questao_id": 11
+    },
+    {
+      "id": 55,
+      "letra": "E",
+      "texto": "V = 2,40 + 6x",
+      "correta": 0,
+      "questao_id": 11
+    },
+    {
+      "id": 56,
+      "letra": "A",
+      "texto": "7,0",
+      "correta": 0,
+      "questao_id": 12
+    },
+    {
+      "id": 57,
+      "letra": "B",
+      "texto": "7,2",
+      "correta": 0,
+      "questao_id": 12
+    },
+    {
+      "id": 58,
+      "letra": "C",
+      "texto": "7,4",
+      "correta": 0,
+      "questao_id": 12
+    },
+    {
+      "id": 59,
+      "letra": "D",
+      "texto": "7,6",
+      "correta": 1,
+      "questao_id": 12
+    },
+    {
+      "id": 60,
+      "letra": "E",
+      "texto": "8,0",
+      "correta": 0,
+      "questao_id": 12
+    },
+    {
+      "id": 61,
+      "letra": "A",
+      "texto": "39 m",
+      "correta": 0,
+      "questao_id": 13
+    },
+    {
+      "id": 62,
+      "letra": "B",
+      "texto": "78 m",
+      "correta": 1,
+      "questao_id": 13
+    },
+    {
+      "id": 63,
+      "letra": "C",
+      "texto": "180 m",
+      "correta": 0,
+      "questao_id": 13
+    },
+    {
+      "id": 64,
+      "letra": "D",
+      "texto": "360 m",
+      "correta": 0,
+      "questao_id": 13
+    },
+    {
+      "id": 65,
+      "letra": "E",
+      "texto": "720 m",
+      "correta": 0,
+      "questao_id": 13
+    },
+    {
+      "id": 66,
+      "letra": "A",
+      "texto": "350 m",
+      "correta": 0,
+      "questao_id": 14
+    },
+    {
+      "id": 67,
+      "letra": "B",
+      "texto": "3,5 km",
+      "correta": 1,
+      "questao_id": 14
+    },
+    {
+      "id": 68,
+      "letra": "C",
+      "texto": "35 km",
+      "correta": 0,
+      "questao_id": 14
+    },
+    {
+      "id": 69,
+      "letra": "D",
+      "texto": "350 km",
+      "correta": 0,
+      "questao_id": 14
+    },
+    {
+      "id": 70,
+      "letra": "E",
+      "texto": "3 500 km",
+      "correta": 0,
+      "questao_id": 14
+    },
+    {
+      "id": 71,
+      "letra": "A",
+      "texto": "5/12",
+      "correta": 0,
+      "questao_id": 15
+    },
+    {
+      "id": 72,
+      "letra": "B",
+      "texto": "7/12",
+      "correta": 1,
+      "questao_id": 15
+    },
+    {
+      "id": 73,
+      "letra": "C",
+      "texto": "1/3",
+      "correta": 0,
+      "questao_id": 15
+    },
+    {
+      "id": 74,
+      "letra": "D",
+      "texto": "3/5",
+      "correta": 0,
+      "questao_id": 15
+    },
+    {
+      "id": 75,
+      "letra": "E",
+      "texto": "2/7",
+      "correta": 0,
+      "questao_id": 15
+    },
+    {
+      "id": 76,
+      "letra": "A",
+      "texto": "18 questões",
+      "correta": 0,
+      "questao_id": 16
+    },
+    {
+      "id": 77,
+      "letra": "B",
+      "texto": "21 questões",
+      "correta": 0,
+      "questao_id": 16
+    },
+    {
+      "id": 78,
+      "letra": "C",
+      "texto": "24 questões",
+      "correta": 0,
+      "questao_id": 16
+    },
+    {
+      "id": 79,
+      "letra": "D",
+      "texto": "26 questões",
+      "correta": 1,
+      "questao_id": 16
+    },
+    {
+      "id": 80,
+      "letra": "E",
+      "texto": "29 questões",
+      "correta": 0,
+      "questao_id": 16
+    },
+    {
+      "id": 81,
+      "letra": "A",
+      "texto": "eutrofização",
+      "correta": 1,
+      "questao_id": 17
+    },
+    {
+      "id": 82,
+      "letra": "B",
+      "texto": "biomagnificação",
+      "correta": 0,
+      "questao_id": 17
+    },
+    {
+      "id": 83,
+      "letra": "C",
+      "texto": "sucessão primária",
+      "correta": 0,
+      "questao_id": 17
+    },
+    {
+      "id": 84,
+      "letra": "D",
+      "texto": "isolamento reprodutivo",
+      "correta": 0,
+      "questao_id": 17
+    },
+    {
+      "id": 85,
+      "letra": "E",
+      "texto": "seleção artificial",
+      "correta": 0,
+      "questao_id": 17
+    },
+    {
+      "id": 86,
+      "letra": "A",
+      "texto": "redução do pH por aumento da acidez.",
+      "correta": 0,
+      "questao_id": 18
+    },
+    {
+      "id": 87,
+      "letra": "B",
+      "texto": "neutralização parcial da acidez do solo.",
+      "correta": 1,
+      "questao_id": 18
+    },
+    {
+      "id": 88,
+      "letra": "C",
+      "texto": "transformação do solo em substância pura.",
+      "correta": 0,
+      "questao_id": 18
+    },
+    {
+      "id": 89,
+      "letra": "D",
+      "texto": "eliminação completa da matéria orgânica.",
+      "correta": 0,
+      "questao_id": 18
+    },
+    {
+      "id": 90,
+      "letra": "E",
+      "texto": "produção direta de glicose pelas raízes.",
+      "correta": 0,
+      "questao_id": 18
+    },
+    {
+      "id": 91,
+      "letra": "A",
+      "texto": "0,3 kWh",
+      "correta": 0,
+      "questao_id": 19
+    },
+    {
+      "id": 92,
+      "letra": "B",
+      "texto": "3 kWh",
+      "correta": 1,
+      "questao_id": 19
+    },
+    {
+      "id": 93,
+      "letra": "C",
+      "texto": "30 kWh",
+      "correta": 0,
+      "questao_id": 19
+    },
+    {
+      "id": 94,
+      "letra": "D",
+      "texto": "100 kWh",
+      "correta": 0,
+      "questao_id": 19
+    },
+    {
+      "id": 95,
+      "letra": "E",
+      "texto": "300 kWh",
+      "correta": 0,
+      "questao_id": 19
+    },
+    {
+      "id": 96,
+      "letra": "A",
+      "texto": "0%",
+      "correta": 0,
+      "questao_id": 20
+    },
+    {
+      "id": 97,
+      "letra": "B",
+      "texto": "25%",
+      "correta": 1,
+      "questao_id": 20
+    },
+    {
+      "id": 98,
+      "letra": "C",
+      "texto": "50%",
+      "correta": 0,
+      "questao_id": 20
+    },
+    {
+      "id": 99,
+      "letra": "D",
+      "texto": "75%",
+      "correta": 0,
+      "questao_id": 20
+    },
+    {
+      "id": 100,
+      "letra": "E",
+      "texto": "100%",
+      "correta": 0,
+      "questao_id": 20
+    },
+    {
+      "id": 101,
+      "letra": "A",
+      "texto": "destilação",
+      "correta": 0,
+      "questao_id": 21
+    },
+    {
+      "id": 102,
+      "letra": "B",
+      "texto": "filtração",
+      "correta": 1,
+      "questao_id": 21
+    },
+    {
+      "id": 103,
+      "letra": "C",
+      "texto": "evaporação",
+      "correta": 0,
+      "questao_id": 21
+    },
+    {
+      "id": 104,
+      "letra": "D",
+      "texto": "fusão",
+      "correta": 0,
+      "questao_id": 21
+    },
+    {
+      "id": 105,
+      "letra": "E",
+      "texto": "sublimação",
+      "correta": 0,
+      "questao_id": 21
+    },
+    {
+      "id": 106,
+      "letra": "A",
+      "texto": "30 km/h",
+      "correta": 0,
+      "questao_id": 22
+    },
+    {
+      "id": 107,
+      "letra": "B",
+      "texto": "45 km/h",
+      "correta": 0,
+      "questao_id": 22
+    },
+    {
+      "id": 108,
+      "letra": "C",
+      "texto": "60 km/h",
+      "correta": 1,
+      "questao_id": 22
+    },
+    {
+      "id": 109,
+      "letra": "D",
+      "texto": "90 km/h",
+      "correta": 0,
+      "questao_id": 22
+    },
+    {
+      "id": 110,
+      "letra": "E",
+      "texto": "240 km/h",
+      "correta": 0,
+      "questao_id": 22
+    },
+    {
+      "id": 111,
+      "letra": "A",
+      "texto": "diminuir a chegada de oxigênio ao sangue.",
+      "correta": 0,
+      "questao_id": 23
+    },
+    {
+      "id": 112,
+      "letra": "B",
+      "texto": "aumentar a oferta de oxigênio e a eliminação de gás carbônico.",
+      "correta": 1,
+      "questao_id": 23
+    },
+    {
+      "id": 113,
+      "letra": "C",
+      "texto": "interromper a circulação sanguínea nos músculos.",
+      "correta": 0,
+      "questao_id": 23
+    },
+    {
+      "id": 114,
+      "letra": "D",
+      "texto": "impedir a produção de ATP pelas células.",
+      "correta": 0,
+      "questao_id": 23
+    },
+    {
+      "id": 115,
+      "letra": "E",
+      "texto": "reduzir a atividade metabólica do organismo.",
+      "correta": 0,
+      "questao_id": 23
+    },
+    {
+      "id": 116,
+      "letra": "A",
+      "texto": "1:1",
+      "correta": 1,
+      "questao_id": 24
+    },
+    {
+      "id": 117,
+      "letra": "B",
+      "texto": "1:2",
+      "correta": 0,
+      "questao_id": 24
+    },
+    {
+      "id": 118,
+      "letra": "C",
+      "texto": "2:1",
+      "correta": 0,
+      "questao_id": 24
+    },
+    {
+      "id": 119,
+      "letra": "D",
+      "texto": "2:3",
+      "correta": 0,
+      "questao_id": 24
+    },
+    {
+      "id": 120,
+      "letra": "E",
+      "texto": "3:2",
+      "correta": 0,
+      "questao_id": 24
+    },
+    {
+      "id": 121,
+      "letra": "A",
+      "texto": "liberal-democrática, com ampla autonomia partidária.",
+      "correta": 0,
+      "questao_id": 25
+    },
+    {
+      "id": 122,
+      "letra": "B",
+      "texto": "autoritária, com centralização do poder e controle da informação.",
+      "correta": 1,
+      "questao_id": 25
+    },
+    {
+      "id": 123,
+      "letra": "C",
+      "texto": "anarquista, com ausência de Estado e de instituições públicas.",
+      "correta": 0,
+      "questao_id": 25
+    },
+    {
+      "id": 124,
+      "letra": "D",
+      "texto": "federalista radical, com independência total dos estados.",
+      "correta": 0,
+      "questao_id": 25
+    },
+    {
+      "id": 125,
+      "letra": "E",
+      "texto": "parlamentarista, com supremacia do Legislativo sobre o Executivo.",
+      "correta": 0,
+      "questao_id": 25
+    },
+    {
+      "id": 126,
+      "letra": "A",
+      "texto": "distribuição igualitária dos serviços urbanos.",
+      "correta": 0,
+      "questao_id": 26
+    },
+    {
+      "id": 127,
+      "letra": "B",
+      "texto": "segregação socioespacial e desigualdade de acesso à cidade.",
+      "correta": 1,
+      "questao_id": 26
+    },
+    {
+      "id": 128,
+      "letra": "C",
+      "texto": "eliminação da periferia pelo crescimento planejado.",
+      "correta": 0,
+      "questao_id": 26
+    },
+    {
+      "id": 129,
+      "letra": "D",
+      "texto": "redução da dependência do transporte coletivo.",
+      "correta": 0,
+      "questao_id": 26
+    },
+    {
+      "id": 130,
+      "letra": "E",
+      "texto": "ausência de relação entre moradia e renda.",
+      "correta": 0,
+      "questao_id": 26
+    },
+    {
+      "id": 131,
+      "letra": "A",
+      "texto": "no dever e na universalização da ação.",
+      "correta": 1,
+      "questao_id": 27
+    },
+    {
+      "id": 132,
+      "letra": "B",
+      "texto": "no prazer imediato como critério único.",
+      "correta": 0,
+      "questao_id": 27
+    },
+    {
+      "id": 133,
+      "letra": "C",
+      "texto": "na vantagem pessoal acima da norma.",
+      "correta": 0,
+      "questao_id": 27
+    },
+    {
+      "id": 134,
+      "letra": "D",
+      "texto": "na negação de qualquer princípio moral.",
+      "correta": 0,
+      "questao_id": 27
+    },
+    {
+      "id": 135,
+      "letra": "E",
+      "texto": "na obediência apenas ao medo da punição.",
+      "correta": 0,
+      "questao_id": 27
+    },
+    {
+      "id": 136,
+      "letra": "A",
+      "texto": "isolamento político da comunidade.",
+      "correta": 0,
+      "questao_id": 28
+    },
+    {
+      "id": 137,
+      "letra": "B",
+      "texto": "participação social na reivindicação de direitos.",
+      "correta": 1,
+      "questao_id": 28
+    },
+    {
+      "id": 138,
+      "letra": "C",
+      "texto": "substituição completa do Estado por indivíduos.",
+      "correta": 0,
+      "questao_id": 28
+    },
+    {
+      "id": 139,
+      "letra": "D",
+      "texto": "negação da cidadania coletiva.",
+      "correta": 0,
+      "questao_id": 28
+    },
+    {
+      "id": 140,
+      "letra": "E",
+      "texto": "desinteresse pela vida pública.",
+      "correta": 0,
+      "questao_id": 28
+    },
+    {
+      "id": 141,
+      "letra": "A",
+      "texto": "isolamento econômico entre territórios.",
+      "correta": 0,
+      "questao_id": 29
+    },
+    {
+      "id": 142,
+      "letra": "B",
+      "texto": "fragmentação internacional da produção.",
+      "correta": 1,
+      "questao_id": 29
+    },
+    {
+      "id": 143,
+      "letra": "C",
+      "texto": "fim das trocas comerciais globais.",
+      "correta": 0,
+      "questao_id": 29
+    },
+    {
+      "id": 144,
+      "letra": "D",
+      "texto": "redução completa da tecnologia no trabalho.",
+      "correta": 0,
+      "questao_id": 29
+    },
+    {
+      "id": 145,
+      "letra": "E",
+      "texto": "ausência de redes de transporte e comunicação.",
+      "correta": 0,
+      "questao_id": 29
+    },
+    {
+      "id": 146,
+      "letra": "A",
+      "texto": "restrição do voto direto.",
+      "correta": 0,
+      "questao_id": 30
+    },
+    {
+      "id": 147,
+      "letra": "B",
+      "texto": "consolidação da redemocratização brasileira.",
+      "correta": 1,
+      "questao_id": 30
+    },
+    {
+      "id": 148,
+      "letra": "C",
+      "texto": "extinção dos direitos trabalhistas.",
+      "correta": 0,
+      "questao_id": 30
+    },
+    {
+      "id": 149,
+      "letra": "D",
+      "texto": "centralização monárquica do poder.",
+      "correta": 0,
+      "questao_id": 30
+    },
+    {
+      "id": 150,
+      "letra": "E",
+      "texto": "suspensão permanente das liberdades civis.",
+      "correta": 0,
+      "questao_id": 30
+    },
+    {
+      "id": 151,
+      "letra": "A",
+      "texto": "ilha de calor",
+      "correta": 1,
+      "questao_id": 31
+    },
+    {
+      "id": 152,
+      "letra": "B",
+      "texto": "chuva orográfica",
+      "correta": 0,
+      "questao_id": 31
+    },
+    {
+      "id": 153,
+      "letra": "C",
+      "texto": "inversão marítima",
+      "correta": 0,
+      "questao_id": 31
+    },
+    {
+      "id": 154,
+      "letra": "D",
+      "texto": "erosão laminar",
+      "correta": 0,
+      "questao_id": 31
+    },
+    {
+      "id": 155,
+      "letra": "E",
+      "texto": "corrente de convecção oceânica",
+      "correta": 0,
+      "questao_id": 31
+    },
+    {
+      "id": 156,
+      "letra": "A",
+      "texto": "ampliação plena de direitos trabalhistas tradicionais.",
+      "correta": 0,
+      "questao_id": 32
+    },
+    {
+      "id": 157,
+      "letra": "B",
+      "texto": "desaparecimento da mediação tecnológica.",
+      "correta": 0,
+      "questao_id": 32
+    },
+    {
+      "id": 158,
+      "letra": "C",
+      "texto": "precarização associada à plataformização do trabalho.",
+      "correta": 1,
+      "questao_id": 32
+    },
+    {
+      "id": 159,
+      "letra": "D",
+      "texto": "fim da necessidade de renda para os trabalhadores.",
+      "correta": 0,
+      "questao_id": 32
+    },
+    {
+      "id": 160,
+      "letra": "E",
+      "texto": "controle coletivo dos meios de produção pelos entregadores.",
+      "correta": 0,
+      "questao_id": 32
+    }
+  ],
+  "conteudos": [
+    {
+      "id": 1,
+      "slug": "porcentagem",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Porcentagem",
+      "materia": "Matematica",
+      "habilidade": null,
+      "materia_id": 1,
+      "competencia": null
+    },
+    {
+      "id": 2,
+      "slug": "progressao-aritmetica",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Progressao aritmetica",
+      "materia": "Matematica",
+      "habilidade": null,
+      "materia_id": 1,
+      "competencia": null
+    },
+    {
+      "id": 3,
+      "slug": "funcao-afim",
+      "ordem": 3,
+      "status": "ativo",
+      "titulo": "Funcao afim",
+      "materia": "Matematica",
+      "habilidade": null,
+      "materia_id": 1,
+      "competencia": null
+    },
+    {
+      "id": 4,
+      "slug": "probabilidade",
+      "ordem": 4,
+      "status": "ativo",
+      "titulo": "Probabilidade",
+      "materia": "Matematica",
+      "habilidade": null,
+      "materia_id": 1,
+      "competencia": null
+    },
+    {
+      "id": 5,
+      "slug": "geometria-plana",
+      "ordem": 5,
+      "status": "ativo",
+      "titulo": "Geometria plana",
+      "materia": "Matematica",
+      "habilidade": null,
+      "materia_id": 1,
+      "competencia": null
+    },
+    {
+      "id": 6,
+      "slug": "interpretacao-de-texto",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Interpretacao de texto",
+      "materia": "Portugues",
+      "habilidade": null,
+      "materia_id": 2,
+      "competencia": null
+    },
+    {
+      "id": 7,
+      "slug": "concordancia-verbal",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Concordancia verbal",
+      "materia": "Portugues",
+      "habilidade": null,
+      "materia_id": 2,
+      "competencia": null
+    },
+    {
+      "id": 8,
+      "slug": "crase",
+      "ordem": 3,
+      "status": "ativo",
+      "titulo": "Crase",
+      "materia": "Portugues",
+      "habilidade": null,
+      "materia_id": 2,
+      "competencia": null
+    },
+    {
+      "id": 9,
+      "slug": "figuras-de-linguagem",
+      "ordem": 4,
+      "status": "ativo",
+      "titulo": "Figuras de linguagem",
+      "materia": "Portugues",
+      "habilidade": null,
+      "materia_id": 2,
+      "competencia": null
+    },
+    {
+      "id": 10,
+      "slug": "ecologia",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Ecologia",
+      "materia": "Biologia",
+      "habilidade": null,
+      "materia_id": 3,
+      "competencia": null
+    },
+    {
+      "id": 11,
+      "slug": "citologia",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Citologia",
+      "materia": "Biologia",
+      "habilidade": null,
+      "materia_id": 3,
+      "competencia": null
+    },
+    {
+      "id": 12,
+      "slug": "genetica",
+      "ordem": 3,
+      "status": "ativo",
+      "titulo": "Genetica",
+      "materia": "Biologia",
+      "habilidade": null,
+      "materia_id": 3,
+      "competencia": null
+    },
+    {
+      "id": 13,
+      "slug": "brasil-colonia",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Brasil Colonia",
+      "materia": "Historia",
+      "habilidade": null,
+      "materia_id": 4,
+      "competencia": null
+    },
+    {
+      "id": 14,
+      "slug": "revolucao-industrial",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Revolucao Industrial",
+      "materia": "Historia",
+      "habilidade": null,
+      "materia_id": 4,
+      "competencia": null
+    },
+    {
+      "id": 15,
+      "slug": "cartografia",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Cartografia",
+      "materia": "Geografia",
+      "habilidade": null,
+      "materia_id": 5,
+      "competencia": null
+    },
+    {
+      "id": 16,
+      "slug": "climatologia",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Climatologia",
+      "materia": "Geografia",
+      "habilidade": null,
+      "materia_id": 5,
+      "competencia": null
+    },
+    {
+      "id": 17,
+      "slug": "estequiometria",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Estequiometria",
+      "materia": "Quimica",
+      "habilidade": null,
+      "materia_id": 6,
+      "competencia": null
+    },
+    {
+      "id": 18,
+      "slug": "ligacoes-quimicas",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Ligacoes quimicas",
+      "materia": "Quimica",
+      "habilidade": null,
+      "materia_id": 6,
+      "competencia": null
+    },
+    {
+      "id": 19,
+      "slug": "cinematica",
+      "ordem": 1,
+      "status": "ativo",
+      "titulo": "Cinematica",
+      "materia": "Fisica",
+      "habilidade": null,
+      "materia_id": 7,
+      "competencia": null
+    },
+    {
+      "id": 20,
+      "slug": "energia-mecanica",
+      "ordem": 2,
+      "status": "ativo",
+      "titulo": "Energia mecanica",
+      "materia": "Fisica",
+      "habilidade": null,
+      "materia_id": 7,
+      "competencia": null
+    },
+    {
+      "id": 21,
+      "materia_id": 2,
+      "materia": "Português",
+      "titulo": "Funções da linguagem",
+      "slug": "funcoes-da-linguagem",
+      "ordem": 5,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 22,
+      "materia_id": 2,
+      "materia": "Português",
+      "titulo": "Variação linguística",
+      "slug": "variacao-linguistica",
+      "ordem": 6,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 23,
+      "materia_id": 8,
+      "materia": "Artes",
+      "titulo": "Leitura de imagem e cultura visual",
+      "slug": "leitura-de-imagem-e-cultura-visual",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 24,
+      "materia_id": 9,
+      "materia": "Inglês",
+      "titulo": "Leitura e inferência",
+      "slug": "leitura-e-inferencia",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 25,
+      "materia_id": 10,
+      "materia": "Literatura",
+      "titulo": "Realismo e crítica social",
+      "slug": "realismo-e-critica-social",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 26,
+      "materia_id": 11,
+      "materia": "Educação Física",
+      "titulo": "Corpo, saúde e sociedade",
+      "slug": "corpo-saude-e-sociedade",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 27,
+      "materia_id": 2,
+      "materia": "Português",
+      "titulo": "Argumentação",
+      "slug": "argumentacao",
+      "ordem": 7,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 28,
+      "materia_id": 1,
+      "materia": "Matemática",
+      "titulo": "Razão e proporção",
+      "slug": "razao-e-proporcao",
+      "ordem": 6,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 29,
+      "materia_id": 1,
+      "materia": "Matemática",
+      "titulo": "Estatística",
+      "slug": "estatistica",
+      "ordem": 7,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 30,
+      "materia_id": 1,
+      "materia": "Matemática",
+      "titulo": "Escala",
+      "slug": "escala",
+      "ordem": 8,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 31,
+      "materia_id": 6,
+      "materia": "Química",
+      "titulo": "pH e neutralização",
+      "slug": "ph-e-neutralizacao",
+      "ordem": 3,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 32,
+      "materia_id": 7,
+      "materia": "Física",
+      "titulo": "Energia elétrica",
+      "slug": "energia-eletrica",
+      "ordem": 3,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 33,
+      "materia_id": 6,
+      "materia": "Química",
+      "titulo": "Separação de misturas",
+      "slug": "separacao-de-misturas",
+      "ordem": 4,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 34,
+      "materia_id": 3,
+      "materia": "Biologia",
+      "titulo": "Fisiologia humana",
+      "slug": "fisiologia-humana",
+      "ordem": 4,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 35,
+      "materia_id": 6,
+      "materia": "Química",
+      "titulo": "Estequiometria simples",
+      "slug": "estequiometria-simples",
+      "ordem": 5,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 36,
+      "materia_id": 4,
+      "materia": "História",
+      "titulo": "Era Vargas",
+      "slug": "era-vargas",
+      "ordem": 3,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 37,
+      "materia_id": 5,
+      "materia": "Geografia",
+      "titulo": "Urbanização",
+      "slug": "urbanizacao",
+      "ordem": 3,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 38,
+      "materia_id": 12,
+      "materia": "Filosofia",
+      "titulo": "Ética",
+      "slug": "etica",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 39,
+      "materia_id": 13,
+      "materia": "Sociologia",
+      "titulo": "Cidadania e participação",
+      "slug": "cidadania-e-participacao",
+      "ordem": 1,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 40,
+      "materia_id": 5,
+      "materia": "Geografia",
+      "titulo": "Globalização",
+      "slug": "globalizacao",
+      "ordem": 4,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 41,
+      "materia_id": 4,
+      "materia": "História",
+      "titulo": "Brasil República",
+      "slug": "brasil-republica",
+      "ordem": 4,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    },
+    {
+      "id": 42,
+      "materia_id": 13,
+      "materia": "Sociologia",
+      "titulo": "Trabalho e tecnologia",
+      "slug": "trabalho-e-tecnologia",
+      "ordem": 2,
+      "status": "ativo",
+      "competencia": null,
+      "habilidade": null
+    }
+  ],
+  "questoes": [
+    {
+      "id": 1,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Português",
+      "conteudo": "Interpretação de texto",
+      "enunciado": "Em uma campanha de biblioteca escolar, lia-se: “Livro parado não forma leitor. Compartilhe histórias.” O objetivo principal da frase é",
+      "explicacao": "A frase associa o livro parado à ausência de formação leitora e usa o imperativo “Compartilhe” para incentivar a circulação das histórias.",
+      "habilidade": "H1",
+      "competencia": "C1",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 2,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Português",
+      "conteudo": "Funções da linguagem",
+      "enunciado": "Em um aplicativo de saúde, aparece a mensagem: “Beba água agora. Seu corpo agradece.” Ao se dirigir diretamente ao usuário para induzir uma ação, predomina a função",
+      "explicacao": "A função conativa ou apelativa ocorre quando a linguagem procura convencer ou orientar o receptor a agir.",
+      "habilidade": "H18",
+      "competencia": "C6",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 3,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Português",
+      "conteudo": "Variação linguística",
+      "enunciado": "Um estudante escreveu em um fórum: “A gente vai entregar o trabalho amanhã, porque tava difícil fechar tudo hoje.” Em uma situação formal, a reescrita mais adequada, sem alterar o sentido, é",
+      "explicacao": "A alternativa mantém o sentido original e ajusta marcas de informalidade para registro formal.",
+      "habilidade": "H25",
+      "competencia": "C8",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 4,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Artes",
+      "conteudo": "Leitura de imagem e cultura visual",
+      "enunciado": "Uma intervenção urbana cobre temporariamente uma praça de concreto com tapetes verdes feitos de material reciclado. A obra convida os pedestres a sentar, conversar e permanecer no local. Nessa proposta, a arte atua principalmente como",
+      "explicacao": "A intervenção altera o modo como as pessoas ocupam a praça e propõe reflexão sobre cidade, ambiente e convivência.",
+      "habilidade": "H12",
+      "competencia": "C4",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 5,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Inglês",
+      "conteudo": "Leitura e inferência",
+      "enunciado": "Em um cartaz de aeroporto, lê-se: “Keep your boarding pass ready.” A orientação dada ao passageiro é",
+      "explicacao": "A expressão “keep ... ready” indica manter algo preparado ou à mão.",
+      "habilidade": "H5",
+      "competencia": "C2",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 6,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Literatura",
+      "conteudo": "Realismo e crítica social",
+      "enunciado": "Em um romance, o narrador descreve um personagem que mantém aparência respeitável em público, mas age de modo interesseiro nas relações privadas. Esse contraste é usado para revelar a hipocrisia de determinado grupo social. Essa estratégia se aproxima de uma característica do",
+      "explicacao": "O Realismo frequentemente expõe contradições morais, interesses sociais e conflitos psicológicos dos personagens.",
+      "habilidade": "H16",
+      "competencia": "C5",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 7,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Educação Física",
+      "conteudo": "Corpo, saúde e sociedade",
+      "enunciado": "Uma escola substituiu atividades competitivas obrigatórias por circuitos com diferentes níveis de intensidade, permitindo que todos os estudantes participassem conforme suas condições físicas. Essa mudança valoriza",
+      "explicacao": "A proposta adapta a prática para garantir participação e respeitar diferentes condições corporais.",
+      "habilidade": "H10",
+      "competencia": "C3",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 8,
+      "ano": 2026,
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Português",
+      "conteudo": "Argumentação",
+      "enunciado": "Em um artigo de opinião, o autor afirma: “Não basta instalar lixeiras coloridas; é preciso ensinar o caminho do resíduo depois do descarte.” O argumento central é que políticas ambientais escolares devem",
+      "explicacao": "O enunciado defende que infraestrutura só é suficiente quando acompanhada de compreensão crítica do processo.",
+      "habilidade": "H23",
+      "competencia": "C7",
+      "dificuldade": "dificil"
+    },
+    {
+      "id": 9,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Porcentagem",
+      "enunciado": "Uma escola tinha 800 estudantes. Após uma campanha de matrícula, o número aumentou 12,5%. O total de estudantes passou a ser",
+      "explicacao": "12,5% de 800 é 100. Logo, o novo total é 800 + 100 = 900.",
+      "habilidade": "H3",
+      "competencia": "C1",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 10,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Razão e proporção",
+      "enunciado": "Para preparar 6 litros de suco, uma cantina mistura concentrado e água na razão 1:5. Para preparar 18 litros mantendo a mesma proporção, a quantidade de concentrado necessária é",
+      "explicacao": "A razão total tem 6 partes, sendo 1 de concentrado. Em 18 litros, 1/6 corresponde a 3 litros.",
+      "habilidade": "H2",
+      "competencia": "C1",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 11,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Função afim",
+      "enunciado": "Um aplicativo de transporte cobra taxa fixa de R$ 6,00 mais R$ 2,40 por quilômetro rodado. A função que representa o valor V, em reais, de uma corrida de x quilômetros é",
+      "explicacao": "Há uma parte fixa de 6 reais e uma parte variável proporcional aos quilômetros: 2,40x.",
+      "habilidade": "H21",
+      "competencia": "C5",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 12,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Estatística",
+      "enunciado": "As notas de cinco estudantes em uma atividade foram 6, 7, 7, 8 e 10. A média dessas notas é",
+      "explicacao": "A soma é 38. Dividindo por 5, obtém-se 7,6.",
+      "habilidade": "H27",
+      "competencia": "C7",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 13,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Geometria plana",
+      "enunciado": "Um terreno retangular mede 24 m de comprimento e 15 m de largura. Será colocada uma cerca em todo o contorno. O comprimento mínimo de cerca necessário é",
+      "explicacao": "O contorno é o perímetro: 2 × (24 + 15) = 78 metros.",
+      "habilidade": "H8",
+      "competencia": "C2",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 14,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Escala",
+      "enunciado": "Em um mapa na escala 1:50 000, a distância entre duas cidades é de 7 cm. A distância real entre elas é",
+      "explicacao": "7 cm no mapa representam 7 × 50 000 = 350 000 cm, que correspondem a 3,5 km.",
+      "habilidade": "H11",
+      "competencia": "C3",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 15,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Probabilidade",
+      "enunciado": "Em uma caixa há 4 bolas azuis, 3 verdes e 5 vermelhas, todas iguais ao toque. Ao retirar uma bola ao acaso, a probabilidade de ela não ser vermelha é",
+      "explicacao": "Há 12 bolas no total. As não vermelhas são 4 + 3 = 7. A probabilidade é 7/12.",
+      "habilidade": "H28",
+      "competencia": "C7",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 16,
+      "ano": 2026,
+      "area": "Matemática e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Matemática",
+      "conteudo": "Progressão aritmética",
+      "enunciado": "Um estudante decidiu resolver 8 questões no primeiro dia e aumentar 3 questões a cada novo dia. No sétimo dia, ele resolverá",
+      "explicacao": "É uma PA com a1 = 8 e razão 3. No sétimo dia: a7 = 8 + 6×3 = 26.",
+      "habilidade": "H22",
+      "competencia": "C5",
+      "dificuldade": "dificil"
+    },
+    {
+      "id": 17,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Biologia",
+      "conteudo": "Ecologia",
+      "enunciado": "Em uma lagoa, o despejo de esgoto aumenta a quantidade de nutrientes disponíveis, favorecendo a proliferação de algas. A decomposição posterior reduz o oxigênio dissolvido e causa morte de peixes. Esse processo é chamado de",
+      "explicacao": "A eutrofização ocorre pelo excesso de nutrientes em ambientes aquáticos, seguido de proliferação de algas e queda do oxigênio.",
+      "habilidade": "H10",
+      "competencia": "C3",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 18,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Química",
+      "conteudo": "pH e neutralização",
+      "enunciado": "Um agricultor aplica calcário em um solo muito ácido para melhorar o desenvolvimento das plantas. A ação do calcário está relacionada à",
+      "explicacao": "O calcário possui caráter básico e é usado para corrigir a acidez do solo, elevando o pH.",
+      "habilidade": "H17",
+      "competencia": "C5",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 19,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Física",
+      "conteudo": "Energia elétrica",
+      "enunciado": "Uma lâmpada de 20 W permanece ligada durante 5 horas por dia. Em 30 dias, o consumo de energia dessa lâmpada será",
+      "explicacao": "20 W = 0,02 kW. O tempo total é 5×30 = 150 h. Energia = 0,02×150 = 3 kWh.",
+      "habilidade": "H21",
+      "competencia": "C6",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 20,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Biologia",
+      "conteudo": "Genética",
+      "enunciado": "Em uma espécie vegetal, a cor roxa da flor é dominante sobre a cor branca. Dois indivíduos heterozigotos são cruzados. A proporção esperada de plantas com flores brancas é",
+      "explicacao": "No cruzamento Aa × Aa, a proporção genotípica é 1 AA : 2 Aa : 1 aa. Apenas aa manifesta o fenótipo recessivo, logo 25%.",
+      "habilidade": "H13",
+      "competencia": "C4",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 21,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Química",
+      "conteudo": "Separação de misturas",
+      "enunciado": "Em uma estação de tratamento, uma mistura de água e areia passa por um processo em que a fase sólida fica retida em uma barreira porosa. Esse processo é",
+      "explicacao": "A filtração separa sólido não dissolvido de líquido por meio de uma barreira porosa.",
+      "habilidade": "H18",
+      "competencia": "C5",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 22,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Física",
+      "conteudo": "Cinemática",
+      "enunciado": "Um ônibus percorre 120 km em 2 horas, mantendo velocidade média constante. Sua velocidade média é",
+      "explicacao": "Velocidade média é distância dividida pelo tempo: 120/2 = 60 km/h.",
+      "habilidade": "H20",
+      "competencia": "C6",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 23,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Biologia",
+      "conteudo": "Fisiologia humana",
+      "enunciado": "Durante uma corrida, a frequência respiratória aumenta para atender à maior demanda energética dos músculos. Esse aumento contribui principalmente para",
+      "explicacao": "A respiração mais intensa favorece trocas gasosas, fornecendo oxigênio e removendo CO2 produzido no metabolismo.",
+      "habilidade": "H14",
+      "competencia": "C4",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 24,
+      "ano": 2026,
+      "area": "Ciências da Natureza e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Química",
+      "conteudo": "Estequiometria simples",
+      "enunciado": "Na reação 2 H2 + O2 → 2 H2O, a proporção em mol entre gás hidrogênio e água formada é",
+      "explicacao": "Pela equação balanceada, 2 mol de H2 formam 2 mol de H2O, portanto a proporção H2:H2O é 1:1.",
+      "habilidade": "H24",
+      "competencia": "C7",
+      "dificuldade": "dificil"
+    },
+    {
+      "id": 25,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "História",
+      "conteudo": "Era Vargas",
+      "enunciado": "Durante o Estado Novo, o governo brasileiro fortaleceu a propaganda oficial e restringiu liberdades políticas. Essas práticas indicam uma característica",
+      "explicacao": "O Estado Novo foi marcado por centralização política, censura e propaganda estatal.",
+      "habilidade": "H11",
+      "competencia": "C3",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 26,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Geografia",
+      "conteudo": "Urbanização",
+      "enunciado": "Em muitas metrópoles, parte da população vive longe dos centros de emprego e gasta horas em deslocamentos diários. Esse fenômeno evidencia",
+      "explicacao": "A distância entre moradia popular e oportunidades urbanas expressa segregação e desigualdade no espaço urbano.",
+      "habilidade": "H16",
+      "competencia": "C4",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 27,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Filosofia",
+      "conteudo": "Ética",
+      "enunciado": "Uma pessoa devolve uma carteira encontrada na rua porque acredita que essa atitude deve valer como regra para todos, independentemente de recompensa. Essa justificativa se aproxima de uma ética baseada",
+      "explicacao": "A ideia de agir segundo uma regra que possa valer universalmente aproxima-se da ética do dever.",
+      "habilidade": "H23",
+      "competencia": "C5",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 28,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Sociologia",
+      "conteudo": "Cidadania e participação",
+      "enunciado": "Moradores de um bairro organizam uma reunião para cobrar iluminação pública, transporte e segurança. Essa ação exemplifica",
+      "explicacao": "A mobilização coletiva por serviços públicos é uma forma de participação cidadã.",
+      "habilidade": "H22",
+      "competencia": "C5",
+      "dificuldade": "facil"
+    },
+    {
+      "id": 29,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Geografia",
+      "conteudo": "Globalização",
+      "enunciado": "Uma empresa projeta um produto em um país, fabrica componentes em outro e vende o item em diversos mercados. Essa dinâmica revela",
+      "explicacao": "A produção distribuída por diferentes países é característica das cadeias globais e da fragmentação produtiva.",
+      "habilidade": "H18",
+      "competencia": "C4",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 30,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "História",
+      "conteudo": "Brasil República",
+      "enunciado": "A Constituição de 1988 ampliou direitos sociais e mecanismos de participação após um período de regime autoritário. Por isso, é frequentemente associada à",
+      "explicacao": "A Constituição de 1988 marcou a ampliação de direitos e a institucionalização do processo democrático após a ditadura.",
+      "habilidade": "H8",
+      "competencia": "C2",
+      "dificuldade": "medio"
+    },
+    {
+      "id": 31,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Geografia",
+      "conteudo": "Climatologia",
+      "enunciado": "Em áreas urbanas densamente ocupadas, a substituição de vegetação por asfalto e concreto contribui para temperaturas mais elevadas que nas áreas rurais próximas. Esse fenômeno é conhecido como",
+      "explicacao": "A ilha de calor urbana ocorre pela concentração de materiais que absorvem calor, pouca vegetação e emissão de calor por atividades humanas.",
+      "habilidade": "H26",
+      "competencia": "C6",
+      "dificuldade": "dificil"
+    },
+    {
+      "id": 32,
+      "ano": 2026,
+      "area": "Ciências Humanas e suas Tecnologias",
+      "fonte": "Autoral estilo ENEM",
+      "prova": "EstudAI ENEM Base 01",
+      "status": "aprovada",
+      "materia": "Sociologia",
+      "conteudo": "Trabalho e tecnologia",
+      "enunciado": "Aplicativos de entrega permitem flexibilidade de horário, mas transferem ao trabalhador custos como manutenção do veículo, internet e riscos do deslocamento. Essa relação expressa uma transformação do trabalho marcada por",
+      "explicacao": "A plataformização pode combinar autonomia aparente com transferência de custos e riscos ao trabalhador, caracterizando precarização.",
+      "habilidade": "H20",
+      "competencia": "C4",
+      "dificuldade": "dificil"
+    }
+  ],
+  "conquistas": [
+    {
+      "id": 1,
+      "nome": "Ritmo inicial",
+      "icone": "flame",
+      "codigo": "streak_3",
+      "categoria": "streak",
+      "descricao": "Estude por 3 dias.",
+      "requisito": 3
+    },
+    {
+      "id": 2,
+      "nome": "Semana consistente",
+      "icone": "calendar",
+      "codigo": "streak_7",
+      "categoria": "streak",
+      "descricao": "Estude por 7 dias.",
+      "requisito": 7
+    },
+    {
+      "id": 3,
+      "nome": "Constancia forte",
+      "icone": "trophy",
+      "codigo": "streak_30",
+      "categoria": "streak",
+      "descricao": "Estude por 30 dias.",
+      "requisito": 30
+    },
+    {
+      "id": 4,
+      "nome": "Longa jornada",
+      "icone": "award",
+      "codigo": "streak_100",
+      "categoria": "streak",
+      "descricao": "Estude por 100 dias.",
+      "requisito": 100
+    },
+    {
+      "id": 5,
+      "nome": "Primeiras 50",
+      "icone": "list-checks",
+      "codigo": "questoes_50",
+      "categoria": "questoes",
+      "descricao": "Responda 50 questoes.",
+      "requisito": 50
+    },
+    {
+      "id": 6,
+      "nome": "Volume bom",
+      "icone": "target",
+      "codigo": "questoes_200",
+      "categoria": "questoes",
+      "descricao": "Responda 200 questoes.",
+      "requisito": 200
+    },
+    {
+      "id": 7,
+      "nome": "Treino pesado",
+      "icone": "dumbbell",
+      "codigo": "questoes_500",
+      "categoria": "questoes",
+      "descricao": "Responda 500 questoes.",
+      "requisito": 500
+    },
+    {
+      "id": 8,
+      "nome": "Mil questoes",
+      "icone": "medal",
+      "codigo": "questoes_1000",
+      "categoria": "questoes",
+      "descricao": "Responda 1000 questoes.",
+      "requisito": 1000
+    },
+    {
+      "id": 9,
+      "nome": "Cem acertos",
+      "icone": "check-circle",
+      "codigo": "acertos_100",
+      "categoria": "desempenho",
+      "descricao": "Acerte 100 questoes.",
+      "requisito": 100
+    },
+    {
+      "id": 10,
+      "nome": "Dia perfeito",
+      "icone": "sparkles",
+      "codigo": "perfecto_dia",
+      "categoria": "desempenho",
+      "descricao": "Finalize um dia com 20 acertos e nenhum erro.",
+      "requisito": 20
+    },
+    {
+      "id": 11,
+      "nome": "Simulado 80+",
+      "icone": "badge-check",
+      "codigo": "simulado_80",
+      "categoria": "desempenho",
+      "descricao": "Faca 80 por cento ou mais em um simulado.",
+      "requisito": 80
+    },
+    {
+      "id": 12,
+      "nome": "Meta batida",
+      "icone": "flag",
+      "codigo": "meta_semana",
+      "categoria": "especial",
+      "descricao": "Conclua uma meta semanal.",
+      "requisito": 1
+    },
+    {
+      "id": 13,
+      "nome": "Primeiro dia",
+      "icone": "sun",
+      "codigo": "primeiro_dia",
+      "categoria": "especial",
+      "descricao": "Finalize o primeiro dia de estudo.",
+      "requisito": 1
+    },
+    {
+      "id": 14,
+      "nome": "Primeiro simulado",
+      "icone": "clipboard-check",
+      "codigo": "primeiro_simulado",
+      "categoria": "especial",
+      "descricao": "Finalize o primeiro simulado.",
+      "requisito": 1
+    },
+    {
+      "id": 15,
+      "nome": "Anotador",
+      "icone": "notebook-pen",
+      "codigo": "anotador",
+      "categoria": "especial",
+      "descricao": "Crie sua primeira anotacao.",
+      "requisito": 1
+    },
+    {
+      "id": 16,
+      "nome": "Revisor",
+      "icone": "rotate-ccw",
+      "codigo": "revisador",
+      "categoria": "especial",
+      "descricao": "Refaca uma questao que ja errou.",
+      "requisito": 1
+    },
+    {
+      "id": 17,
+      "nome": "100 questoes respondidas",
+      "icone": "target",
+      "codigo": "questoes_100",
+      "categoria": "questoes",
+      "descricao": "Responda 100 questoes.",
+      "requisito": 100
+    },
+    {
+      "id": 18,
+      "nome": "Primeira semana completa",
+      "icone": "calendar",
+      "codigo": "primeira_semana_completa",
+      "categoria": "especial",
+      "descricao": "Conclua todas as tarefas validas da semana.",
+      "requisito": 1
+    },
+    {
+      "id": 19,
+      "nome": "Semana sem atrasos",
+      "icone": "check",
+      "codigo": "semana_sem_atrasos",
+      "categoria": "especial",
+      "descricao": "Mantenha a semana atual sem tarefas atrasadas.",
+      "requisito": 1
+    },
+    {
+      "id": 20,
+      "nome": "Revisou 10 erros",
+      "icone": "refresh",
+      "codigo": "revisou_10_erros",
+      "categoria": "especial",
+      "descricao": "Revise pelo menos 10 erros reais.",
+      "requisito": 10
+    },
+    {
+      "id": 21,
+      "nome": "Plano semanal concluido",
+      "icone": "clipboard",
+      "codigo": "plano_semanal_concluido",
+      "categoria": "especial",
+      "descricao": "Conclua um plano semanal salvo.",
+      "requisito": 1
+    },
+    {
+      "id": 22,
+      "nome": "Primeira redacao",
+      "icone": "pencil",
+      "codigo": "primeira_redacao",
+      "categoria": "especial",
+      "descricao": "Salve ou analise sua primeira redacao ENEM.",
+      "requisito": 1
+    }
+  ],
+  "materias": [
+    {
+      "id": 1,
+      "area": "Matematica e suas Tecnologias",
+      "nome": "Matematica",
+      "slug": "matematica",
+      "ativa": 1
+    },
+    {
+      "id": 2,
+      "area": "Linguagens",
+      "nome": "Portugues",
+      "slug": "portugues",
+      "ativa": 1
+    },
+    {
+      "id": 3,
+      "area": "Ciencias da Natureza",
+      "nome": "Biologia",
+      "slug": "biologia",
+      "ativa": 1
+    },
+    {
+      "id": 4,
+      "area": "Ciencias Humanas",
+      "nome": "Historia",
+      "slug": "historia",
+      "ativa": 1
+    },
+    {
+      "id": 5,
+      "area": "Ciencias Humanas",
+      "nome": "Geografia",
+      "slug": "geografia",
+      "ativa": 1
+    },
+    {
+      "id": 6,
+      "area": "Ciencias da Natureza",
+      "nome": "Quimica",
+      "slug": "quimica",
+      "ativa": 1
+    },
+    {
+      "id": 7,
+      "area": "Ciencias da Natureza",
+      "nome": "Fisica",
+      "slug": "fisica",
+      "ativa": 1
+    },
+    {
+      "id": 8,
+      "nome": "Artes",
+      "slug": "artes",
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "ativa": 1
+    },
+    {
+      "id": 9,
+      "nome": "Inglês",
+      "slug": "ingles",
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "ativa": 1
+    },
+    {
+      "id": 10,
+      "nome": "Literatura",
+      "slug": "literatura",
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "ativa": 1
+    },
+    {
+      "id": 11,
+      "nome": "Educação Física",
+      "slug": "educacao-fisica",
+      "area": "Linguagens, Códigos e suas Tecnologias",
+      "ativa": 1
+    },
+    {
+      "id": 12,
+      "nome": "Filosofia",
+      "slug": "filosofia",
+      "area": "Ciências Humanas e suas Tecnologias",
+      "ativa": 1
+    },
+    {
+      "id": 13,
+      "nome": "Sociologia",
+      "slug": "sociologia",
+      "area": "Ciências Humanas e suas Tecnologias",
+      "ativa": 1
+    }
+  ]
+}

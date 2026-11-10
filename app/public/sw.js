@@ -1,4 +1,4 @@
-const CACHE_VERSION = '0.1.0-alpha-launch-core';
+const CACHE_VERSION = '0.1.0-alpha-recovery-07';
 const STATIC_CACHE = `estudai-static-${CACHE_VERSION}`;
 
 const STATIC_ASSETS = [

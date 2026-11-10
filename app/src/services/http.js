@@ -105,7 +105,12 @@
       credentials: 'same-origin',
       ...fetchOptions,
       headers
-    }).then(wrapApiResponse);
+    }).then((response) => {
+      if (response.status === 401) {
+        window.dispatchEvent(new CustomEvent('estudai:session-expired'));
+      }
+      return wrapApiResponse(response);
+    });
   }
 
   window.parseApiJson = parseJsonFromText;

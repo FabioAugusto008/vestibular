@@ -9,6 +9,7 @@ header('Content-Type: application/json; charset=utf-8');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db     = getDB();
 $uid    = currentUserId();
+beginDashboardReadOnlyGet($db, ['listar']);
 
 switch ($action) {
 

@@ -9,6 +9,7 @@ header('Content-Type: application/json; charset=utf-8');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db     = getDB();
 $uid    = currentUserId();
+beginDashboardReadOnlyGet($db, ['carregar']);
 
 switch ($action) {
 
@@ -22,13 +23,8 @@ switch ($action) {
         $stmt->execute([$uid]);
         $prefs = $stmt->fetch();
 
-        // Se não existe, cria com valores padrão
+        // Defaults are returned without creating a preference row during GET.
         if (!$prefs) {
-            $ins = $db->prepare("
-                INSERT INTO preferencias_usuario (usuario_id, tema, notificacoes, horario_lembrete)
-                VALUES (?, 'light', 1, '08:00')
-            ");
-            $ins->execute([$uid]);
             $prefs = ['tema' => 'light', 'notificacoes' => 1, 'horario_lembrete' => '08:00'];
         }
 

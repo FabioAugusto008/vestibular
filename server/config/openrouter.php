@@ -54,6 +54,7 @@ $timeout = max(10, min(90, $timeout));
 
 return [
     'provider' => 'openrouter',
+    'enabled' => estudai_openrouter_env('ESTUDAI_AI_DISABLED', 'false') !== 'true',
     'completion_url' => $completionUrl,
     'api_key' => estudai_openrouter_env('OPENROUTER_API_KEY', ''),
     'model' => estudai_openrouter_env('OPENROUTER_MODEL', 'liquid/lfm-2.5-1.2b-instruct:free'),

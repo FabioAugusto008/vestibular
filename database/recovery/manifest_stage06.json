@@ -1,0 +1,200 @@
+{
+  "target": "estudai_teste_2026",
+  "server": {
+    "version": "8.0.45",
+    "uuid": "e8063b4d-2ae0-11f1-aa12-9c6b0081b962",
+    "port": 3306
+  },
+  "structure_source": "SHOW CREATE TABLE from validated recovery reference; administrative routine excluded",
+  "static_data_sources": [
+    "Reviewed nonpersonal catalog tables; original seed reviewed but not executed: it changes DDL, disables FK checks and has no duplication guard."
+  ],
+  "question_deduplication": {
+    "source_questions": 64,
+    "distinct_questions": 32,
+    "source_alternatives": 320,
+    "selected_alternatives": 160,
+    "all_duplicate_pairs_fully_equivalent": true
+  },
+  "catalog_counts": {
+    "questoes_alternativas": 160,
+    "conteudos": 42,
+    "questoes": 32,
+    "conquistas": 22,
+    "materias": 13
+  },
+  "derived_materials": [
+    {
+      "id": 8,
+      "nome": "Artes",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 9,
+      "nome": "Inglês",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 10,
+      "nome": "Literatura",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 11,
+      "nome": "Educação Física",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 12,
+      "nome": "Filosofia",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 13,
+      "nome": "Sociologia",
+      "source": "existing_question_label"
+    }
+  ],
+  "derived_contents": [
+    {
+      "id": 21,
+      "materia": "Português",
+      "titulo": "Funções da linguagem",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 22,
+      "materia": "Português",
+      "titulo": "Variação linguística",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 23,
+      "materia": "Artes",
+      "titulo": "Leitura de imagem e cultura visual",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 24,
+      "materia": "Inglês",
+      "titulo": "Leitura e inferência",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 25,
+      "materia": "Literatura",
+      "titulo": "Realismo e crítica social",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 26,
+      "materia": "Educação Física",
+      "titulo": "Corpo, saúde e sociedade",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 27,
+      "materia": "Português",
+      "titulo": "Argumentação",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 28,
+      "materia": "Matemática",
+      "titulo": "Razão e proporção",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 29,
+      "materia": "Matemática",
+      "titulo": "Estatística",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 30,
+      "materia": "Matemática",
+      "titulo": "Escala",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 31,
+      "materia": "Química",
+      "titulo": "pH e neutralização",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 32,
+      "materia": "Física",
+      "titulo": "Energia elétrica",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 33,
+      "materia": "Química",
+      "titulo": "Separação de misturas",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 34,
+      "materia": "Biologia",
+      "titulo": "Fisiologia humana",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 35,
+      "materia": "Química",
+      "titulo": "Estequiometria simples",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 36,
+      "materia": "História",
+      "titulo": "Era Vargas",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 37,
+      "materia": "Geografia",
+      "titulo": "Urbanização",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 38,
+      "materia": "Filosofia",
+      "titulo": "Ética",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 39,
+      "materia": "Sociologia",
+      "titulo": "Cidadania e participação",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 40,
+      "materia": "Geografia",
+      "titulo": "Globalização",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 41,
+      "materia": "História",
+      "titulo": "Brasil República",
+      "source": "existing_question_label"
+    },
+    {
+      "id": 42,
+      "materia": "Sociologia",
+      "titulo": "Trabalho e tecnologia",
+      "source": "existing_question_label"
+    }
+  ],
+  "text_relationships": "Question materia/conteudo fields have no catalog FKs; all map to catalog by accent-insensitive normalized labels.",
+  "table_auto_increment_history_removed": true,
+  "historical_catalog_timestamps_removed": true,
+  "personal_data_tables_imported": [],
+  "sha256": {
+    "structure_stage06.json": "d07e007badd5d4369c51b4f6b0f088481fb559a0c5a686cca6e12d83705ceedb",
+    "catalog_stage06.json": "606a289894c98cbea44bd86b46d6dda7784dbcd6c05caf416e1a29c9cb567aee"
+  }
+}
