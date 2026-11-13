@@ -1,210 +1,258 @@
-# EstudAI: roteiro de conteúdo para 12 slides
+# EstudAI: roteiro pedagógico de 15 minutos
 
-Apresentação de 17/11/2026, Parque Tecnológico de São José dos Campos. Conteúdo baseado no protótipo local examinado em 13/11/2026. Este arquivo é um roteiro, não uma apresentação pronta. Distribuição indicativa: cerca de 10 a 12 minutos, ajustável pelo professor.
+## Organização oficial e participantes
 
-As imagens indicadas como existentes foram verificadas em `../screenshots/`. Não foram produzidas novas capturas nesta entrega. Os textos de fala orientam a explicação; não precisam aparecer integralmente no slide.
+Referência principal: “Documento norteador EstudAI_Unidade_077.pdf”, lido integralmente. Unidade informada: Etec Prof. José Sant'Ana de Castro. Data prevista: 17/11/2026. **Local definitivo: a confirmar por Isabel e Fabiano.**
 
-## Slide 01 - EstudAI: organização, prática e acompanhamento
+Participação presencial prevista: Professora Isabel, Professor Fabiano, Evelyn e Fabio. João Victor não terá fala prevista. Sua ausência não elimina eventual crédito de autoria; confirmar a lista completa de autores com a equipe. A divisão entre os dois professores é interna e pode ser ajustada por eles.
 
-**Objetivo:** apresentar o projeto e situar o público.
+| Intervalo | Responsável | Conteúdo | Slides |
+| --- | --- | --- | --- |
+| 00:00-05:00 | Isabel e Fabiano | Proposta pedagógica, metodologia ativa e orientação | 01-03 |
+| 05:00-08:00 | Fabio | Problema, levantamento, decisões e aprendizagens | 04-05 |
+| 08:00-10:00 | Evelyn | IA no desenvolvimento e no produto | 06-07 |
+| 10:00-13:00 | Fabio | Exemplo fictício e conferência do resultado | 08-10 |
+| 13:00-15:00 | Isabel e Fabiano | Síntese pedagógica, limites e possibilidades | 11-12 |
 
-**Texto principal pronto:**
+Os tempos incluem trocas de fala e demonstração. Ensaiar com cronômetro. O produto é o exemplo concreto do percurso de aprendizagem; não ocupar a abertura inteira com telas ou tecnologias.
 
-- EstudAI: uma plataforma para conectar a rotina de estudos ao planejamento e à prática.
-- Projeto de tecnologia educacional em desenvolvimento.
-- 17/11/2026 | Parque Tecnológico de São José dos Campos.
+**Pendências de relato real:** metodologia ativa adotada; componente curricular/turma; origem da proposta; exemplo de orientação; decisão dos estudantes; aprendizagem observada; ferramentas de IA do percurso inicial. Os campos indicados devem ser completados com a equipe. O norteador sugere perguntas, mas não fornece essas respostas. Não apresentar suas sugestões como fatos ocorridos.
 
-**Complemento:** Equipe: [nomes dos integrantes]. Professor: [nome]. Instituição / curso: [identificação]. Preencher apenas com informações oficiais.
+**Local:** o PDF informa Fatec, Av. Tomé Portes Del Rei, 525, Vila São José, Taubaté - SP. O contexto anterior mencionava o Parque Tecnológico de São José dos Campos. Manter a pendência até confirmação, sem escolher um endereço por conta própria.
 
-**Imagem recomendada:** `01-dashboard.png`, existente, com destaque para a identidade visual. A própria marca visível na captura pode orientar a composição. Não inventar um logotipo novo.
-
-**Explicação oral:** “O EstudAI procura aproximar o planejamento do que o estudante realmente faz. Vamos mostrar a proposta educacional e o que já pode ser demonstrado no protótipo. As telas usam dados fictícios; o apoio remoto de IA ainda está em validação.” Evitar começar com detalhes de manutenção ou ferramentas de programação.
-
-## Slide 02 - O desafio de organizar os estudos
-
-**Objetivo:** explicar o problema sem inventar evidências estatísticas.
-
-**Texto principal pronto:**
-
-- O tempo disponível e as dificuldades variam entre estudantes.
-- Definir prioridades e manter uma rotina exige decisões frequentes.
-- Um calendário registra compromissos, mas não reúne sozinho prática e acompanhamento.
-
-**Complemento:** pergunta de apoio: “Como transformar objetivos de estudo em atividades possíveis de realizar?”
-
-**Imagem recomendada:** diagrama conceitual montado pelo professor com três caixas: “Prioridades”, “Tempo disponível” e “Acompanhamento”. Não há screenshot específico do problema, nem necessidade de simular uma tela do produto.
-
-**Explicação oral:** explicar qualitativamente a diferença entre marcar uma data e decidir o que estudar nela. O projeto foi orientado por esse problema; não há pesquisa de campo no material consultado que permita afirmar quantos estudantes o vivenciam ou quanto a ferramenta melhora o desempenho.
+As imagens da pasta `../screenshots/` foram verificadas. Há também uma captura anterior do plano fictício B, reutilizada no PDF da documentação principal. Não foram produzidas novas capturas. Os textos principais cabem nos slides; as notas são orientação para a fala, não texto para projetar integralmente.
 
 <!-- pagina -->
 
-## Slide 03 - A proposta do EstudAI
+## Slide 01 - EstudAI: investigar, construir e aprender
 
-**Objetivo:** mostrar a relação entre as partes da plataforma.
+**Quem apresenta e tempo:** Isabel e/ou Fabiano. 00:00-00:45, 45 segundos.
 
-**Texto principal pronto:**
-
-- Registrar o perfil, os objetivos e a disponibilidade do estudante.
-- Organizar atividades em plano semanal, tarefas e calendário.
-- Conectar a prática às correções, ao histórico e aos indicadores.
-
-**Complemento:** foco principal em Ensino Médio e preparação para ENEM ou vestibulares. A personalização busca adequação à rotina; não é promessa de aprovação em uma prova.
-
-**Imagem recomendada:** `01-dashboard.png`, existente. Usar como visão geral do ambiente, sem exigir leitura de todos os números.
-
-**Explicação oral:** apresentar o EstudAI como um ambiente que reúne ferramentas relacionadas. Seu valor proposto está em ligar organização e execução, e não somente em acumular funcionalidades. O núcleo pode ser demonstrado com planejamento local; a análise remota é uma frente de evolução.
-
-## Slide 04 - Do primeiro acesso ao acompanhamento
-
-**Objetivo:** apresentar uma jornada simples de utilização.
+**Objetivo:** identificar a unidade e apresentar o foco pedagógico.
 
 **Texto principal pronto:**
 
-1. Entrar e informar o perfil.
-2. Definir objetivos, horários e reforços.
-3. Obter o plano e consultar o calendário.
-4. Praticar com questões e simulados.
-5. Consultar correções e acompanhar o percurso.
+- EstudAI: proposta de apoio à organização dos estudos.
+- Etec Prof. José Sant'Ana de Castro.
+- Boas práticas de metodologias ativas com uso de IA.
+- 17/11/2026 | Local a confirmar.
 
-**Complemento:** na versão demonstrada, o plano é local, identificado como FALLBACK. O fluxo não depende de um diagnóstico remoto aprovado para ser explicado.
+**Complemento:** apresentação presencial prevista de Isabel, Fabiano, Evelyn e Fabio. Créditos de autoria em campo separado: [validar lista completa, preservando João Victor quando autor]. Não listá-lo como apresentador.
 
-**Imagem recomendada:** fluxograma com essas cinco etapas e, como apoio, `02-planejamento.png`, existente. Uma nova captura de login pode ser produzida posteriormente; não existe um PNG de login na pasta entregue.
+**Imagem recomendada:** `01-dashboard.png`, existente, como apoio discreto à identidade do projeto. Não usar a tela para antecipar uma longa demonstração.
 
-**Explicação oral:** distinguir o cadastro inicial da execução semanal. As informações do perfil dão contexto ao plano, enquanto as respostas e os resultados ficam disponíveis para consulta posterior. As setas do diagrama representam a proposta funcional, sem afirmar adaptação automática já ativa.
+**Explicação oral sugerida:** “Vamos apresentar o percurso pedagógico do EstudAI: o problema investigado, as escolhas da equipe e o uso crítico da IA. A plataforma é um exemplo concreto desse trabalho, ainda em desenvolvimento.” Identificar a turma e o componente curricular apenas após confirmação. Passar ao contexto de formação.
+
+## Slide 02 - A proposta pedagógica e a metodologia ativa
+
+**Quem apresenta e tempo:** Isabel e/ou Fabiano. 00:45-02:45, 2 minutos.
+
+**Objetivo:** explicar como o trabalho foi proposto e como os estudantes participaram.
+
+**Texto principal pronto:**
+
+- Contexto: [turma e componente curricular reais].
+- Problema da comunidade escolar: organização dos estudos.
+- Metodologia adotada: [nome e aplicação efetivamente utilizados].
+- Decisões estudantis: [um exemplo confirmado pela equipe].
+
+**Complemento:** o norteador cita aprendizagem por projetos, por problemas e investigação como exemplos. Não selecionar uma dessas denominações sem confirmação do percurso real.
+
+**Imagem recomendada:** registro já existente da proposta pedagógica ou orientação docente, se os professores possuírem e autorizarem. Não foi localizado esse registro na pasta de screenshots. Alternativa: esquema textual do percurso, identificado como organização da fala, sem simular evidência de uma aula.
+
+**Explicação oral sugerida:** explicar quem propôs o desafio, o que se esperava aprender e quais escolhas ficaram a cargo dos estudantes. Relacionar a atividade à formação em Desenvolvimento de Sistemas conforme o contexto real. Evitar frases genéricas como “usamos metodologia ativa”; mostrar uma ação concreta que sustente a identificação escolhida.
 
 <!-- pagina -->
 
-## Slide 05 - Um perfil para orientar a rotina
+## Slide 03 - Orientação docente e acompanhamento
 
-**Objetivo:** explicar a coleta de informações e sua utilidade.
+**Quem apresenta e tempo:** Isabel e/ou Fabiano. 02:45-05:00, 2 minutos e 15 segundos.
 
-**Texto principal pronto:**
-
-- Objetivo de estudo e data de prova, quando houver.
-- Dias e blocos reais de horário disponíveis.
-- Matérias, conteúdos difíceis, reforços e preferências.
-
-**Complemento:** essas informações são declaradas pelo estudante. Não são um diagnóstico automático de capacidade ou de aprendizagem.
-
-**Imagem recomendada:** `12-perfil-diagnostico.png`, existente, como alternativa imediata. Para ilustrar o preenchimento, produzir posteriormente capturas específicas do onboarding: disponibilidade e reforços/dificuldades. Elas ainda não estão na pasta de screenshots.
-
-**Explicação oral:** dar um exemplo hipotético: um estudante com apenas um período livre precisa de uma organização diferente de quem estuda em vários dias. Deixar claro que o exemplo explica a proposta, não constitui dado de um usuário real. Na captura atual, o diagnóstico ainda não foi gerado.
-
-## Slide 06 - Personalização e IA: proposta e estágio atual
-
-**Objetivo:** apresentar a inovação pretendida com transparência.
+**Objetivo:** mostrar o papel dos professores nas decisões e na avaliação do trabalho.
 
 **Texto principal pronto:**
 
-- Personalização local: perfil e horários já orientam o planejamento.
-- Proposta de IA: analisar o perfil e sugerir prioridades e ajustes.
-- Estado atual: integração remota em validação; demonstração com FALLBACK local.
+- Orientação da investigação e da construção do protótipo.
+- Participação dos estudantes na divisão de tarefas e nas escolhas.
+- Conferência dos resultados, devolutivas e revisão de decisões.
+- Evidência: [um registro real a selecionar].
 
-**Complemento:** questões e simulados utilizam a base cadastrada, sem criação por IA em tempo real. Redação possui orientação local não oficial.
+**Complemento:** roteiro de exemplo, a completar: “Ao observar [situação], orientamos [ação]. A equipe reviu [decisão] e passou a [procedimento].” Usar somente um episódio confirmado, sem inventar reuniões ou instrumentos de avaliação.
 
-**Imagem recomendada:** `02-planejamento.png`, existente, mantendo legível a indicação FALLBACK. Como apoio opcional, `11-redacao.png`, com seu aviso de orientação local.
+**Imagem recomendada:** registro autorizado de orientação ou de uma versão do trabalho, se já disponível. `02-planejamento.png` pode ilustrar o produto resultante, mas não comprova como uma aula foi conduzida.
 
-**Explicação oral:** “Já existe uma integração com a OpenRouter, mas os resultados reais ainda não foram aprovados. Por isso, mostramos a alternativa local de forma identificada.” Explicar que replanejamento e recomendações automáticas são objetivos em evolução, sem anunciar que a plataforma já se adapta sozinha.
+**Explicação oral sugerida:** detalhar um momento em que a orientação ajudou a avançar. Dizer como o uso de IA foi discutido e como se decidiu conferir suas saídas. Se os professores usaram IA para orientar, identificar ferramenta e finalidade apenas quando confirmadas. Encerrar: “Fabio vai mostrar como investigamos a necessidade e o que a equipe aprendeu.”
+
+## Slide 04 - Investigação: o que o levantamento informou
+
+**Quem apresenta e tempo:** Fabio. 05:00-06:30, 1 minuto e 30 segundos.
+
+**Objetivo:** apresentar a justificativa documentada e seu alcance.
+
+**Texto principal pronto:**
+
+- Levantamento informado com 60 participantes da comunidade escolar.
+- 80% relataram dificuldades na organização dos estudos.
+- 93,3% consideraram que a IA poderia ajudar.
+
+**Complemento:** rodapé obrigatório: “Fonte: Documento norteador EstudAI_Unidade_077.pdf, p. 3.” Não inventar perguntas, data de coleta, perfil da amostra, margens de erro ou contagens individuais.
+
+**Imagem recomendada:** duas barras ou dois números destacados, produzidos pelo professor nos slides com esses percentuais, mantendo a atribuição. Não há gráfico original da pesquisa na pasta de screenshots. O gráfico proposto é apenas uma forma de apresentar os dados informados.
+
+**Explicação oral sugerida:** “Esses dados indicam uma necessidade e uma expectativa da comunidade consultada. Não mostram que a plataforma já melhorou a aprendizagem.” Explicar como a equipe utilizou o levantamento em uma decisão real: [confirmar decisão e participação de Fabio]. Não generalizar para todos os estudantes.
 
 <!-- pagina -->
 
-## Slide 07 - Planejamento que aparece no calendário
+## Slide 05 - Decisões, dificuldades e aprendizagens da equipe
 
-**Objetivo:** mostrar a conexão entre perfil, atividade e data.
+**Quem apresenta e tempo:** Fabio. 06:30-08:00, 1 minuto e 30 segundos.
 
-**Texto principal pronto:**
-
-- Plano semanal com conteúdo, tipo de atividade e duração.
-- Datas e horários compatíveis com a disponibilidade informada.
-- Tarefas e eventos associados, com consulta do andamento.
-
-**Complemento:** a demonstração de 16/11 tem quatro tarefas e duas concluídas: 50% do plano. Esse percentual não é uma nota de aprendizagem.
-
-**Imagem recomendada:** `02-planejamento.png` e `03-calendario.png`, existentes. São capturas verticais; usar detalhes em slides ou áreas separadas, sem achatar o texto ou remover o aviso FALLBACK.
-
-**Explicação oral:** acompanhar uma atividade do plano até a data correspondente no calendário. O professor pode explicar que a visão anual mostra eventos existentes, sem significar geração de um plano anual de IA. Não demonstrar ações genéricas ainda bloqueadas apenas porque há botões visíveis.
-
-## Slide 08 - Praticar, revisar e realizar simulados
-
-**Objetivo:** explicar como o estudante utiliza os conteúdos.
+**Objetivo:** explicar a participação estudantil no desenvolvimento.
 
 **Texto principal pronto:**
 
-- Questões cadastradas com alternativas e correção pelo sistema.
-- Exercícios vinculados ao plano e revisão de erros anteriores.
-- Simulados com retomada e consulta dos resultados próprios.
+- Do problema investigado à proposta de perfil, plano e calendário.
+- Uma decisão da equipe: [exemplo real].
+- Uma dificuldade e a orientação recebida: [episódio confirmado].
+- Uma aprendizagem: [evidência pessoal do percurso].
 
-**Complemento:** gabaritos são protegidos conforme o fluxo; explicações aparecem na etapa de correção autorizada. Um catálogo com conteúdo insuficiente é informado e bloqueado.
+**Complemento:** os relatórios técnicos documentam conferência de horários e rejeição de saídas inadequadas. Fabio deve dizer como participou e o que aprendeu, sem assumir autoria de todas as ações documentadas nem transformar uma revisão posterior em relato de uma aula anterior.
 
-**Imagem recomendada:** `04-questoes.png` como principal; `05-correcao.png` ou `06-simulados.png` como apoio. Todas existem. `07-resultado-simulado.png` pode ilustrar o resultado já salvo.
+**Imagem recomendada:** `05-correcao.png` ou `02-planejamento.png` pode ilustrar a preocupação com retorno e conferência; não substitui o relato de participação. Um registro real da evolução do trabalho é preferível, se disponível.
 
-**Explicação oral:** distinguir treino diário, prática planejada e simulado. A correção mostrada corresponde a uma tentativa fictícia anterior; não foi criada ou modificada para melhorar a imagem. A base é limitada, e não se anuncia cobertura completa de avaliações oficiais.
+**Explicação oral sugerida:** usar a sequência “problema observado, decisão tomada, dificuldade, revisão e aprendizagem”. Distinguir a contribuição de cada integrante, inclusive autores que não estarão presentes, conforme os registros e o acordo da equipe. Passagem: “Evelyn vai explicar onde a IA entrou no trabalho e o que ainda precisa ser validado.”
+
+## Slide 06 - IA como apoio para desenvolver e aprender
+
+**Quem apresenta e tempo:** Evelyn. 08:00-09:00, 1 minuto.
+
+**Objetivo:** identificar ferramentas e usos durante o desenvolvimento.
+
+**Texto principal pronto:**
+
+- Ferramenta(s) utilizada(s) pela equipe: [confirmar nome e finalidade].
+- Apoio a uma etapa concreta: [pesquisa, programação ou revisão realmente realizada].
+- Resultado conferido pela equipe, com orientação docente.
+
+**Complemento:** há uso do Codex nesta recuperação técnica e preparação documental. Não atribuir automaticamente essa ferramenta à investigação inicial ou a todos os integrantes. Confirmar outras ferramentas e modelos/versões quando conhecidos. HTML, CSS, JavaScript, PHP e MySQL são tecnologias de desenvolvimento, não identificam a IA utilizada.
+
+**Imagem recomendada:** nome da ferramenta e finalidade em um quadro preparado pela equipe, após confirmação. Não expor conversas privadas, senhas ou chaves. Não há screenshot específico desse uso de IA na pasta entregue.
+
+**Explicação oral sugerida:** “Usamos [ferramenta confirmada] para [finalidade real]. A resposta precisou ser conferida em [exemplo].” Explicar o que o grupo decidiu manter, corrigir ou rejeitar. Se faltar registro, reconhecer a pendência em vez de escolher uma ferramenta apenas para completar o slide.
 
 <!-- pagina -->
 
-## Slide 09 - Acompanhar o percurso de estudo
+## Slide 07 - IA no EstudAI: integração, fallback e limites
 
-**Objetivo:** explicar os indicadores sem confundir períodos.
+**Quem apresenta e tempo:** Evelyn. 09:00-10:00, 1 minuto.
 
-**Texto principal pronto:**
-
-- Histórico de respostas e resultados por modalidade.
-- Indicadores de acertos, erros e evolução por período.
-- Progresso das atividades para consultar o que falta realizar.
-
-**Complemento:** os números exibidos são exemplos fictícios de funcionamento, não evidência de melhora de aprendizagem. Conquistas integram a proposta, mas o desbloqueio automático não foi revalidado.
-
-**Imagem recomendada:** `08-estatisticas.png`, existente; opcionalmente `01-dashboard.png`. Usar `09-conquistas.png` apenas se for útil mostrar o catálogo, deixando explícito que há zero desbloqueios.
-
-**Explicação oral:** o plano de 16/11 e os agregados da semana de 09-15/11 usam intervalos diferentes. O resultado diário de 50% vem de duas respostas em 11/11; práticas e simulados têm seus próprios totais. A tarefa concluída mostra execução, não necessariamente domínio do conteúdo.
-
-## Slide 10 - Tecnologias que sustentam a plataforma
-
-**Objetivo:** apresentar a solução técnica sem transformar a fala em aula de programação.
+**Objetivo:** separar o uso no processo da integração prevista no produto.
 
 **Texto principal pronto:**
 
-- HTML, CSS e JavaScript: interface e interação no navegador.
-- PHP e MySQL: regras de funcionamento e armazenamento.
-- Apache: ambiente local; recursos PWA: aplicação web e arquivos estáticos.
-- OpenRouter: integração de IA existente, ainda em validação.
+- Integração prevista: OpenRouter para diagnóstico e recomendações de planejamento.
+- Hoje: planejamento e orientação de redação com alternativa local identificada.
+- IA remota em validação e desativada na demonstração.
+- Questões e simulados vêm da base cadastrada.
 
-**Complemento:** a aplicação examinada não utiliza React. Python e Node.js foram ferramentas de apoio a testes e materiais, não o framework do produto.
+**Complemento:** OpenRouter é o serviço intermediário; o modelo configurado documentado é LiquidAI LFM3-1.7B, `liquid/lfm-3-1.7b:free`. Essa configuração não prova saída real aprovada. Fallback local é um algoritmo alternativo, não um modelo de IA.
 
-**Imagem recomendada:** diagrama simples com três blocos: “Navegador”, “Servidor PHP” e “Banco MySQL”. Mostrar a integração de IA em ramificação identificada como “em validação”. O professor pode montar esse diagrama; não é necessário produzir screenshot técnico.
+**Imagem recomendada:** captura anterior do plano B reproduzida na documentação principal; `11-redacao.png` é alternativa para mostrar o aviso de orientação local. Preservar FALLBACK e os avisos. Não executar novas chamadas.
 
-**Explicação oral:** o navegador apresenta informações, o servidor aplica regras e o banco mantém o histórico. PWA não significa funcionamento completo sem conexão: autenticação, dados e serviços externos continuam dependendo de seus respectivos acessos.
+**Explicação oral sugerida:** distinguir quatro camadas: IA como apoio à equipe, integração prevista, recurso local funcionando e recurso remoto ainda não aprovado. Dizer que não há replanejamento automático plenamente validado. Passagem: “Fabio vai mostrar um caso fictício e como conferir seu resultado.”
+
+## Slide 08 - Exemplo fictício: perfil e instruções
+
+**Quem apresenta e tempo:** Fabio. 10:00-10:50, 50 segundos.
+
+**Objetivo:** mostrar o que orienta o exemplo e como se formula uma regra.
+
+**Texto principal pronto:**
+
+- Conta fictícia B: objetivo ENEM; reforço declarado em Matemática.
+- Disponibilidade: segunda-feira, 18h-19h; limite da prova em 17/11/2026.
+- Instrução real do projeto: respeitar datas e blocos, sem sobreposição.
+
+**Complemento:** não atribuir um conteúdo difícil específico ou um diagnóstico de nível que não conste do perfil. O reforço declarado não é um diagnóstico automático. Os dados de cenário estão nos testes de onboarding e na janela arquivada do plano; não foi consultado o banco nesta entrega.
+
+**Imagem recomendada:** usar um pequeno quadro de perfil fictício, identificado como síntese de dados arquivados. A imagem `12-perfil-diagnostico.png` é da conta A e não deve ser apresentada como perfil de B. Uma captura específica do perfil B poderá ser preparada em outra execução, se necessária.
+
+**Explicação oral sugerida:** mostrar duas linhas reais de `estudaiPlanoSemanalPrompt`, sem rodar a IA: “Crie um plano semanal em portugues usando os dados abaixo, sem inventar disponibilidade ou conteudo.” Explicar que a regra proíbe horários fora do bloco e que o plano da demonstração veio do gerador local.
 
 <!-- pagina -->
 
-## Slide 11 - O que já demonstramos e o que vem depois
+## Slide 09 - Plano local e calendário da mesma conta
 
-**Objetivo:** separar entregas atuais de perspectivas.
+**Quem apresenta e tempo:** Fabio. 10:50-11:50, 1 minuto.
 
-**Texto principal pronto:**
-
-- Hoje: núcleo local testado e demonstrado no Chrome real.
-- Funcional: planejamento local, calendário, práticas e resultados nos cenários validados.
-- Próximos passos: validar IA remota, ampliar conteúdos e avaliar o uso educacional.
-
-**Complemento:** protótipo em versão alfa, com dados fictícios e sem deploy de produção nesta fase. Replanejamento completo e aplicação automática da revisão semanal permanecem pendentes.
-
-**Imagem recomendada:** `06-simulados.png` ou `05-correcao.png`, existentes, como evidência de um fluxo real. Um quadro “Disponível / Em evolução” pode resumir o estágio, sem lista de etapas de manutenção.
-
-**Explicação oral:** testes de software dão evidência de funcionamento no escopo exercitado. Eles não substituem avaliação pedagógica, ensaio de acessibilidade ou uso com público real. Não é necessário mencionar códigos de erro da integração de IA; basta explicar com clareza que a aprovação remota ainda está pendente.
-
-## Slide 12 - Uma rotina com mais clareza
-
-**Objetivo:** concluir com a contribuição pretendida e abrir espaço para perguntas.
+**Objetivo:** relacionar a disponibilidade a uma atividade persistida.
 
 **Texto principal pronto:**
 
-- Organizar o tempo, praticar e acompanhar resultados em um só ambiente.
-- Respeitar objetivos e disponibilidade do estudante.
-- Evoluir com validação técnica, avaliação pedagógica e transparência sobre a IA.
+- Plano B: Redação, “Tese e repertorio”.
+- Segunda-feira, 16/11/2026, 18h-19h, 60 minutos.
+- Origem FALLBACK: geração local, sem aprovação remota de IA.
+- Consultar plano e calendário da mesma conta.
 
-**Complemento:** “EstudAI: tecnologia como apoio à organização dos estudos.” Equipe / contato institucional: [preencher, se autorizado].
+**Complemento:** a captura anterior `visual-1794578083253-ai-plan-fallback.png` existe nas evidências da Etapa 13.1 e foi reutilizada no PDF principal. Ela não é uma nova captura. Os dados da tarefa foram conferidos no arquivo arquivado da geração.
 
-**Imagem recomendada:** `01-dashboard.png`, existente, ou uma composição gráfica simples criada pelo professor com as palavras “Planejar”, “Praticar” e “Acompanhar”. Não montar telas que simulem funcionalidades ausentes.
+**Imagem recomendada:** figura do plano B na documentação principal. Para demonstração na aplicação, consultar o calendário já salvo de B. `03-calendario.png` mostra A: pode ilustrar a interface, mas deve ser identificada como outra conta, sem comparação cruzada de perfil e resultado.
 
-**Explicação oral:** retomar o problema inicial e dizer que o projeto pretende apoiar decisões e constância, sem substituir o professor ou prometer resultados de prova. Convidar a perguntas sobre a proposta, o funcionamento demonstrado e os próximos passos. Não apresentar benefícios esperados como pesquisa concluída.
+**Explicação oral sugerida:** seguir da atividade até a data de 16/11. Se usar somente imagens, explicar que a figura B comprova plano e horário, enquanto a associação com calendário foi validada nos registros técnicos; não apresentar o calendário de A como evidência visual de B. As capturas públicas de A têm tarefas extras de teste e não provam que todo o conjunto cabe em um único bloco de uma hora.
+
+## Slide 10 - Conferir o resultado e preservar a participação
+
+**Quem apresenta e tempo:** Fabio. 11:50-13:00, 1 minuto e 10 segundos.
+
+**Objetivo:** mostrar avaliação crítica e limites da personalização.
+
+**Texto principal pronto:**
+
+- Conferir: 60 minutos dentro de 18h-19h, antes da prova e sem sobreposição.
+- Verificar também se a atividade atende às prioridades informadas.
+- Acompanhar tarefas e resultados; distinguir ajustes futuros de ações liberadas.
+
+**Complemento:** uma tarefa de Redação não demonstra atendimento ao reforço de Matemática nem cobertura de todo o ENEM. Esse ponto merece revisão pedagógica, sem anunciar personalização integral já validada.
+
+**Imagem recomendada:** mesma figura B do slide anterior; `08-estatisticas.png` apenas como ilustração adicional de acompanhamento, se houver tempo. Não misturar seus resultados de A com o plano B.
+
+**Explicação oral sugerida:** dizer o que foi conferido e o que não se pode concluir. Comentar que respostas remotas inadequadas foram rejeitadas na validação e que isso motivou correções locais. O estudante participa informando preferências e consultando resultados. Replanejamento completo e edição genérica bloqueada não devem ser demonstrados como operacionais. Encerrar a demonstração e devolver a fala aos professores.
+
+<!-- pagina -->
+
+## Slide 11 - Síntese pedagógica: o que a equipe aprendeu
+
+**Quem apresenta e tempo:** Isabel e/ou Fabiano. 13:00-14:00, 1 minuto.
+
+**Objetivo:** concluir o percurso de aprendizagem com evidência.
+
+**Texto principal pronto:**
+
+- Investigar uma necessidade e justificar escolhas.
+- Planejar, colaborar e revisar decisões.
+- Utilizar IA com conferência crítica dos resultados.
+- Evidência de aprendizagem: [exemplo observado pelos professores].
+
+**Complemento:** essas dimensões são propostas de reflexão. Os professores devem indicar quais observaram de fato e citar um exemplo, sem declarar aquisição de competências que não tenham acompanhado.
+
+**Imagem recomendada:** um registro autorizado do trabalho ou uma síntese textual da aprendizagem. Não substituir a evidência pedagógica por números de acertos do perfil fictício.
+
+**Explicação oral sugerida:** retomar um episódio da abertura e mostrar o que mudou na forma de investigar, decidir ou verificar. O protótipo não foi testado com estudantes em situação real de uso, segundo o norteador. O levantamento de necessidades não é comprovação de impacto na aprendizagem, autonomia ou desempenho.
+
+## Slide 12 - Limites, possibilidades e encerramento
+
+**Quem apresenta e tempo:** Isabel e/ou Fabiano. 14:00-15:00, 1 minuto.
+
+**Objetivo:** apresentar uma perspectiva educacional responsável.
+
+**Texto principal pronto:**
+
+- Núcleo local demonstrável, com dados fictícios e IA remota em validação.
+- Possibilidade de adaptar a investigação e a conferência de resultados a outras turmas.
+- Próximos passos: avaliação educacional, acessibilidade, conteúdos e integração de IA.
+
+**Complemento:** a futura aplicação depende de objetivos pedagógicos, acompanhamento docente, infraestrutura e revisão de privacidade e segurança. Não houve deploy de produção nesta fase.
+
+**Imagem recomendada:** `01-dashboard.png`, existente, ou uma síntese visual de “Investigar, construir, conferir e aprender”. Não montar telas que simulem funcionalidades ausentes.
+
+**Explicação oral sugerida:** explicar um primeiro passo possível para outra turma, como investigar suas necessidades e analisar criticamente uma proposta de organização. Apresentar testes de uso com estudantes como próximos passos, não como resultados já obtidos. Agradecer e encerrar dentro dos quinze minutos. Perguntas posteriores dependem da organização do evento.

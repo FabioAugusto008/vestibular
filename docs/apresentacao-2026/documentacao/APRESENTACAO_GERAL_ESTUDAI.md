@@ -1,10 +1,14 @@
 # EstudAI
 
-## Organização, prática e acompanhamento dos estudos
+## Percurso pedagógico, investigação e organização dos estudos
 
-**Documento de apoio ao professor**  
-Apresentação: 17/11/2026, Parque Tecnológico de São José dos Campos.  
-Referência do conteúdo: versão demonstrativa local examinada em 13/11/2026.
+**Documento de apoio aos professores - alinhado ao norteador oficial**
+Apresentação: 17/11/2026, duração total de 15 minutos. **Local: a confirmar pelos professores.**
+Unidade informada no norteador: Etec Prof. José Sant'Ana de Castro. Referência técnica: protótipo local examinado em 13/11/2026.
+
+**Participação presencial prevista:** Professora Isabel, Professor Fabiano, Evelyn e Fabio. **Autoria do projeto:** validar os créditos completos com a equipe; a ausência presencial de João Victor não autoriza sua exclusão dos créditos de desenvolvimento. Ele não possui fala prevista neste roteiro.
+
+O arquivo “Documento norteador EstudAI_Unidade_077.pdf” foi localizado em Downloads e lido integralmente, nas suas quatro páginas. Ele é a referência principal da apresentação: a plataforma deve exemplificar uma experiência de formação, destacando a investigação do problema, as escolhas docentes, a participação estudantil e a análise crítica do uso da IA. A demonstração técnica ocupa três dos quinze minutos.
 
 O EstudAI é uma plataforma web que reúne perfil do estudante, planejamento semanal, calendário, atividades de prática e acompanhamento de desempenho. Sua proposta é transformar objetivos e disponibilidade em uma rotina de estudos que possa ser consultada, realizada e acompanhada em um só ambiente.
 
@@ -12,15 +16,45 @@ O foco educacional está na relação entre **planejar, praticar e observar o pr
 
 **O que está disponível hoje:** o fluxo principal foi testado localmente, com contas fictícias e Chrome real. O planejamento demonstrado é gerado por regras locais, identificado como FALLBACK. Questões, práticas vinculadas ao plano, revisões de erros, simulados e consultas de resultados foram validados nos cenários documentados. A integração remota com IA existe, mas ainda não produziu resultados aprovados de ponta a ponta e permanece desativada.
 
-### O problema e sua justificativa
+<!-- pagina -->
+
+## Problema e justificativa do projeto
 
 Estudar envolve decisões que um calendário comum não resolve sozinho: quais matérias priorizar, quanto tempo reservar, como distribuir atividades e quando voltar a um assunto difícil. Estudantes também têm horários, objetivos e necessidades diferentes. Uma lista única de compromissos pode registrar datas sem explicar como elas se relacionam com a prática e com os resultados obtidos.
 
-O EstudAI procura aproximar essas partes. A disponibilidade informa o planejamento; as tarefas aparecem no calendário; as práticas registram respostas; os indicadores permitem consultar o desempenho. O problema é apresentado de forma qualitativa: não foram identificados no material analisado estudos com estudantes que comprovem resultados de aprendizagem ou dimensionem estatisticamente essa necessidade.
+O EstudAI procura aproximar essas partes. A disponibilidade informa o planejamento; as tarefas aparecem no calendário; as práticas registram respostas; os indicadores permitem consultar o desempenho. O norteador informa um levantamento de necessidades da comunidade escolar, detalhado na próxima página. Esses dados justificam investigar a proposta, mas não comprovam ganhos de aprendizagem com o protótipo.
 
 ### Como entender a origem da proposta
 
-A motivação descrita no projeto é reunir organização e acompanhamento, aproveitando informações da rotina para orientar o estudo. O histórico documental mostra a evolução de um ambiente com questões e indicadores para uma proposta que também integra perfil, planejamento e calendário. Não há registro suficiente para atribuir sua criação a entrevistas, a uma pesquisa de campo ou a uma história pessoal específica. Nomes, autoria e contexto institucional devem ser informados pela equipe.
+A motivação documentada é investigar dificuldades de organização dos estudos e construir uma proposta de apoio à rotina. O levantamento informado no norteador faz parte desse percurso. Isabel e Fabiano devem esclarecer como a ideia surgiu na turma e quem a propôs; o PDF apresenta essas questões como orientações de relato, sem fornecer as respostas. Não se deve inventar uma história de origem, uma sequência de aulas ou atribuições individuais.
+
+**Local pendente:** o PDF indica Fatec, Av. Tomé Portes Del Rei, 525, Vila São José, Taubaté - SP. A informação anterior mencionava o Parque Tecnológico de São José dos Campos. As referências divergem. Manter “local a confirmar” na capa até validação de Isabel e Fabiano.
+
+<!-- pagina -->
+
+## Percurso pedagógico e investigação da comunidade escolar
+
+### O levantamento informado no documento norteador
+
+Segundo o “Documento norteador EstudAI_Unidade_077.pdf”, página 3, houve um levantamento com **60 participantes da comunidade escolar**. O material informa que **80% relataram dificuldades na organização dos estudos** e **93,3% consideraram que a IA poderia ajudar**.
+
+Apresentar os percentuais como resultados desse levantamento informado, sem generalizar para todos os estudantes. O segundo resultado expressa uma percepção de possível ajuda, não uma comprovação de eficácia da IA. O PDF não fornece questionário, distribuição dos participantes, data de aplicação, procedimento de amostragem, margem de erro ou base individual de respostas. Não acrescentar essas informações nem converter os percentuais em contagens não publicadas.
+
+Uma formulação adequada para o slide é: “O documento norteador registra um levantamento com 60 participantes da comunidade escolar: 80% relataram dificuldades para organizar os estudos e 93,3% consideraram que a IA poderia ajudar.” Rodapé: “Fonte: Documento norteador EstudAI_Unidade_077.pdf, p. 3.”
+
+### O papel dos professores
+
+Nos cinco minutos iniciais, Isabel e Fabiano devem situar a atividade na formação dos estudantes, explicar a proposta feita à equipe e identificar a metodologia ativa que realmente utilizaram. O norteador menciona aprendizagem por projetos, por problemas e investigação apenas como exemplos; não determina qual delas foi adotada no EstudAI.
+
+**Relatos a completar com os professores:** componente curricular e turma; origem da proposta; metodologia efetivamente aplicada; escolhas deixadas aos estudantes; forma de acompanhamento; um exemplo de orientação que levou a rever uma decisão. Usar um registro real, quando disponível. Não atribuir encontros, rubricas ou procedimentos que não estejam documentados.
+
+### Protagonismo, avaliação e aprendizagens
+
+Fabio deve relacionar o levantamento a uma decisão concreta da equipe: [confirmar qual decisão e sua evidência]. Deve também contar uma dificuldade, a orientação recebida e o que aprendeu. Evelyn deve distinguir o uso da IA para construir o trabalho do uso previsto dentro do produto. Os professores encerram retomando aprendizagens observadas, com um exemplo que as sustente.
+
+Os registros técnicos permitem discutir conferência de horários, comparação entre requisitos e resultados e identificação de respostas inadequadas. Isso pode fundamentar uma reflexão sobre verificação crítica. Atribuir uma aprendizagem ou contribuição pessoal a um estudante, porém, depende do relato real da equipe; testes de software não substituem essa evidência pedagógica.
+
+**Condição atual:** o próprio norteador informa que o protótipo ainda não foi testado com estudantes em situação real de uso. O levantamento é investigação de necessidades, não avaliação de impacto do EstudAI no desempenho ou na autonomia.
 
 <!-- pagina -->
 
@@ -70,15 +104,61 @@ A IA foi projetada como apoio à organização: analisar informações educacion
 
 Replanejar significa considerar o que foi realizado, o que ficou pendente e uma mudança de rotina para propor uma nova distribuição. Na redação, a proposta é oferecer comentários orientativos por competência e próximos passos de revisão. Não se trata de diagnóstico clínico, correção oficial ou substituição do professor.
 
-### B. O que já foi implementado
+### B. IA como apoio ao desenvolvimento
 
-Existe integração de backend com a OpenRouter, serviço que intermedeia o acesso a modelos de linguagem. Foram implementados preparação de solicitações, validação de respostas, limites e tratamento de erros. Testes locais simulados verificam contratos de saída e situações de falha. Planejamento semanal e orientação de redação possuem alternativas locais identificadas.
+Nesta recuperação técnica e preparação documental houve apoio do Codex, conforme os registros desta sessão. Esse uso não deve ser apresentado automaticamente como ferramenta da pesquisa inicial ou como prova de que todos os integrantes a utilizaram. Evelyn deve confirmar as ferramentas efetivamente usadas pela equipe, a finalidade de cada uma, o modelo/versão quando conhecido e um exemplo de resultado que precisou ser conferido ou corrigido. HTML, CSS, JavaScript, PHP e MySQL não são nomes de ferramentas de IA.
 
-### C. O que ainda precisa de validação
+### C. Integração prevista no produto e alternativa local
+
+Existe integração de backend com a OpenRouter, serviço que intermedeia o acesso a modelos de linguagem. O modelo configurado nos registros técnicos é LiquidAI LFM3-1.7B, identificado como liquid/lfm-3-1.7b:free; isso não comprova que uma geração real tenha sido aprovada. Foram implementados preparação de solicitações, validação, limites e tratamento de erros. Planejamento semanal e orientação de redação possuem alternativas locais identificadas. Fallback é execução por regras locais; não é um modelo de IA nem uma resposta remota comprovada.
+
+### D. O que ainda precisa de validação
 
 As tentativas reais anteriores de planejamento e diagnóstico não resultaram em saídas aprovadas. A integração remota continua desativada. Replanejamento completo, planejamento anual e aplicação automática da revisão semanal permanecem pendentes ou bloqueados na demonstração. Não se deve anunciar adaptação inteligente automática já operacional.
 
 **Separação essencial:** a IA proposta apoia a organização e as recomendações; questões, alternativas, gabaritos e simulados utilizam a base cadastrada. O sistema não depende de geração autoral de questões por IA em tempo real.
+
+<!-- pagina -->
+
+## Demonstração de Fabio: exemplo e conferência em três minutos
+
+### Um caso fictício sem misturar contas
+
+Para a conferência completa de horários, preferir o plano local da **conta fictícia B**, já existente, com uma tarefa. O registro arquivado da geração informa segunda-feira, **16/11/2026, das 18h às 19h**, com data-limite de prova em 17/11. A tarefa é Redação, “Tese e repertorio”, duração de 60 minutos e origem FALLBACK.
+
+O cenário de perfil utilizado nos testes foi ENEM, com reforço declarado em Matemática e disponibilidade de uma hora na segunda-feira. A evidência do plano confirma horário e janela; não se deve afirmar que uma atividade única de Redação resolve o reforço em Matemática ou representa adaptação pedagógica integral. Não foi identificada uma dificuldade textual específica que permita inventar diagnóstico ou nível do estudante.
+
+**Imagem anterior disponível:** a captura “visual-1794578083253-ai-plan-fallback.png”, das evidências da Etapa 13.1, mostra esse plano de B. Ela será reutilizada na versão PDF deste documento, sem nova captura. As imagens 02 e 03 da pasta de apresentação mostram A e contêm tarefas adicionais de validação. Não comparar o perfil de B com o calendário de A como se fossem da mesma conta; o conjunto de A também não deve ser apresentado como plano integralmente produzido a partir de um único bloco de uma hora.
+
+![Captura real anterior do plano local da conta fictícia B](C:/Users/player/AppData/Local/EstudAI/Recovery/20261113_stage13_1_b296fec1/visual-1794578083253-ai-plan-fallback.png)
+
+<!-- pagina -->
+
+## Procedimento demonstrativo: entrada, regra e resultado
+
+**0:00-0:50:** Fabio apresenta o perfil fictício: objetivo ENEM, reforço informado e disponibilidade. Mostra um trecho real das instruções de planejamento existentes, explicando que se trata da integração prevista, sem executar IA.
+
+**0:50-1:50:** mostra o plano local de B e, se a aplicação for utilizada no evento, consulta o calendário da mesma conta, já persistido. Se usar apenas imagens, a captura de B acima comprova plano/data/horário; a imagem 03 de A pode ilustrar a interface do calendário, desde que seja identificada como outra conta e não usada para uma comparação cruzada de coerência.
+
+**1:50-3:00:** confere 60 minutos, intervalo 18h-19h, data anterior à prova e ausência de sobreposição no plano de uma tarefa. Mostra como consultar andamento e resultados. Explica que reforços e qualidade pedagógica exigem avaliação: compatibilidade de horário não prova atendimento de todas as prioridades.
+
+### Trecho real de prompt do projeto
+
+Fonte: server/services/ai/prompts.php, função estudaiPlanoSemanalPrompt. O trecho abaixo é literal; a ausência de acentos acompanha o código original.
+
+> Crie um plano semanal em portugues usando os dados abaixo, sem inventar disponibilidade ou conteudo.
+>
+> - Cada tarefa deve usar a data e um bloco da propria data; inicio e fim dentro do bloco, sem sobreposicao.
+
+Essas instruções explicam o contrato previsto com a IA. **O plano exibido veio do gerador local alternativo**, não de uma nova execução desse prompt. Não executar solicitações remotas para a apresentação deste exemplo.
+
+### Participação e ajustes
+
+O estudante participa informando seus objetivos, dificuldades e disponibilidade e consultando o andamento. Alterar parâmetros do perfil ou desejar um novo plano não equivale a replanejamento automático já validado. Edição genérica de tarefas, replanejamento completo e automações bloqueadas devem ser descritos como limites atuais, sem clicar em controles não liberados durante a demonstração.
+
+### Um exemplo de avaliação crítica
+
+Os relatórios registram respostas remotas rejeitadas e correções locais para evitar aceitar saídas inadequadas. O aprendizado discutível é comparar o que foi pedido com o que foi entregue, registrar limites e não transformar uma falha em sucesso aparente. Os professores e estudantes devem relacionar esse procedimento a uma experiência de que participaram, confirmando os detalhes do percurso.
 
 <!-- pagina -->
 
@@ -199,7 +279,7 @@ Esses pontos expressam como o projeto articula seus recursos. Não constituem co
 
 O EstudAI pretende dar mais clareza às prioridades, tornar a rotina consultável, incentivar constância e apoiar a preparação para avaliações. Ao relacionar atividade e resultado, pode favorecer a reflexão do estudante sobre suas escolhas e dificuldades. Esses benefícios são possibilidades da proposta; precisam ser investigados com estudantes e professores.
 
-Não foram apresentados resultados científicos de melhora de notas, redução de evasão, ganho de aprendizagem ou comparação de eficácia. O sistema também não substitui orientação pedagógica. Um professor pode ajudar a interpretar dificuldades e definir atividades adequadas, inclusive quando os indicadores numéricos parecem positivos.
+O levantamento com 60 participantes informa necessidades e expectativas, não melhora de notas, redução de evasão ou ganho de aprendizagem com o produto. Conforme o norteador, não houve teste com estudantes em situação real de uso. O sistema não substitui orientação pedagógica. Um professor pode ajudar a interpretar dificuldades e definir atividades adequadas, inclusive quando os indicadores numéricos parecem positivos.
 
 ### Estágio atual
 
@@ -251,10 +331,12 @@ Conquistas permanecem em zero. Rótulos de interface que mencionam IA não compr
 
 ## 9. Referências internas e orientação editorial
 
-Esta documentação foi elaborada com leitura do projeto e dos registros existentes, sem novas chamadas externas, conexão com banco ou alteração do aplicativo. Informações de maturidade seguem os relatórios mais recentes, que delimitam o escopo das listas gerais de funcionalidades.
+Esta revisão prioriza o documento norteador oficial e a correção de participantes fornecida pelo solicitante. A maturidade do produto segue os relatórios técnicos mais recentes. Foram realizadas apenas leituras e produção documental, sem novas chamadas externas, conexão com banco ou alteração do aplicativo.
 
 ### Fontes consultadas
 
+- Documento norteador EstudAI_Unidade_077.pdf, localizado em C:\Users\player\Downloads e lido integralmente: p. 1, unidade, foco pedagógico, tempo e endereço informado; p. 2, orientação docente e reflexão; p. 3, levantamento com 60 participantes, divisão de relatos, IA e exemplo; p. 4, ensaio e síntese final. É a referência principal desta apresentação.
+- Complemento do solicitante: ausência presencial de João Victor; participação prevista de Isabel, Fabiano, Evelyn e Fabio; transferência do relato de investigação para Fabio; local definitivo pendente de validação.
 - README.md e DOCUMENTACAO.md: definição, arquitetura e proposta funcional.
 - docs/auditoria-inicial-0.0.1-alpha.md, docs/versions/0.1.0-alpha.md e documentação de onboarding: evolução e composição da proposta.
 - docs/etapa06-gets-com-escrita.md e docs/etapa07-validacao-final.md: contexto das restrições e da validação de acesso/leitura.
@@ -269,10 +351,18 @@ Esta documentação foi elaborada com leitura do projeto e dos registros existen
 
 Os registros disponíveis não incluem um relatório individual para cada uma das etapas iniciais 01-05. Também não foi localizado o arquivo ROADMAP.md citado no README. Nenhum desses documentos foi presumido existente. Isso não impede a descrição funcional sustentada pelos arquivos examinados.
 
-### Informações que a equipe deve completar
+<!-- pagina -->
 
-**Integrantes:** [preencher nomes]. **Professor responsável:** [preencher nome]. **Instituição / curso:** [preencher identificação]. A data e o local do evento foram fornecidos para esta apresentação. A autoria e a instituição não foram inferidas a partir do ambiente técnico.
+## Conferência final dos professores e organização da fala
+
+### Validações que a equipe deve completar
+
+Confirmar o local; turma e componente curricular; metodologia ativa efetivamente utilizada; origem da proposta; exemplos de orientação, decisão estudantil e aprendizagem; ferramentas de IA usadas no percurso inicial; créditos completos de autoria. A unidade foi identificada no norteador como Etec Prof. José Sant'Ana de Castro. A apresentação presencial está prevista para Isabel, Fabiano, Evelyn e Fabio, sem fala de João Victor. Preservar sua autoria quando registrada, separando crédito de desenvolvimento e presença no evento.
+
+### Divisão dos quinze minutos
+
+Professores: 5 minutos de proposta pedagógica, metodologia e orientação; Fabio: 3 minutos de investigação e aprendizagens; Evelyn: 2 minutos de IA no processo e no produto; Fabio: 3 minutos de exemplo e conferência; professores: 2 minutos de síntese pedagógica e encerramento. A divisão entre Isabel e Fabiano será definida por eles. Os tempos incluem as passagens e a demonstração.
 
 ### Mensagem central para a apresentação
 
-O EstudAI propõe reunir organização, prática e acompanhamento em uma rotina de estudos orientada pelo perfil do estudante. O protótipo já permite demonstrar essa integração com planejamento local e dados fictícios. O apoio remoto de IA é uma frente em validação, que deve evoluir com transparência, segurança e avaliação pedagógica.
+O EstudAI exemplifica um percurso de investigação de necessidades e construção de uma proposta de apoio aos estudos. A apresentação deve mostrar como os professores orientaram escolhas e como os estudantes investigaram, decidiram e verificaram resultados, com exemplos reais a confirmar pela equipe. O protótipo local é uma evidência desse percurso, não o único foco nem uma prova de impacto educacional. O apoio remoto de IA permanece em validação.

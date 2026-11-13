@@ -1,59 +1,47 @@
-# EstudAI: resumo para o professor
+# EstudAI: síntese para Isabel e Fabiano
 
-**Apresentação:** 17/11/2026, Parque Tecnológico de São José dos Campos.  
-**Referência:** estado do protótipo examinado em 13/11/2026.  
-**Equipe, professor e instituição:** preencher com as informações oficiais.
+**Referência principal:** Documento norteador EstudAI_Unidade_077.pdf, lido integralmente, quatro páginas. **Unidade:** Etec Prof. José Sant'Ana de Castro. **Data prevista:** 17/11/2026. **Duração:** 15 minutos. **Local: a confirmar.**
 
-## A proposta em uma frase
+O PDF indica Fatec, Av. Tomé Portes Del Rei, 525, Vila São José, Taubaté - SP. A informação anterior mencionava o Parque Tecnológico de São José dos Campos. Não há confirmação da mudança; validar o endereço antes de fechar a capa.
 
-O EstudAI é uma plataforma web que conecta o perfil do estudante a um planejamento semanal, às atividades de prática e ao acompanhamento dos resultados.
+## Participação e finalidade
 
-## Problema, objetivo e público
+Participação presencial prevista: Professora Isabel, Professor Fabiano, Evelyn e Fabio. João Victor não terá fala prevista. A lista de autores é distinta da lista de apresentadores; sua ausência não autoriza excluir eventual crédito de desenvolvimento. Confirmar os créditos completos com a equipe.
 
-Organizar estudos exige mais do que anotar datas. É necessário escolher prioridades, distribuir o tempo disponível, praticar e voltar aos assuntos que apresentam dificuldade. O projeto procura reunir essas decisões em um ambiente, considerando que cada estudante tem uma rotina diferente.
+O foco é o percurso pedagógico: como a necessidade foi investigada, como os professores orientaram, quais decisões os estudantes tomaram e o que aprenderam. O EstudAI, plataforma de perfil, planejamento, calendário e prática, é o exemplo concreto desse percurso. Evitar uma apresentação composta apenas por funcionalidades.
 
-O objetivo é apoiar uma rotina compatível com metas, matérias e disponibilidade, com foco em estudantes do Ensino Médio e preparação para ENEM ou vestibulares. Os benefícios esperados são maior clareza das prioridades, acompanhamento da rotina e apoio à constância. Não há pesquisa com estudantes que comprove melhora de aprendizagem ou de notas; não usar percentuais de eficácia na apresentação.
+## Divisão de falas: quinze minutos
 
-## Como o estudante utiliza
+| Intervalo | Quem apresenta | Conteúdo |
+| --- | --- | --- |
+| 00:00-05:00 | Isabel e Fabiano | Proposta pedagógica, metodologia ativa real e orientação |
+| 05:00-08:00 | Fabio | Investigação, levantamento, decisões e aprendizagens |
+| 08:00-10:00 | Evelyn | IA no desenvolvimento e integração prevista no produto |
+| 10:00-13:00 | Fabio | Perfil fictício, exemplo de plano e conferência |
+| 13:00-15:00 | Isabel e Fabiano | Síntese pedagógica, limites e possibilidades |
 
-1. Cria uma conta ou faz login.
-2. Informa objetivo, data de prova, disponibilidade, matérias e reforços no perfil inicial.
-3. Obtém um plano semanal, hoje demonstrado pelo gerador local.
-4. Consulta tarefas e calendário, abre práticas e realiza simulados.
-5. Acompanha respostas, correções, revisões, histórico e indicadores.
+O roteiro completo distribui 12 slides nesses blocos. Os tempos já incluem as passagens e a demonstração. A divisão interna entre os professores pode ser ajustada por eles. Ensaiar juntos com cronômetro.
 
-As questões e os simulados utilizam a base cadastrada no sistema. Não são fabricados por IA em tempo real. Os registros pertencem à conta do estudante; as demonstrações usam contas e dados fictícios.
+## Investigação e metodologia: o que pode ser afirmado
 
-## O que está pronto e o que precisa de cuidado
+O norteador informa um levantamento com **60 participantes da comunidade escolar**: **80% relataram dificuldades na organização dos estudos** e **93,3% consideraram que a IA poderia ajudar**. Atribuir ao documento, página 3. Não inventar questionário, data, amostragem, margens de erro ou outros resultados. São necessidades e expectativas informadas, não comprovação de eficácia do EstudAI.
 
-**Validado no escopo local:** autenticação, perfil inicial, consultas de tarefas e calendário, prática com questões, revisão de erros, exercícios ligados ao plano, simulados e recuperação de resultados. Essas jornadas foram testadas, incluindo uso no Chrome real.
+Isabel e Fabiano precisam completar o contexto da turma, componente curricular, origem da proposta e metodologia efetivamente utilizada. Aprendizagem por projetos, por problemas e investigação aparecem no PDF como exemplos, não como identificação do método aplicado. Selecionar um episódio real de orientação e uma evidência de aprendizagem. Fabio deve relacionar o levantamento a uma decisão da equipe, sem inventar sua participação ou a dos colegas.
 
-**Funciona com alternativa local:** planejamento semanal e orientação de redação. A palavra FALLBACK significa que o resultado veio de regras locais alternativas, e não de uma geração remota aprovada. A orientação de redação é não oficial e não substitui avaliação humana.
+## A explicação de Evelyn sobre IA
 
-**Em validação ou bloqueado:** diagnóstico remoto, geração de plano por IA, replanejamento completo, planejamento anual e aplicação automática da revisão semanal. A OpenRouter está integrada ao backend, mas as saídas reais anteriores não foram aprovadas; a IA remota permanece desativada.
+Distinguir quatro situações: **apoio ao desenvolvimento**, **integração prevista no produto**, **alternativa local funcionando** e **IA remota ainda em validação**. Há uso do Codex nesta recuperação técnica/documentação; Evelyn deve confirmar as ferramentas do percurso inicial e suas finalidades, sem atribuí-las automaticamente a todos.
 
-**Limites de demonstração:** o catálogo de conquistas pode ser mostrado, mas o desbloqueio automático não foi revalidado e as capturas têm zero conquistas. Botões visíveis não comprovam liberação de todas as ações. O PWA conserva arquivos estáticos, mas não torna todo o sistema utilizável sem conexão. Não houve publicação em produção.
+No produto, a integração documentada usa OpenRouter, serviço de acesso a modelos, com LiquidAI LFM3-1.7B configurado. A geração remota não está aprovada e permanece desativada. Planejamento e orientação de redação funcionam por fallback local, que não é uma resposta de IA remota. Questões e simulados utilizam a base cadastrada. Não anunciar replanejamento automático plenamente operacional.
 
-## Como apresentar o papel da IA
+## Exemplo de Fabio e conferência
 
-“A proposta é usar inteligência artificial para apoiar a análise do perfil e recomendar uma organização de estudos. O protótipo atual já funciona com planejamento local, enquanto a integração remota continua em validação.”
+Preferir a conta fictícia B, cujo plano existente tem uma tarefa: Redação, “Tese e repertorio”, em **16/11, das 18h às 19h, 60 minutos**, com origem FALLBACK. O cenário informa objetivo ENEM, reforço em Matemática e limite da prova em 17/11. Conferir data, duração e bloco; não afirmar que uma tarefa de Redação atende integralmente ao reforço de Matemática ou a todo o ENEM.
 
-Evitar frases como “a IA já identifica automaticamente o nível de cada aluno” ou “o sistema se adapta sozinho a qualquer dificuldade”. Essas capacidades não foram comprovadas na versão apresentada.
+A documentação principal reproduz uma captura anterior de B e um trecho real de prompt, sem nova execução. Consultar o calendário da mesma conta, se houver demonstração ao vivo. As imagens públicas 02 e 03 são de A, com tarefas adicionais de teste; não compará-las ao perfil de B como se fossem um único caso. Não criar resultados ou ajustar dados para melhorar a apresentação.
 
-## Tecnologias e diferenciais
+## Conclusão e pendências
 
-HTML, CSS e JavaScript compõem a interface; PHP processa as regras; MySQL armazena os dados; Apache fornece o ambiente local. Recursos PWA apoiam o comportamento de aplicativo web. OpenRouter é a integração prevista para modelos de IA. Não apresentar React ou Python como frameworks da aplicação.
+O núcleo local foi testado, mas o norteador registra ausência de teste com estudantes em situação real de uso. Concluir com aprendizagens observadas pelos professores, um exemplo concreto e possibilidades para outras turmas. Benefícios educacionais ainda precisam ser avaliados. Há limites de conteúdo, conquistas sem desbloqueio revalidado, automações bloqueadas e ausência de produção pública nesta fase.
 
-O principal diferencial da proposta é a conexão entre perfil, plano, calendário, prática e acompanhamento. A personalização local e a identificação transparente da origem permitem demonstrar o núcleo sem depender de um serviço externo de IA.
-
-## Organização dos slides e das imagens
-
-O roteiro anexo propõe **12 slides**: capa, problema, proposta, fluxo, perfil, personalização/IA, planejamento/calendário, prática/simulados, acompanhamento, tecnologias, estágio/evolução e conclusão. Cada slide inclui texto pronto, objetivo, imagem sugerida e notas de fala.
-
-As 12 capturas verificadas estão em `../screenshots/`, com ZIP em `../screenshots.zip`. Priorizar dashboard, plano, calendário, questões, simulados e estatísticas. Login, disponibilidade do onboarding e reforços ainda precisam de novas capturas específicas nessa pasta; elas não foram produzidas nesta entrega. O roteiro oferece alternativas com imagens existentes.
-
-**Atenção aos números:** 50% do plano representa duas de quatro tarefas de 16/11. O zero semanal refere-se a 09-15/11. O resultado diário de 50% vem de duas respostas em 11/11; a prática planejada e os simulados são modalidades distintas. Esses dados são exemplos fictícios de funcionamento, não resultados de eficácia educacional.
-
-## Próximos passos e conclusão
-
-Validar a IA remota e a qualidade das recomendações, ampliar a base de questões, recuperar automações com segurança e avaliar utilidade e acessibilidade com estudantes e professores. A mensagem final é uma proposta de organização integrada, com núcleo demonstrável e evolução responsável, sem apresentar capacidades futuras como concluídas.
+Antes de enviar os slides: confirmar local, metodologia, turma/componente, ferramentas de IA do percurso inicial, exemplo de decisão/orientação/aprendizagem e autoria. As 12 capturas existentes podem apoiar a fala; não houve nova captura, alteração de código/banco, chamada OpenRouter, commit ou deploy nesta revisão documental.
