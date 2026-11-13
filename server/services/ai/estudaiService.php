@@ -2,22 +2,22 @@
 
 require_once __DIR__ . '/openrouterClient.php';
 require_once __DIR__ . '/prompts.php';
+require_once __DIR__ . '/validation.php';
 
 function estudaiDecodeJsonText(string $text): ?array {
+    if (strlen($text) > 100000) {
+        return null;
+    }
     $clean = trim($text);
-    $clean = preg_replace('/^```json\s*/i', '', $clean);
-    $clean = preg_replace('/^```\s*/', '', $clean);
-    $clean = preg_replace('/\s*```$/', '', $clean);
+    if (str_starts_with($clean, '```')) {
+        if (!preg_match('/\A```(?:json)?[ \t]*\R(.*?)\R```\z/is', $clean, $match)) {
+            return null;
+        }
+        $clean = trim($match[1]);
+    }
 
     $data = json_decode($clean, true);
-    if (!is_array($data)) {
-        $start = strpos($clean, '{');
-        $end = strrpos($clean, '}');
-        if ($start !== false && $end !== false && $end > $start) {
-            $data = json_decode(substr($clean, $start, $end - $start + 1), true);
-        }
-    }
-    return is_array($data) ? $data : null;
+    return is_array($data) && !array_is_list($data) ? $data : null;
 }
 
 function estudaiText($value, int $maxLength = 500): string {
@@ -602,7 +602,12 @@ function estudaiNormalizeSimuladoPlanejado(array $data, array $entrada): array {
 function estudaiIaError(Throwable $e, string $tipo, array $config): array {
     $message = $e instanceof OpenRouterRateLimitException
         ? 'A IA atingiu o limite temporario do provedor. Tente novamente em alguns instantes.'
-        : 'Nao foi possivel gerar a analise agora. Verifique a conexao com a IA ou tente novamente.';
+        : 'A IA nao conseguiu concluir a analise agora. Tente novamente mais tarde.';
+    if (empty($config['enabled'])) {
+        $message = 'A IA esta desativada neste ambiente. Diagnostico remoto indisponivel.';
+    } elseif ($e instanceof OpenRouterException && in_array($e->category, ['budget_exhausted', 'provider_stopped'], true)) {
+        $message = 'O limite de chamadas desta etapa foi encerrado. Diagnostico remoto indisponivel.';
+    }
 
     return [
         'ok' => false,
@@ -612,24 +617,26 @@ function estudaiIaError(Throwable $e, string $tipo, array $config): array {
         'tipo' => $tipo,
         'erro' => $message,
         'erro_tecnico' => $e->getMessage(),
+        'categoria' => $e instanceof OpenRouterException ? $e->category : 'invalid_contract',
     ];
 }
 
-function estudaiGerarDiagnostico(array $perfil): array {
+function estudaiGerarDiagnostico(array $perfil, ?callable $transport = null): array {
     $config = require __DIR__ . '/../../config/openrouter.php';
     try {
         $response = openrouterChatCompletion(estudaiDiagnosticoPrompt($perfil), [
+            'feature' => 'diagnostico',
             'temperature' => 0.25,
-            'max_tokens' => 900,
+            'max_tokens' => 4500,
             'response_format' => ['type' => 'json_object'],
-        ]);
+        ], $transport);
 
         $parsed = estudaiDecodeJsonText(openrouterFirstText($response));
         if (!$parsed) {
             throw new RuntimeException('A IA retornou um diagnostico fora do formato esperado.');
         }
 
-        $diagnostico = estudaiNormalizeDiagnostico($parsed, $perfil);
+        $diagnostico = estudaiAiDiagnostico($parsed, $perfil);
         if ($diagnostico['perfil_resumido'] === '' || $diagnostico['estrategia_recomendada'] === '') {
             throw new RuntimeException('A IA retornou um diagnostico incompleto.');
         }
@@ -638,7 +645,7 @@ function estudaiGerarDiagnostico(array $perfil): array {
             'ok' => true,
             'origem' => 'ia',
             'provider' => 'openrouter',
-            'modelo' => $config['model'],
+            'modelo' => $response['model'] ?? $config['model'],
             'usage' => $response['usage'] ?? [],
             'diagnostico' => $diagnostico,
         ];
@@ -651,21 +658,22 @@ function estudaiGerarPlanoEstudos(array $entrada): array {
     return estudaiGerarPlanoSemanal($entrada);
 }
 
-function estudaiGerarPlanoSemanal(array $entrada): array {
+function estudaiGerarPlanoSemanal(array $entrada, ?callable $transport = null): array {
     $config = require __DIR__ . '/../../config/openrouter.php';
     try {
         $response = openrouterChatCompletion(estudaiPlanoSemanalPrompt($entrada), [
+            'feature' => 'plano_semanal',
             'temperature' => 0.25,
             'max_tokens' => 2600,
             'response_format' => ['type' => 'json_object'],
-        ]);
+        ], $transport);
 
         $parsed = estudaiDecodeJsonText(openrouterFirstText($response));
         if (!$parsed) {
             throw new RuntimeException('A IA retornou um plano fora do formato esperado.');
         }
 
-        $plano = estudaiNormalizePlanoSemanal($parsed, $entrada);
+        $plano = estudaiAiPlanoSemanal($parsed, $entrada);
         if (empty($plano['tarefas'])) {
             throw new RuntimeException('A IA retornou um plano sem tarefas validas.');
         }
@@ -674,7 +682,7 @@ function estudaiGerarPlanoSemanal(array $entrada): array {
             'ok' => true,
             'origem' => 'ia',
             'provider' => 'openrouter',
-            'modelo' => $config['model'],
+            'modelo' => $response['model'] ?? $config['model'],
             'usage' => $response['usage'] ?? [],
             'plano' => $plano,
         ];
@@ -683,21 +691,22 @@ function estudaiGerarPlanoSemanal(array $entrada): array {
     }
 }
 
-function estudaiGerarPlanoAnual(array $entrada): array {
+function estudaiGerarPlanoAnual(array $entrada, ?callable $transport = null): array {
     $config = require __DIR__ . '/../../config/openrouter.php';
     try {
         $response = openrouterChatCompletion(estudaiPlanoAnualPrompt($entrada), [
+            'feature' => 'plano_anual',
             'temperature' => 0.22,
             'max_tokens' => 4500,
             'response_format' => ['type' => 'json_object'],
-        ]);
+        ], $transport);
 
         $parsed = estudaiDecodeJsonText(openrouterFirstText($response));
         if (!$parsed) {
             throw new RuntimeException('A IA retornou um plano anual fora do formato esperado.');
         }
 
-        $plano = estudaiNormalizePlanoAnual($parsed, $entrada);
+        $plano = estudaiAiPlanoAnual($parsed, $entrada);
         if (empty($plano['meses'])) {
             throw new RuntimeException('A IA retornou um plano anual sem tarefas validas.');
         }
@@ -706,7 +715,7 @@ function estudaiGerarPlanoAnual(array $entrada): array {
             'ok' => true,
             'origem' => 'ia',
             'provider' => 'openrouter',
-            'modelo' => $config['model'],
+            'modelo' => $response['model'] ?? $config['model'],
             'usage' => $response['usage'] ?? [],
             'plano' => $plano,
         ];
@@ -731,18 +740,20 @@ function estudaiGerarSimuladoPlanejado(array $entrada): array {
     ];
 }
 
-function estudaiGerarRevisaoSemanal(array $entrada): array {
+function estudaiGerarRevisaoSemanal(array $entrada, ?callable $transport = null): array {
     $config = require __DIR__ . '/../../config/openrouter.php';
     try {
         $response = openrouterChatCompletion(estudaiRevisaoSemanalPrompt($entrada), [
+            'feature' => 'revisao_semanal',
             'temperature' => 0.2,
             'max_tokens' => 1800,
             'response_format' => ['type' => 'json_object'],
-        ]);
+        ], $transport);
         $parsed = estudaiDecodeJsonText(openrouterFirstText($response));
         if (!$parsed) {
             throw new RuntimeException('A IA retornou revisao semanal fora do formato esperado.');
         }
+        $parsed = estudaiAiRevisao($parsed, $entrada);
 
         $acao = $parsed['decisao']['acao'] ?? 'manter';
         $ajuste = $parsed['decisao']['ajuste_tipo'] ?? null;
@@ -767,7 +778,7 @@ function estudaiGerarRevisaoSemanal(array $entrada): array {
             'ok' => true,
             'origem' => 'ia',
             'provider' => 'openrouter',
-            'modelo' => $config['model'],
+            'modelo' => $response['model'] ?? $config['model'],
             'usage' => $response['usage'] ?? [],
             'analise' => $parsed,
         ];

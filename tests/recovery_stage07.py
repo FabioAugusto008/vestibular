@@ -64,7 +64,7 @@ def request(client, path, method="GET", expected=200):
         return data
 
 
-def run(private, accounts_path):
+def run(private, accounts_path, planning_enabled=False):
     code = r"""
     require 'server/config/database.php';
     if(DB_NAME!=='estudai_teste_2026'||DB_USER!=='estudai_teste_app'||DB_HOST!=='localhost'){exit(1);}
@@ -77,7 +77,7 @@ def run(private, accounts_path):
                        capture_output=True, text=True)
     check(p.returncode == 0, "real_configuration_guard_before_HTTP")
     config = json.loads(p.stdout)
-    check(len(config["grants"]) == 18, "only_table_scoped_select_additions")
+    check(len(config["grants"]) == (22 if planning_enabled else 18), "expected_recovery_grant_scope")
     accounts = json.loads(accounts_path.read_text(encoding="utf-8"))
     check(len(accounts) == 2 and all(a["email"].endswith("@estudai.invalid") for a in accounts), "existing_fictional_accounts_only")
     clients = [previous.Client(), previous.Client()]
@@ -116,16 +116,19 @@ def run(private, accounts_path):
             check(result.get("ok") is True and key in result, "contract_" + path)
             if index == 0:
                 fixture[path] = result
-            if key in ("questoes", "historico", "tarefas"):
+            if key in ("questoes", "historico") or (key == "tarefas" and not planning_enabled):
                 check(result[key] == [], "empty_state_" + path)
             if key == "plano":
-                check(result[key] is None, "no_plan_is_created")
+                if not planning_enabled or index == 1:
+                    check(result[key] is None, "no_plan_is_created_for_unplanned_account")
+                else:
+                    check(result[key] is None or isinstance(result[key].get("id"), int), "existing_authorized_plan_contract")
             if key == "meta":
                 check(result[key]["questoes_feitas"] == 0 and result[key]["concluida"] is False, "computed_goal_without_record")
             if path.startswith("conquistas"):
                 check(result["total"] == 22 and result["desbloqueadas"] == 0, "catalog_read_without_awards")
             if path.startswith("estatisticas"):
-                check(result["perfil"]["tem_perfil"] and result["tarefas"]["total_semana"] == 0, "profile_and_empty_progress")
+                check(result["perfil"]["tem_perfil"] and (planning_enabled or result["tarefas"]["total_semana"] == 0), "profile_and_progress_contract")
     check(profiles[0]["perfil"]["usuario_id"] != profiles[1]["perfil"]["usuario_id"], "different_authenticated_profiles")
     for index, client in enumerate(clients):
         other_id = profiles[1-index]["perfil"]["usuario_id"]
@@ -141,7 +144,7 @@ def run(private, accounts_path):
     status, _, _ = clients[0].call("onboarding", "salvar")
     check(status == 405, "onboarding_save_get_rejected", status)
     blocked = ["cron_gerar.php", "cron_revisao_semanal_ia.php?force=1", "diagnostico.php?action=gerar", "ia.php",
-               "simulados-planejados.php?action=listar", "calendario-estudai.php?action=mes",
+               "simulados-planejados.php?action=listar", "calendario-estudai.php?action=" + ("atualizar_status" if planning_enabled else "mes"),
                "plano-estudos.php?action=gerar", "metas.php?action=definir", "conquistas.php?action=verificar",
                "questoes.php?action=finalizar", "tarefas-estudo.php?action=concluir", "estatisticas.php?action=geral",
                "preferencias.php?action=carregar&action=salvar", "questoes.php?action=carregar&action[]=responder"]
@@ -189,6 +192,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--private-dir", required=True)
     parser.add_argument("--accounts", required=True)
+    parser.add_argument("--planning-enabled", action="store_true", help="Stage 08: allow its explicit grants and an existing plan; never generate one")
     args = parser.parse_args()
     private, accounts = Path(args.private_dir).resolve(), Path(args.accounts).resolve()
     base = (Path(os.environ["LOCALAPPDATA"]) / "EstudAI/Recovery").resolve()
@@ -196,7 +200,7 @@ def main():
     suffix = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     report = private / ("dashboard_api_" + suffix + ".json")
     try:
-        result = run(private, accounts)
+        result = run(private, accounts, args.planning_enabled)
     except (RuntimeError, ValueError, OSError) as error:
         with report.open("x", encoding="utf-8") as handle:
             json.dump(dict(result="FAIL", error=str(error), checks=checks), handle, indent=2)

@@ -1,19 +1,19 @@
 <?php
 
 if (!function_exists('estudai_openrouter_env')) {
-    function estudai_openrouter_env(string $key, string $default = ''): string {
+    function estudai_openrouter_env(string $key, string $default = '', bool $allowEmpty = false): string {
         static $dotenv = null;
 
         $value = getenv($key);
-        if ($value !== false && $value !== '') {
+        if ($value !== false && ($allowEmpty || $value !== '')) {
             return $value;
         }
 
-        if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
+        if (isset($_ENV[$key]) && ($allowEmpty || $_ENV[$key] !== '')) {
             return (string) $_ENV[$key];
         }
 
-        if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') {
+        if (isset($_SERVER[$key]) && ($allowEmpty || $_SERVER[$key] !== '')) {
             return (string) $_SERVER[$key];
         }
 
@@ -32,7 +32,7 @@ if (!function_exists('estudai_openrouter_env')) {
             }
         }
 
-        if (isset($dotenv[$key]) && $dotenv[$key] !== '') {
+        if (isset($dotenv[$key]) && ($allowEmpty || $dotenv[$key] !== '')) {
             return (string) $dotenv[$key];
         }
 
@@ -50,15 +50,19 @@ if (substr($completionUrl, -17) !== '/chat/completions') {
 }
 
 $timeout = (int) estudai_openrouter_env('OPENROUTER_TIMEOUT_SECONDS', '120');
-$timeout = max(10, min(90, $timeout));
+$timeout = max(10, min(45, $timeout));
 
 return [
     'provider' => 'openrouter',
-    'enabled' => estudai_openrouter_env('ESTUDAI_AI_DISABLED', 'false') !== 'true',
+    'enabled' => !in_array(strtolower(estudai_openrouter_env('ESTUDAI_AI_DISABLED', 'true')), ['true', '1', 'yes', 'on'], true),
     'completion_url' => $completionUrl,
-    'api_key' => estudai_openrouter_env('OPENROUTER_API_KEY', ''),
-    'model' => estudai_openrouter_env('OPENROUTER_MODEL', 'liquid/lfm-2.5-1.2b-instruct:free'),
+    'api_key' => estudai_openrouter_env('OPENROUTER_API_KEY', '', true),
+    'model' => estudai_openrouter_env('OPENROUTER_MODEL', 'liquid/lfm-3-1.7b:free'),
     'site_url' => estudai_openrouter_env('OPENROUTER_SITE_URL', 'http://localhost/vestibular'),
     'site_name' => estudai_openrouter_env('OPENROUTER_SITE_NAME', 'EstudAI'),
     'timeout_seconds' => $timeout,
+    'approved_features' => array_values(array_filter(array_map('trim', explode(',', estudai_openrouter_env('ESTUDAI_AI_FEATURES', ''))))),
+    'allowed_users' => array_map('intval', array_filter(explode(',', estudai_openrouter_env('ESTUDAI_AI_ALLOWED_USERS', '')))),
+    'budget_file' => estudai_openrouter_env('ESTUDAI_AI_BUDGET_FILE', ''),
+    'max_requests' => max(0, min(3, (int)estudai_openrouter_env('ESTUDAI_AI_MAX_REQUESTS', '0'))),
 ];

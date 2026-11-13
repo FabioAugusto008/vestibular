@@ -6,10 +6,11 @@ require_once __DIR__ . '/../helpers/helpers.php';
 requireLogin();
 header('Content-Type: application/json; charset=utf-8');
 
+date_default_timezone_set('America/Sao_Paulo');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db     = getDB();
 $uid    = currentUserId();
-beginDashboardReadOnlyGet($db, ['estudai_geral']);
+beginDashboardReadOnlyGet($db, ['estudai_geral', 'geral', 'evolucao']);
 
 switch ($action) {
 
@@ -161,12 +162,9 @@ switch ($action) {
             ];
         }
 
-        $simuladosFinalizados = 0;
-        if (dbTableExists($db, 'simulado_tentativas')) {
-            $stmt = $db->prepare("SELECT COUNT(*) FROM simulado_tentativas WHERE usuario_id = ? AND status = 'finalizado'");
-            $stmt->execute([$uid]);
-            $simuladosFinalizados += (int)$stmt->fetchColumn();
-        }
+        $simCount = $db->prepare("SELECT COUNT(*) FROM simulado_tentativas WHERE usuario_id = ? AND status = 'finalizado'");
+        $simCount->execute([$uid]);
+        $simuladosFinalizados = (int)$simCount->fetchColumn(); // Separate simulation indicator; daily counts stay unchanged.
         if (dbTableExists($db, 'simulados_planejados')) {
             $stmt = $db->prepare("SELECT COUNT(*) FROM simulados_planejados WHERE usuario_id = ? AND status = 'finalizado'");
             $stmt->execute([$uid]);

@@ -6,10 +6,15 @@ require_once __DIR__ . '/../services/ai/estudaiService.php';
 
 requireLogin();
 header('Content-Type: application/json; charset=utf-8');
+date_default_timezone_set('America/Sao_Paulo');
 
 $db = getDB();
 $uid = currentUserId();
 $action = $_GET['action'] ?? $_POST['action'] ?? (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' ? 'gerar' : 'carregar_ativo');
+$recoveryActions = ['GET' => ['carregar_ativo'], 'POST' => ['gerar_semana']];
+if (!is_string($action) || !in_array($action, $recoveryActions[$_SERVER['REQUEST_METHOD'] ?? 'GET'] ?? [], true)) {
+    jsonResponse(['erro' => 'Operacao de planejamento nao autorizada nesta etapa.'], 403);
+}
 beginDashboardReadOnlyGet($db, ['carregar_ativo']);
 
 function planoDecodeList($value): array {
@@ -82,7 +87,8 @@ function planoNormalizarData($value): ?string {
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
         return null;
     }
-    return $value;
+    $date = DateTimeImmutable::createFromFormat('!Y-m-d', $value, new DateTimeZone('America/Sao_Paulo'));
+    return $date && $date->format('Y-m-d') === $value ? $value : null;
 }
 
 function planoLoadTarefas(PDO $db, int $uid, ?int $planoId): array {
@@ -127,6 +133,13 @@ function planoFromRow(PDO $db, int $uid, ?array $row): ?array {
     if (!is_array($json)) {
         $json = [];
     }
+    if (($row['origem'] ?? '') === 'fallback') {
+        $json['alertas'] = array_map(static function ($alert) {
+            return is_string($alert) && str_starts_with($alert, 'A IA falhou ou retornou um plano invalido:')
+                ? 'IA indisponivel. Plano gerado localmente com base na sua rotina.'
+                : $alert;
+        }, is_array($json['alertas'] ?? null) ? $json['alertas'] : []);
+    }
 
     return array_merge($json, [
         'id' => (int)$row['id'],
@@ -157,6 +170,15 @@ function planoAtivo(PDO $db, int $uid): ?array {
         LIMIT 1
     ");
     $stmt->execute([$uid]);
+    return planoFromRow($db, $uid, $stmt->fetch() ?: null);
+}
+
+function planoDaSemana(PDO $db, int $uid, array $janela): ?array {
+    $monday = (new DateTimeImmutable($janela['semana_inicio'], new DateTimeZone('America/Sao_Paulo')))->modify('monday this week');
+    $stmt = $db->prepare("SELECT * FROM planos_estudo
+        WHERE usuario_id = ? AND tipo_plano = 'semanal' AND status = 'ativo'
+          AND semana_inicio BETWEEN ? AND ? ORDER BY id DESC LIMIT 1");
+    $stmt->execute([$uid, $monday->format('Y-m-d'), $monday->modify('+6 days')->format('Y-m-d')]);
     return planoFromRow($db, $uid, $stmt->fetch() ?: null);
 }
 
@@ -279,8 +301,10 @@ function planoRegistrarHistorico(PDO $db, int $uid, array $perfil, array $result
     $stmt->execute($params);
 }
 
-function planoEnsure0003(PDO $db): void {
-    $required = [
+function planoEnsure0003(PDO $db, bool $somenteSemanal = false): void {
+    $required = $somenteSemanal ? [
+        'plano_versoes', 'plano_estudo_itens', 'eventos_calendario_estudai', 'planejamento_semanal_controle',
+    ] : [
         'plano_versoes',
         'eventos_calendario_estudai',
         'exercicios_planejados',
@@ -895,7 +919,9 @@ function planoGerarBasicoSemanal(array $perfil, array $janela, string $motivo): 
 
     return [
         'titulo' => 'Plano semanal basico',
-        'resumo' => 'A IA nao conseguiu montar um plano valido. Criamos um plano basico usando sua disponibilidade e materias do perfil.',
+        'resumo' => envValue('ESTUDAI_AI_DISABLED', 'false') === 'true'
+            ? 'Plano local criado usando sua disponibilidade e materias do perfil, sem chamadas de IA.'
+            : 'A IA nao conseguiu montar um plano valido. Criamos um plano basico usando sua disponibilidade e materias do perfil.',
         'semana_inicio' => $janela['semana_inicio'],
         'semana_fim' => $janela['semana_fim'],
         'estrategia_da_semana' => 'Cumprir pelo menos uma atividade em cada dia disponivel e manter a rotina ativa.',
@@ -904,7 +930,9 @@ function planoGerarBasicoSemanal(array $perfil, array $janela, string $motivo): 
             'Plano gerado localmente como fallback.',
         ],
         'alertas' => [
-            'A IA falhou ou retornou um plano invalido: ' . sanitizeTextValue($motivo, 220),
+            envValue('ESTUDAI_AI_DISABLED', 'false') === 'true'
+                ? 'IA desativada neste ambiente. Planejamento gerado localmente.'
+                : 'IA indisponivel. Plano gerado localmente com base na sua rotina.',
         ],
     ];
 }
@@ -931,65 +959,108 @@ function planoResultadoFallbackSemanal(array $perfil, array $janela, string $mot
         'modelo' => $base['modelo'] ?? 'fallback-local',
         'usage' => $base['usage'] ?? [],
         'fallback_usado' => true,
-        'aviso_usuario' => 'A IA caiu ou retornou um plano invalido, mas geramos um plano basico com base na sua rotina.',
+        'aviso_usuario' => envValue('ESTUDAI_AI_DISABLED', 'false') === 'true'
+            ? 'Plano gerado localmente com base na sua rotina. A IA esta desativada neste ambiente.'
+            : 'A IA caiu ou retornou um plano invalido, mas geramos um plano basico com base na sua rotina.',
         'erro_tecnico' => $motivo,
         'plano' => $plano,
         'plano_validado' => $validado,
     ];
 }
 
-function planoGerarSemanalValidado(PDO $db, int $uid, array $perfil, array $entrada, array $janela): array {
-    $resultado = estudaiGerarPlanoSemanal($entrada);
+function planoGerarSemanalValidado(PDO $db, int $uid, array $perfil, array $entrada, array $janela, ?callable $transport = null): array {
+    $aiEnabled = !in_array(strtolower(envValue('ESTUDAI_AI_DISABLED', 'true')), ['true', '1', 'yes', 'on'], true);
+    if (!$aiEnabled) {
+        return planoResultadoFallbackSemanal($perfil, $janela, 'IA desativada neste ambiente.', ['provider' => 'local', 'modelo' => 'fallback-local']);
+    }
+    $resultado = estudaiGerarPlanoSemanal($entrada, $transport);
     if (empty($resultado['ok'])) {
         $motivo = $resultado['erro_tecnico'] ?? ($resultado['erro'] ?? 'Falha ao chamar a IA.');
         logTechnicalError('plano_semanal_ia_falha', new RuntimeException($motivo));
         return planoResultadoFallbackSemanal($perfil, $janela, $motivo, $resultado);
     }
-
     $erros = [];
     $validado = validarPlanoSemanalGerado($resultado['plano'] ?? [], $perfil, $janela, $erros);
-    if ($validado) {
-        $resultado['plano_validado'] = $validado;
-        return $resultado;
+    if (!$validado) {
+        $mensagem = planoMensagemValidacaoSemanal($erros);
+        return planoResultadoFallbackSemanal($perfil, $janela, $mensagem, $resultado);
     }
+    $resultado['plano_validado'] = $validado;
+    return $resultado;
+}
 
-    $mensagem = planoMensagemValidacaoSemanal($erros);
-    logTechnicalError('plano_semanal_validacao', new RuntimeException($mensagem));
-
-    $diasSemTarefas = planoExtrairErroValidacao($erros, 'dias_sem_tarefas');
-    $entradaRetry = $entrada;
-    $entradaRetry['validacao_anterior'] = [
-        'problema' => $mensagem,
-        'dias_sem_tarefas' => $diasSemTarefas['datas'] ?? [],
-        'dias_obrigatorios' => array_map(static fn($dia) => $dia['data'] ?? null, $janela['dias_cobertura_obrigatoria'] ?? []),
-        'instrucao' => 'Refaca o JSON semanal cobrindo todos os dias obrigatorios, sem criar tarefas fora dos blocos de disponibilidade.',
-    ];
-
-    $retry = estudaiGerarPlanoSemanal($entradaRetry);
-    if (empty($retry['ok'])) {
-        $motivo = $retry['erro_tecnico'] ?? ($retry['erro'] ?? $mensagem);
-        return planoResultadoFallbackSemanal($perfil, $janela, $motivo, [
-            'provider' => $retry['provider'] ?? ($resultado['provider'] ?? 'openrouter'),
-            'modelo' => $retry['modelo'] ?? ($resultado['modelo'] ?? null),
-            'usage' => $retry['usage'] ?? ($resultado['usage'] ?? []),
-        ]);
+function planoCatalogoIa(PDO $db, array $perfil): array {
+    $catalog = [];
+    $rows = $db->query("SELECT materia, titulo FROM conteudos WHERE status = 'ativo' ORDER BY id")->fetchAll();
+    foreach ($rows as $row) {
+        foreach ($perfil['materias_base'] ?? [] as $subject) {
+            if (estudaiAiKey($subject) === estudaiAiKey($row['materia'])) {
+                $catalog[$subject][] = $row['titulo'];
+            }
+        }
     }
+    return $catalog;
+}
 
-    $retryErros = [];
-    $retryValidado = validarPlanoSemanalGerado($retry['plano'] ?? [], $perfil, $janela, $retryErros);
-    if ($retryValidado) {
-        $retry['plano_validado'] = $retryValidado;
-        $retry['tentativa_corrigida'] = true;
-        return $retry;
+function planoGerarOuRecuperarSemanal(PDO $db, int $uid, array $perfil, array $janela, ?callable $transport = null): array {
+    estudaiRequireTestDatabase($db);
+    $db->beginTransaction();
+    try {
+        $lock = $db->prepare('SELECT id FROM estudo_perfis WHERE usuario_id = ? FOR UPDATE');
+        $lock->execute([$uid]);
+        if ((int)$lock->fetchColumn() !== (int)$perfil['id']) {
+            throw new RuntimeException('Perfil de planejamento invalido.');
+        }
+        $existing = planoDaSemana($db, $uid, $janela);
+        if ($existing) {
+            $db->commit();
+            return [
+                'ok' => true, 'origem' => $existing['origem'], 'plano' => $existing,
+                'tarefas' => $existing['tarefas'], 'janela' => $janela, 'reutilizado' => true,
+                'fallback_usado' => $existing['origem'] === 'fallback',
+                'aviso_usuario' => 'Plano existente recuperado.',
+            ];
+        }
+        rateLimitGuard('plano_gerar_semana', 6, 3600);
+        $entrada = [
+            'perfil' => $perfil, 'janela' => $janela,
+            'materias_base' => $perfil['materias_base'] ?? [],
+            'reforcos' => $perfil['reforcos'] ?? [],
+            'preferencias' => [
+                'intensidade' => $perfil['intensidade'] ?? 'ia',
+                'exercicios_dia' => $perfil['exercicios_dia'] ?? 'ia',
+                'frequencia_simulados' => $perfil['frequencia_simulados'] ?? 'ia',
+            ],
+        ];
+        $aiEnabled = !in_array(strtolower(envValue('ESTUDAI_AI_DISABLED', 'true')), ['true', '1', 'yes', 'on'], true);
+        if ($aiEnabled) {
+            $entrada['catalogo_conteudos'] = planoCatalogoIa($db, $perfil);
+            $diagnostic = planoUltimoDiagnostico($db, $uid);
+            if ($diagnostic) {
+                $entrada['diagnostico'] = $diagnostic;
+            }
+        }
+        $result = planoGerarSemanalValidado($db, $uid, $perfil, $entrada, $janela, $transport);
+        if (empty($result['ok'])) {
+            throw new RuntimeException('Nao foi possivel preparar um plano valido.');
+        }
+        $saved = planoSalvarSemanal($db, $uid, $perfil, $result, $janela);
+        if ($aiEnabled) {
+            planoRegistrarHistorico($db, $uid, $perfil, array_replace($result, ['plano' => $saved]));
+        }
+        $db->commit();
+        return [
+            'ok' => true, 'origem' => $saved['origem'], 'plano' => $saved,
+            'tarefas' => $saved['tarefas'], 'janela' => $janela, 'reutilizado' => false,
+            'fallback_usado' => !empty($result['fallback_usado']),
+            'aviso_usuario' => $result['aviso_usuario'] ?? null,
+        ];
+    } catch (Throwable $error) {
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
+        throw $error;
     }
-
-    $mensagemRetry = planoMensagemValidacaoSemanal($retryErros);
-    logTechnicalError('plano_semanal_validacao_retry', new RuntimeException($mensagemRetry));
-    return planoResultadoFallbackSemanal($perfil, $janela, $mensagemRetry, [
-        'provider' => $retry['provider'] ?? ($resultado['provider'] ?? 'openrouter'),
-        'modelo' => $retry['modelo'] ?? ($resultado['modelo'] ?? null),
-        'usage' => $retry['usage'] ?? ($resultado['usage'] ?? []),
-    ]);
 }
 
 function planoColumnAllowsValue(PDO $db, string $table, string $column, string $value): bool {
@@ -1054,7 +1125,23 @@ function planoSalvarSemanal(PDO $db, int $uid, array $perfil, array $resultado, 
         jsonResponse(['erro' => 'Nao foi possivel gerar um plano semanal valido agora. Tente novamente em alguns instantes.'], 503);
     }
 
-    $db->beginTransaction();
+    $ownsTransaction = !$db->inTransaction();
+    if ($ownsTransaction) {
+        $db->beginTransaction();
+    }
+    try {
+    // Serialize the only authorized weekly writer on the user's existing profile.
+    // No schema change or DELETE privilege is needed, including on first creation.
+    $lock = $db->prepare('SELECT id FROM estudo_perfis WHERE usuario_id = ? FOR UPDATE');
+    $lock->execute([$uid]);
+    if ((int)$lock->fetchColumn() !== (int)($perfil['id'] ?? 0)) {
+        throw new RuntimeException('Perfil de planejamento invalido.');
+    }
+    $existente = planoDaSemana($db, $uid, $janela);
+    if ($existente) {
+        if ($ownsTransaction) $db->commit();
+        return $existente + ['reutilizado' => true];
+    }
     $db->prepare("UPDATE planos_estudo SET status = 'substituido' WHERE usuario_id = ? AND status = 'ativo'")
         ->execute([$uid]);
     if (dbTableExists($db, 'planejamento_semanal_controle')) {
@@ -1166,8 +1253,12 @@ function planoSalvarSemanal(PDO $db, int $uid, array $perfil, array $resultado, 
         }
     }
 
-    $db->commit();
+    if ($ownsTransaction) $db->commit();
     return planoAtivo($db, $uid);
+    } catch (Throwable $e) {
+        if ($db->inTransaction()) $db->rollBack();
+        throw $e;
+    }
 }
 
 try {
@@ -1205,8 +1296,8 @@ try {
         case 'gerar_semana':
             requirePost();
             validateCsrfToken();
-            rateLimitGuard('plano_gerar_semana', 6, 3600);
-            planoEnsure0003($db);
+            requestPayload(8000); // Validate the body; ownership always comes from the session.
+            planoEnsure0003($db, true);
             if (!dbTableExists($db, 'planejamento_semanal_controle') || !dbColumnExists($db, 'planos_estudo', 'tipo_plano')) {
                 jsonResponse(['erro' => 'Banco incompleto. Aplique database/schema.sql.'], 503);
             }
@@ -1217,55 +1308,7 @@ try {
             }
 
             $janela = normalizarJanelaPlanoSemanal($perfil);
-            $entrada = [
-                'perfil' => $perfil,
-                'janela' => $janela,
-                'materias_base' => $perfil['materias_base'] ?? [],
-                'reforcos' => $perfil['reforcos'] ?? [],
-                'preferencias' => [
-                    'intensidade' => $perfil['intensidade'] ?? 'ia',
-                    'exercicios_dia' => $perfil['exercicios_dia'] ?? 'ia',
-                    'frequencia_simulados' => $perfil['frequencia_simulados'] ?? 'ia',
-                ],
-            ];
-            $diagnostico = planoUltimoDiagnostico($db, $uid);
-            if ($diagnostico) {
-                $entrada['diagnostico'] = $diagnostico;
-            }
-
-            $resultado = planoGerarSemanalValidado($db, $uid, $perfil, $entrada, $janela);
-            if (empty($resultado['ok'])) {
-                try {
-                    planoRegistrarHistorico($db, $uid, $perfil, $resultado + ['plano' => []]);
-                } catch (Throwable $ignored) {
-                }
-                jsonResponse(['erro' => $resultado['erro'] ?? 'Nao foi possivel gerar o plano semanal agora.'], 503);
-            }
-            $planoSalvo = planoSalvarSemanal($db, $uid, $perfil, $resultado, $janela);
-
-            try {
-                planoRegistrarHistorico($db, $uid, $perfil, [
-                    'origem' => $resultado['origem'] ?? 'ia',
-                    'provider' => $resultado['provider'] ?? 'openrouter',
-                    'modelo' => $resultado['modelo'] ?? null,
-                    'usage' => $resultado['usage'] ?? [],
-                    'plano' => $planoSalvo,
-                    'erro_tecnico' => $resultado['erro_tecnico'] ?? null,
-                    'fallback_usado' => !empty($resultado['fallback_usado']),
-                    'aviso_usuario' => $resultado['aviso_usuario'] ?? null,
-                ]);
-            } catch (Throwable $ignored) {
-            }
-
-            jsonResponse([
-                'ok' => true,
-                'origem' => $planoSalvo['origem'] ?? ($resultado['origem'] ?? 'ia'),
-                'plano' => $planoSalvo,
-                'tarefas' => $planoSalvo['tarefas'] ?? [],
-                'janela' => $janela,
-                'fallback_usado' => !empty($resultado['fallback_usado']),
-                'aviso_usuario' => $resultado['aviso_usuario'] ?? null,
-            ]);
+            jsonResponse(planoGerarOuRecuperarSemanal($db, $uid, $perfil, $janela));
             break;
 
         case 'replanejar_semana':

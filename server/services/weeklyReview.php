@@ -16,12 +16,13 @@ function estudaiWeeklyJson($raw): array {
 }
 
 function estudaiWeeklyWindow(?DateTimeImmutable $base = null): array {
-    $base = $base ?: new DateTimeImmutable('today');
+    $base = $base ?: new DateTimeImmutable('today', new DateTimeZone('America/Sao_Paulo'));
+    $base = $base->setTimezone(new DateTimeZone('America/Sao_Paulo'));
     $thisMonday = $base->modify('monday this week');
-    $lastMonday = $thisMonday->modify('-7 days');
-    $lastSunday = $thisMonday->modify('-1 day');
-    $nextMonday = $thisMonday->modify('+7 days');
-    $nextSunday = $thisMonday->modify('+13 days');
+    $lastMonday = $base->format('N') === '7' ? $thisMonday : $thisMonday->modify('-7 days');
+    $lastSunday = $lastMonday->modify('+6 days');
+    $nextMonday = $lastMonday->modify('+7 days');
+    $nextSunday = $lastMonday->modify('+13 days');
     return [
         'semana_inicio' => $lastMonday->format('Y-m-d'),
         'semana_fim' => $lastSunday->format('Y-m-d'),

@@ -6,6 +6,7 @@ require_once __DIR__ . '/../helpers/helpers.php';
 requireLogin();
 header('Content-Type: application/json; charset=utf-8');
 
+date_default_timezone_set('America/Sao_Paulo');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $db     = getDB();
 $uid    = currentUserId();

@@ -2,7 +2,8 @@
 // api/redacao.php - Redacao ENEM com analise orientativa
 
 require_once __DIR__ . '/../helpers/helpers.php';
-require_once __DIR__ . '/../services/ai/openrouterClient.php';
+require_once __DIR__ . '/../services/ai/estudaiService.php';
+require_once __DIR__ . '/../services/dailyQuestions.php';
 require_once __DIR__ . '/../services/ai/prompts.php';
 
 requireLogin();
@@ -83,6 +84,7 @@ function redacaoNormalizarAnalise(array $analise): array {
     $sugestoes = redacaoList($analise['sugestoes'] ?? [], 10, 260);
     return [
         'aviso' => sanitizeTextValue($analise['aviso'] ?? '', 300),
+        'origem' => in_array($analise['origem'] ?? '', ['ia', 'fallback'], true) ? $analise['origem'] : 'indisponivel',
         'estimativa_nao_oficial' => true,
         'tema' => sanitizeTextValue($analise['tema'] ?? '', 180),
         'resumo' => sanitizeTextValue($analise['resumo'] ?? '', 900),
@@ -112,6 +114,7 @@ function redacaoAnaliseFallback(string $tema, string $texto): array {
     $palavras = preg_split('/\s+/', trim($texto)) ?: [];
     return redacaoNormalizarAnalise([
         'aviso' => 'Analise orientativa local. A IA nao ficou disponivel agora.',
+        'origem' => 'fallback',
         'estimativa_nao_oficial' => true,
         'tema' => $tema,
         'resumo' => 'Seu texto foi salvo. Revise tese, repertorio, coesao e proposta de intervencao antes de enviar para avaliacao humana.',
@@ -128,7 +131,7 @@ function redacaoAnaliseFallback(string $tema, string $texto): array {
     ]);
 }
 
-function redacaoGerarAnaliseIa(string $tema, string $texto): array {
+function redacaoGerarAnaliseIa(string $tema, string $texto, ?callable $transport = null): array {
     $prompt = estudaiSystemPrompt() . "\n\n" .
         "Voce vai fazer apenas uma analise orientativa de redacao ENEM. " .
         "Nao prometa nota oficial, nao substitua corretor humano e nao invente regras. " .
@@ -138,22 +141,98 @@ function redacaoGerarAnaliseIa(string $tema, string $texto): array {
         ['role' => 'system', 'content' => $prompt],
         ['role' => 'user', 'content' => "Tema: {$tema}\n\nRedacao:\n{$texto}"],
     ], [
+        'feature' => 'redacao',
         'temperature' => 0.25,
         'max_tokens' => 900,
         'response_format' => ['type' => 'json_object'],
-    ]);
+    ], $transport);
 
     $raw = openrouterFirstText($response);
-    $decoded = json_decode($raw, true);
-    if (!is_array($decoded)) {
-        return redacaoAnaliseFallback($tema, $texto);
+    $decoded = estudaiDecodeJsonText($raw);
+    if (!$decoded) {
+        throw new RuntimeException('Analise da IA fora do contrato.');
     }
-    $decoded['estimativa_nao_oficial'] = true;
+    $decoded = estudaiAiRedacao($decoded);
+    $decoded['origem'] = 'ia';
     $decoded['tema'] = $tema;
     return redacaoNormalizarAnalise($decoded);
 }
 
+function redacaoProcessar(PDO $db, int $uid, array $payload, bool $analisar, ?callable $transport = null): array {
+    estudaiRequireTestDatabase($db);
+    if (!is_string($payload['tema'] ?? null) || !is_string($payload['texto'] ?? null)) {
+        questionFlowFail('Informe tema e texto validos.', 400);
+    }
+    $tema = trim($payload['tema']);
+    $texto = trim($payload['texto']);
+    if ($tema === '' || $texto === '' || mb_strlen($tema, 'UTF-8') > 180 ||
+        mb_strlen($texto, 'UTF-8') > 12000 || ($analisar && mb_strlen($texto, 'UTF-8') < 300)) {
+        questionFlowFail('Tema ou texto fora dos limites da redacao.', 400);
+    }
+    $tema = sanitizeTextValue($tema, 180);
+    $texto = sanitizeTextValue($texto, 12000);
+    $rawId = $payload['redacao_id'] ?? null;
+    $id = ($rawId === null || $rawId === 0 || $rawId === '0') ? 0 : questionPositiveId($rawId);
+    if ($tema === '' || $texto === '' || ($analisar && mb_strlen($texto, 'UTF-8') < 300)) {
+        questionFlowFail('Informe texto suficiente para a redacao.', 400);
+    }
+    $db->beginTransaction();
+    try {
+        questionLockUser($db, $uid);
+        $stmt = $id
+            ? $db->prepare('SELECT * FROM redacoes_enem WHERE id = ? AND usuario_id = ?')
+            : $db->prepare('SELECT * FROM redacoes_enem WHERE usuario_id = ? AND tema = ? AND texto = ? ORDER BY id DESC LIMIT 1');
+        $stmt->execute($id ? [$id, $uid] : [$uid, $tema, $texto]);
+        $existing = $stmt->fetch();
+        if ($id && !$existing) {
+            questionFlowFail('Redacao indisponivel.', 404);
+        }
+        $same = $existing && $existing['tema'] === $tema && $existing['texto'] === $texto;
+        if ($same && (!$analisar || $existing['status'] === 'analisada')) {
+            $mapped = redacaoMap($existing);
+            $db->commit();
+            return [
+                'ok' => true, 'persistido' => true, 'reutilizado' => true,
+                'redacao_id' => $mapped['id'], 'analise' => $mapped['analise'],
+                'origem' => $mapped['analise']['origem'] ?? null,
+            ];
+        }
+        rateLimitGuard('redacao_' . ($analisar ? 'analisar' : 'salvar'), 6, 3600);
+        $analise = null;
+        if ($analisar) {
+            try {
+                $analise = redacaoGerarAnaliseIa($tema, $texto, $transport);
+            } catch (Throwable $error) {
+                logTechnicalError('redacao_analise', $error);
+                $analise = redacaoAnaliseFallback($tema, $texto);
+            }
+        }
+        $status = $analisar ? 'analisada' : 'rascunho';
+        if ($existing) {
+            $id = (int)$existing['id'];
+            $stmt = $db->prepare('UPDATE redacoes_enem SET tema = ?, texto = ?, status = ?, analise_json = ?, atualizada_em = CURRENT_TIMESTAMP WHERE id = ? AND usuario_id = ?');
+            $stmt->execute([$tema, $texto, $status, $analise ? jsonEncodeSafe($analise) : null, $id, $uid]);
+        } else {
+            $stmt = $db->prepare('INSERT INTO redacoes_enem (usuario_id, tema, texto, status, analise_json) VALUES (?, ?, ?, ?, ?)');
+            $stmt->execute([$uid, $tema, $texto, $status, $analise ? jsonEncodeSafe($analise) : null]);
+            $id = (int)$db->lastInsertId();
+        }
+        $db->commit();
+        return [
+            'ok' => true, 'persistido' => true, 'reutilizado' => false,
+            'redacao_id' => $id, 'analise' => $analise,
+            'origem' => $analise['origem'] ?? null,
+        ];
+    } catch (Throwable $error) {
+        if ($db->inTransaction()) $db->rollBack();
+        throw $error;
+    }
+}
+
 try {
+    [$action, $payload] = questionFlowAction(['GET' => ['listar'], 'POST' => ['salvar', 'analisar']], 65536);
+    beginDashboardReadOnlyGet($db, ['listar']);
+    if (!redacaoTableReady($db)) jsonResponse(['erro' => 'Historico de redacao indisponivel.'], 503);
     switch ($action) {
         case 'listar':
             if (!redacaoTableReady($db)) {
@@ -171,82 +250,9 @@ try {
             break;
 
         case 'salvar':
-            requirePost();
-            validateCsrfToken();
-            $payload = requestPayload(32000);
-            $tema = sanitizeTextValue($payload['tema'] ?? '', 180);
-            $texto = sanitizeTextValue($payload['texto'] ?? '', 12000);
-            if ($tema === '' || $texto === '') {
-                jsonResponse(['erro' => 'Informe o tema e o texto da redacao.'], 400);
-            }
-            if (!redacaoTableReady($db)) {
-                jsonResponse(['ok' => true, 'persistido' => false, 'aviso' => 'Migration de redacoes ainda nao aplicada.']);
-            }
-            $id = (int)($payload['redacao_id'] ?? 0);
-            if ($id > 0) {
-                $stmt = $db->prepare('
-                    UPDATE redacoes_enem
-                    SET tema = ?, texto = ?, status = ?, atualizada_em = CURRENT_TIMESTAMP
-                    WHERE id = ? AND usuario_id = ?
-                ');
-                $stmt->execute([$tema, $texto, 'rascunho', $id, $uid]);
-            } else {
-                $stmt = $db->prepare('
-                    INSERT INTO redacoes_enem (usuario_id, tema, texto, status)
-                    VALUES (?, ?, ?, ?)
-                ');
-                $stmt->execute([$uid, $tema, $texto, 'rascunho']);
-                $id = (int)$db->lastInsertId();
-            }
-            jsonResponse(['ok' => true, 'persistido' => true, 'redacao_id' => $id]);
-            break;
-
         case 'analisar':
-            requirePost();
             validateCsrfToken();
-            rateLimitGuard('redacao_analisar', 6, 3600);
-            $payload = requestPayload(36000);
-            $tema = sanitizeTextValue($payload['tema'] ?? '', 180);
-            $texto = sanitizeTextValue($payload['texto'] ?? '', 12000);
-            $textoLen = function_exists('mb_strlen') ? mb_strlen($texto, 'UTF-8') : strlen($texto);
-            if ($tema === '' || $textoLen < 300) {
-                jsonResponse(['erro' => 'Informe um tema e um texto com desenvolvimento suficiente para analise.'], 400);
-            }
-
-            try {
-                $analise = redacaoGerarAnaliseIa($tema, $texto);
-            } catch (Throwable $e) {
-                logTechnicalError('redacao_analise', $e);
-                $analise = redacaoAnaliseFallback($tema, $texto);
-            }
-
-            $id = (int)($payload['redacao_id'] ?? 0);
-            $persistido = false;
-            if (redacaoTableReady($db)) {
-                if ($id > 0) {
-                    $stmt = $db->prepare('
-                        UPDATE redacoes_enem
-                        SET tema = ?, texto = ?, status = ?, analise_json = ?, atualizada_em = CURRENT_TIMESTAMP
-                        WHERE id = ? AND usuario_id = ?
-                    ');
-                    $stmt->execute([$tema, $texto, 'analisada', jsonEncodeSafe($analise), $id, $uid]);
-                } else {
-                    $stmt = $db->prepare('
-                        INSERT INTO redacoes_enem (usuario_id, tema, texto, status, analise_json)
-                        VALUES (?, ?, ?, ?, ?)
-                    ');
-                    $stmt->execute([$uid, $tema, $texto, 'analisada', jsonEncodeSafe($analise)]);
-                    $id = (int)$db->lastInsertId();
-                }
-                $persistido = true;
-            }
-
-            jsonResponse([
-                'ok' => true,
-                'redacao_id' => $id ?: null,
-                'persistido' => $persistido,
-                'analise' => $analise,
-            ]);
+            jsonResponse(redacaoProcessar($db, $uid, $payload, $action === 'analisar'));
             break;
 
         default:
@@ -254,5 +260,5 @@ try {
     }
 } catch (Throwable $e) {
     logTechnicalError('redacao', $e);
-    jsonResponse(['erro' => 'Nao foi possivel processar redacao agora.'], 500);
+    jsonResponse(['erro' => $e instanceof QuestionFlowError ? $e->getMessage() : 'Nao foi possivel processar redacao agora.'], $e instanceof QuestionFlowError ? $e->getCode() : 503);
 }

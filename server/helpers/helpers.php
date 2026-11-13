@@ -4,6 +4,8 @@
 // ============================================================
 
 require_once __DIR__ . '/../config/database.php';
+$appConfig = require __DIR__ . '/../config/app.php';
+date_default_timezone_set($appConfig['timezone']);
 
 define('SESSION_NAME', 'estudai_session');
 define('ESTUDAI_VERSION', '0.1.0-alpha');

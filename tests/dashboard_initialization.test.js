@@ -39,10 +39,11 @@ async function scenario(name, options = {}) {
   const calls = [], storageWrites = [], redirects = [], events = new Map();
   const stored = options.storage === undefined ? '{}' : options.storage;
   const data = JSON.parse(JSON.stringify(fixture));
+  data['diagnostico.php?action=carregar_ultimo'] = { ok: true, resultado: null };
   if (options.changeFixture) options.changeFixture(data);
   const document = {
     getElementById: id => nodes.get(id) || null,
-    querySelectorAll: () => [],
+    querySelectorAll: selector => options.selectors?.[selector] || [],
     querySelector(selector) { return selector.startsWith('#') ? nodes.get(selector.slice(1)) || null : null; },
     createElement: tag => element(tag), documentElement: element('html'),
     addEventListener() {}
@@ -67,7 +68,7 @@ async function scenario(name, options = {}) {
     fetch: async (url, request = {}) => {
       const parsed = new URL(url, 'http://localhost/estudAi_1.1/app/public/app.html');
       const key = parsed.pathname.split('/').pop() + parsed.search;
-      calls.push({ key, method: request.method || 'GET' });
+      calls.push({ key, method: request.method || 'GET', hasCSRF: request.headers?.has('X-CSRF-Token') || false });
       assert.ok(Object.hasOwn(data, key), 'Unexpected initialization request: ' + key);
       const failure = options.failures?.[key];
       if (failure === 'network') throw new TypeError('Failed to fetch');
@@ -84,8 +85,8 @@ async function scenario(name, options = {}) {
   const state = vm.runInContext('({sessionExpired:state.sessionExpired, errors:{...state.moduleErrors}, complete:state.onboardingCompleto})', context);
   assert.equal(storageWrites.length, 0, 'Initialization must not overwrite storage');
   assert.ok(calls.every(call => call.method === 'GET'), 'Initialization must not POST');
-  assert.ok(calls.every(call => !/diagnostico|ia\.php|cron|calendario|simulados/.test(call.key)), 'Out-of-scope initialization');
-  assert.ok(calls.length <= 14, 'Unexpected retries or duplicate requests');
+  assert.ok(calls.every(call => call.key === 'diagnostico.php?action=carregar_ultimo' || !/diagnostico|ia[.]php|cron|calendario|simulados/.test(call.key)), 'Out-of-scope initialization');
+  assert.ok(calls.length <= 15, 'Unexpected retries or duplicate requests');
   assert.ok(redirects.length <= 1, 'Expired session must redirect only once');
   const result = { ready, state, nodes, calls, context };
   if (options.verify) options.verify(result);
@@ -95,7 +96,7 @@ async function scenario(name, options = {}) {
 
 async function main() {
   const normal = await scenario('real_sanitized_HTTP_contracts_empty_dashboard', { verify(r) {
-    assert.equal(r.ready, true); assert.equal(r.calls.length, 14);
+    assert.equal(r.ready, true); assert.equal(r.calls.length, 15);
     assert.equal(r.state.complete, true); assert.equal(Object.keys(r.state.errors).length, 0);
     assert.equal(r.nodes.get('prog-mat-txt').textContent, '0/0');
     assert.match(r.nodes.get('dashboard-routine-summary').textContent, /Nenhuma tarefa/);
@@ -165,4 +166,7 @@ async function main() {
   console.log(JSON.stringify({ result: 'PASS', scenarios: results.length, results, simulated_DOM: true, visual_validation: false, real_network_requests: 0 }));
 }
 
-main().catch(error => { console.error(error.message); process.exitCode = 1; });
+if (require.main === module) {
+  main().catch(error => { console.error(error.message); process.exitCode = 1; });
+}
+module.exports = { scenario };

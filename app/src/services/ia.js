@@ -10,9 +10,9 @@
       body: JSON.stringify(payload || {})
     });
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const error = new Error(data.erro || 'Nao foi possivel concluir a chamada de IA.');
+    const data = await response.json();
+    if (!response.ok || !data || data.ok !== true) {
+      const error = new Error(data?.erro || 'Nao foi possivel concluir a chamada de IA.');
       error.status = response.status;
       error.payload = data;
       throw error;
@@ -26,7 +26,7 @@
       return postJson('diagnostico', { perfil }, { action: 'gerar' });
     },
     planoEstudos(entrada) {
-      return postJson('planoEstudos', { entrada }, { action: 'gerar' });
+      return postJson('planoEstudos', {}, { action: 'gerar_semana' });
     },
     mensagem(mensagem, contexto) {
       return postJson('ia', { action: 'mensagem', mensagem, contexto });

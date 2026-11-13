@@ -1,8 +1,40 @@
-# Stage 07: authentication/onboarding and explicit dashboard GET actions only.
+# Stage 10: explicit reads and validated, authenticated study commands only.
 Require local
 Options -Indexes -MultiViews
 
+# Keep the recovery protections when the user's shared XAMPP is restored.
+Header always set Content-Security-Policy "connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
+Header always set X-Content-Type-Options "nosniff"
+SetEnv ESTUDAI_AI_DISABLED true
+<IfModule php_module>
+    php_flag display_errors Off
+</IfModule>
+
 RewriteEngine On
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:status|carregar_ultimo)(&|$)
+RewriteRule ^server/api/diagnostico\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=gerar(&|$)
+RewriteRule ^server/api/diagnostico\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=listar(&|$)
+RewriteRule ^server/api/redacao\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=(?:salvar|analisar)(&|$)
+RewriteRule ^server/api/redacao\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:listar|carregar|historico)(&|$)
+RewriteRule ^server/api/simulados\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=(?:iniciar|responder|finalizar)(&|$)
+RewriteRule ^server/api/simulados\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:listar|carregar)(&|$)
+RewriteRule ^server/api/simulados-planejados\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=(?:gerar_para_tarefa|iniciar|responder|finalizar)(&|$)
+RewriteRule ^server/api/simulados-planejados\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
 RewriteRule ^server/api/(?:auth|onboarding)\.php$ - [F,END]
 RewriteRule ^server/api/(?:auth|onboarding)\.php$ - [END]
@@ -10,6 +42,18 @@ RewriteRule ^server/api/(?:auth|onboarding)\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} (^|&)action=carregar(&|$)
 RewriteRule ^server/api/(?:preferencias|questoes|metas)\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=(?:preparar|responder|finalizar)(&|$)
+RewriteRule ^server/api/questoes\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=responder(&|$)
+RewriteRule ^server/api/revisao\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:carregar_por_tarefa|carregar_semana)(&|$)
+RewriteRule ^server/api/exercicios-ia\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=(?:gerar_por_tarefa|responder)(&|$)
+RewriteRule ^server/api/exercicios-ia\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} !(^|&)action=
 RewriteRule ^server/api/historico\.php$ - [END]
@@ -17,17 +61,23 @@ RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} (^|&)action=(?:estatisticas|carregar)(&|$)
 RewriteRule ^server/api/revisao\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
-RewriteCond %{QUERY_STRING} (^|&)action=estudai_geral(&|$)
+RewriteCond %{QUERY_STRING} (^|&)action=(?:estudai_geral|geral|evolucao)(&|$)
 RewriteRule ^server/api/estatisticas\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} (^|&)action=listar(&|$)
 RewriteRule ^server/api/conquistas\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =POST
+RewriteCond %{QUERY_STRING} (^|&)action=gerar_semana(&|$)
+RewriteRule ^server/api/plano-estudos\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} (^|&)action=carregar_ativo(&|$)
 RewriteRule ^server/api/plano-estudos\.php$ - [END]
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{QUERY_STRING} (^|&)action=(?:hoje|semana|atrasadas|recentes)(&|$)
 RewriteRule ^server/api/tarefas-estudo\.php$ - [END]
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{QUERY_STRING} (^|&)action=(?:mes|ano|dia|eventos)(&|$)
+RewriteRule ^server/api/calendario-estudai\.php$ - [END]
 RewriteRule !^app/(?:public|src)/ - [F,END]
 
 # These dot-prefixed directories contain existing visual identity assets.

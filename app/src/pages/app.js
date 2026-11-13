@@ -42,7 +42,7 @@ const state = {
   calendarDate: new Date(),
   calendarEvents: [],
   calendarYearEvents: [],
-  selectedCalendarDay: new Date().toISOString().slice(0, 10),
+  selectedCalendarDay: localDateKey(),
   currentExerciseTaskId: null,
   currentExerciseLote: null,
   plannedSimulados: [],
@@ -185,8 +185,15 @@ function taskActionLabel(task) {
   if (tipo === 'teoria') return 'Abrir estudo';
   if (tipo === 'questoes' || tipo === 'exercicio') return 'Praticar questoes';
   if (tipo === 'revisao') return 'Revisar';
-  if (tipo === 'simulado' && task.data_prevista && task.data_prevista > localDateKey()) return `Liberado em ${formatDate(task.data_prevista)}`;
-  if (tipo === 'simulado') return 'Iniciar simulado';
+  if (tipo === 'simulado') {
+    const saved = safeArray(state.plannedSimulados).find(sim => Number(sim.tarefa_id) === Number(task.id));
+    if (task.status === 'concluida' || saved?.status === 'finalizado') return 'Ver resultado';
+    if (saved?.status === 'iniciado') return 'Continuar simulado';
+    if (saved?.status === 'liberado') return 'Iniciar simulado';
+    if (saved?.status === 'bloqueado') return `Liberado em ${formatDate(saved.data_liberacao)}`;
+    if (task.data_prevista && task.data_prevista > localDateKey()) return `Liberado em ${formatDate(task.data_prevista)}`;
+    return 'Iniciar simulado';
+  }
   if (tipo === 'resumo') return 'Criar resumo';
   return 'Ver atividade';
 }
@@ -233,7 +240,8 @@ async function loadDashboardReadModules() {
     ['preferencias', loadPreferencias], ['questoes', loadQuestoes],
     ['historico', loadHistorico], ['metas', loadMeta], ['revisao', loadRevisaoStats],
     ['estatisticas', loadEstudaiStats], ['plano', loadPlanoAtivo],
-    ['rotina', loadRotina], ['conquistas', loadConquistas]
+    ['rotina', loadRotina], ['conquistas', loadConquistas],
+    ['diagnostico', loadDiagnosticoUltimo]
   ];
   const results = await Promise.allSettled(modules.map(([name, load]) => Promise.resolve().then(() => {
     delete state.moduleErrors[name];
@@ -933,14 +941,21 @@ function renderEstudaiStats(d) {
   }
 }
 
+function diagnosticoValido(diag) {
+  return !!diag && typeof diag.perfil_resumido === 'string' && typeof diag.estrategia_recomendada === 'string'
+    && ['principais_dificuldades', 'materias_prioritarias', 'proximos_passos'].every(key => Array.isArray(diag[key]));
+}
+
 async function loadDiagnosticoUltimo() {
   try {
     const r = await apiFetch(apiEndpoint('diagnostico', 'action=carregar_ultimo'));
     const d = await r.json();
+    if (!r.ok || !d.ok) throw new Error(d.erro || 'Diagnostico indisponivel.');
+    if (d.resultado && !diagnosticoValido(d.resultado.diagnostico)) throw new Error('Diagnostico salvo fora do formato esperado.');
     state.diagnostico = d.ok && d.resultado ? d.resultado : null;
     renderDiagnostico();
   } catch (e) {
-    renderDiagnostico();
+    document.getElementById('diagnostic-summary').textContent = e.message || 'Diagnostico indisponivel.';
   }
 }
 
@@ -990,6 +1005,7 @@ async function gerarDiagnostico() {
   }
 
   const btn = document.getElementById('btn-gerar-diagnostico');
+  if (btn.disabled) return;
   btn.disabled = true;
   btn.classList.add('loading-state');
   document.getElementById('diagnostic-summary').textContent = 'Gerando diagnostico...';
@@ -1001,10 +1017,10 @@ async function gerarDiagnostico() {
       body: JSON.stringify({})
     });
     const d = await r.json();
-    if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel gerar o diagnostico.');
+    if (!r.ok || !d.ok || d.origem !== 'ia' || !diagnosticoValido(d.diagnostico)) throw new Error(d.erro || 'Nao foi possivel gerar o diagnostico.');
     state.diagnostico = { origem: d.origem, diagnostico: d.diagnostico };
     renderDiagnostico();
-    showToast('success', 'Diagnostico pronto', 'Resultado salvo no historico de IA.');
+    showToast('success', 'Diagnostico pronto', d.reutilizado ? 'Diagnostico salvo recuperado.' : 'Resultado salvo no historico de IA.');
   } catch (e) {
     document.getElementById('diagnostic-summary').textContent = e.message || 'Erro ao gerar diagnostico.';
     showToast('error', 'Diagnostico indisponivel', e.message || 'Tente novamente em alguns minutos.');
@@ -1114,6 +1130,7 @@ async function gerarPlanoEstudos() {
   }
 
   const btn = document.getElementById('btn-gerar-plano');
+  if (btn.disabled) return;
   btn.disabled = true;
   btn.classList.add('loading-state');
   document.getElementById('plan-status-text').textContent = 'Gerando plano semanal, calendario e tarefas...';
@@ -1125,21 +1142,29 @@ async function gerarPlanoEstudos() {
       body: JSON.stringify({})
     });
     const d = await r.json();
-    if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel gerar o plano.');
+    if (!r.ok || !d.ok || !d.plano || !Array.isArray(d.plano.tarefas)) throw new Error(d.erro || 'Nao foi possivel gerar o plano.');
     state.plano = d.plano;
+    const firstDate = state.plano?.tarefas?.[0]?.data_prevista;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(firstDate || '')) {
+      state.calendarDate = new Date(firstDate + 'T12:00:00');
+      state.selectedCalendarDay = firstDate;
+    }
     renderPlano();
     renderDashboardPlan();
     await loadRotina();
     await loadCalendarMonth();
-    await loadPlannedSimulados();
+    if (!dashboardReadOnlyMode()) await loadPlannedSimulados();
     await loadEstudaiStats();
     const fallbackUsado = !!(d.fallback_usado || d.origem === 'fallback' || d.plano?.origem === 'fallback');
     if (fallbackUsado) {
-      const aviso = d.aviso_usuario || 'A IA caiu ou retornou um plano invalido, mas foi gerado um plano basico com base na sua rotina.';
+      const aviso = d.reutilizado ? 'O plano desta semana ja existe e foi recuperado, sem duplicar atividades.'
+        : (d.aviso_usuario || 'Plano gerado localmente com base na sua rotina.');
       document.getElementById('plan-status-text').textContent = aviso;
       showToast('warning', 'Plano basico gerado', aviso);
     } else {
-      showToast('success', 'Plano semanal criado', 'Plano salvo com tarefas e calendario por IA.');
+      const aviso = d.reutilizado ? 'Plano existente recuperado.' : (d.origem === 'ia' ? 'Plano salvo com tarefas e calendario por IA.' : 'Plano salvo com tarefas e calendario.');
+      document.getElementById('plan-status-text').textContent = aviso;
+      showToast('success', d.reutilizado ? 'Plano recuperado' : 'Plano semanal criado', aviso);
     }
   } catch (e) {
     document.getElementById('plan-status-text').textContent = e.message || 'Erro ao gerar plano.';
@@ -1208,7 +1233,8 @@ function taskCardHtml(task, compact) {
   const materia = task.materia || task.metadata?.materia || 'Geral';
   const conteudo = task.conteudo || task.metadata?.conteudo || '';
   const prioridade = task.prioridade || task.metadata?.prioridade || 'media';
-  const blockedSim = tipo === 'simulado' && task.data_prevista && task.data_prevista > localDateKey();
+  const savedSim = safeArray(state.plannedSimulados).find(sim => Number(sim.tarefa_id) === Number(task.id));
+  const blockedSim = tipo === 'simulado' && task.status !== 'concluida' && (savedSim ? savedSim.status === 'bloqueado' : (task.data_prevista && task.data_prevista > localDateKey()));
   return `
     <div class="task-card ${done ? 'done' : ''} ${canceled ? 'cancelled' : ''}">
       <div class="task-main">
@@ -1549,7 +1575,7 @@ async function replanejarSemana() {
 // CALENDARIO, EXERCICIOS E SIMULADOS DO PLANO
 // ====================================
 function isoDate(date) {
-  return date.toISOString().slice(0, 10);
+  return localDateKey(date);
 }
 
 function monthKey(date) {
@@ -1768,12 +1794,15 @@ function jumpCalendarMonth(year, monthIndex) {
 }
 
 async function abrirExerciciosTarefa(tarefaId) {
+  if (Number(state.currentExerciseTaskId) !== Number(tarefaId)) state.currentExerciseLote = null;
   state.currentExerciseTaskId = tarefaId;
   showSection('exercicios');
   await loadExercisesForTask(tarefaId, false);
 }
 
 async function loadExercisesForTask(tarefaId, regenerate) {
+  if (regenerate && state.preparingExercise) return;
+  if (regenerate) state.preparingExercise = true;
   const status = document.getElementById('exercises-status');
   const content = document.getElementById('exercises-content');
   if (status) status.textContent = regenerate ? 'Buscando novo lote na base de questoes...' : 'Carregando pratica com questoes salva...';
@@ -1788,12 +1817,16 @@ async function loadExercisesForTask(tarefaId, regenerate) {
     const r = await apiFetch(endpoint, options);
     const d = await r.json();
     if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel carregar questoes.');
+    if (Number(tarefaId) !== Number(state.currentExerciseTaskId)) return;
     state.currentExerciseLote = d.lote;
     renderExercises();
+    return true;
   } catch (e) {
+    if (Number(tarefaId) !== Number(state.currentExerciseTaskId)) return false;
     if (status) status.textContent = e.message || 'Erro na pratica com questoes.';
     if (content) content.innerHTML = `<div class="empty-state"><p>${escapeHtml(e.message || 'Erro ao carregar questoes.')}</p></div>`;
-  }
+    return false;
+  } finally { if (regenerate) state.preparingExercise = false; }
 }
 
 function renderExercises() {
@@ -1802,12 +1835,12 @@ function renderExercises() {
   if (!content) return;
   const lote = state.currentExerciseLote;
   if (!lote) {
-    if (status) status.textContent = 'Abra uma tarefa de questoes pela rotina ou calendario.';
-    content.innerHTML = '<div class="empty-state"><p>Nenhuma tarefa selecionada.</p></div>';
+    if (status) status.textContent = state.currentExerciseTaskId ? 'Nenhum lote preparado para esta tarefa.' : 'Abra uma tarefa de questoes pela rotina ou calendario.';
+    content.innerHTML = state.currentExerciseTaskId ? '<div class="empty-state"><p>Prepare explicitamente as questoes disponiveis para esta tarefa.</p><button class="btn-primary" type="button" onclick="regenerarExerciciosTarefa()">Preparar exercicios da tarefa</button></div>' : '<div class="empty-state"><p>Nenhuma tarefa selecionada.</p></div>';
     return;
   }
   const respondidos = Object.keys(lote.respostas || {}).length;
-  if (status) status.textContent = `${lote.quantidade || (lote.exercicios || []).length} questoes | base aprovada | ${respondidos} respondido(s)`;
+  if (status) status.textContent = `${lote.quantidade} questoes | ${respondidos} respondido(s) | ${lote.resumo?.acertos || 0} acerto(s) | ${lote.resumo?.tarefa_concluida ? 'Tarefa concluida' : 'Tarefa em andamento'}${lote.aviso ? ' | ' + lote.aviso : ''}`;
   content.innerHTML = (lote.exercicios || []).map((ex, index) => {
     const resposta = lote.respostas?.[ex.id];
     const answered = resposta !== undefined;
@@ -1818,7 +1851,7 @@ function renderExercises() {
       ? `<textarea class="input" id="exercise-answer-${escapeHtml(ex.id)}" rows="3" placeholder="Digite sua resposta">${escapeHtml(resposta?.resposta_usuario || '')}</textarea>`
       : hasAlternativas ? `<div class="options compact-options">${Object.entries(alternativas).map(([letter, text]) => `
           <label class="option-label">
-            <input type="radio" name="exercise-${escapeHtml(ex.id)}" value="${escapeHtml(letter)}" ${resposta?.resposta_marcada === letter ? 'checked' : ''}>
+            <input type="radio" name="exercise-${escapeHtml(ex.id)}" value="${escapeHtml(letter)}" ${resposta?.resposta_marcada === letter ? 'checked' : ''} ${answered ? 'disabled' : ''}>
             <span><strong>${escapeHtml(letter)}</strong> ${escapeHtml(text)}</span>
           </label>
         `).join('')}</div>` : '<div class="empty-state compact-empty"><p>Esta questao nao possui alternativas validas cadastradas.</p></div>';
@@ -1844,14 +1877,14 @@ function renderExercises() {
         ${answered && resposta.acertou === false ? `
           <div class="form-field compact-field">
             <label for="exercise-error-reason-${escapeHtml(ex.id)}">Por que voce acha que errou?</label>
-            <select class="input" id="exercise-error-reason-${escapeHtml(ex.id)}">
+            <select class="input" id="exercise-error-reason-${escapeHtml(ex.id)}" disabled>
               <option value="">Prefiro nao informar</option>
               ${reasonOptions.map(([value, label]) => `<option value="${value}" ${resposta.motivo_erro === value ? 'selected' : ''}>${label}</option>`).join('')}
             </select>
           </div>
         ` : ''}
-        <button class="btn-primary btn-sm" type="button" ${canAnswer ? '' : 'disabled'} onclick="responderExercicio(${lote.id}, ${JSON.stringify(ex.id)}, ${JSON.stringify(ex.tipo || 'multipla_escolha')})">
-          ${answered ? 'Atualizar resposta' : 'Responder'}
+        <button class="btn-primary btn-sm" type="button" ${canAnswer && !answered ? '' : 'disabled'} onclick="responderExercicio(${lote.id}, '${escapeHtml(ex.id)}', '${escapeHtml(ex.tipo || 'multipla_escolha')}')">
+          ${answered ? 'Resposta registrada' : 'Responder'}
         </button>
       </article>
     `;
@@ -1859,6 +1892,7 @@ function renderExercises() {
 }
 
 async function responderExercicio(loteId, key, tipo) {
+  if (state.exerciseAnswerPending) return;
   const selector = `input[name="exercise-${CSS.escape(key)}"]:checked`;
   const marcada = document.querySelector(selector)?.value || '';
   const aberta = document.getElementById(`exercise-answer-${key}`)?.value || '';
@@ -1867,6 +1901,7 @@ async function responderExercicio(loteId, key, tipo) {
     showToast('warning', 'Resposta pendente', 'Escolha uma alternativa.');
     return;
   }
+  state.exerciseAnswerPending = true;
   try {
     const r = await apiFetch(apiEndpoint('exerciciosIa', 'action=responder'), {
       method: 'POST',
@@ -1882,11 +1917,11 @@ async function responderExercicio(loteId, key, tipo) {
     const d = await r.json();
     if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel salvar resposta.');
     await loadExercisesForTask(state.currentExerciseTaskId, false);
-    await loadEstudaiStats();
+    await Promise.allSettled([loadEstudaiStats(), loadPlanoAtivo(), loadRotina()]);
     showToast('success', 'Resposta salva', d.acertou === null ? 'Resposta aberta registrada.' : (d.acertou ? 'Boa, resposta correta.' : 'Resposta salva para revisao.'));
   } catch (e) {
     showToast('error', 'Resposta nao salva', e.message || 'Tente novamente.');
-  }
+  } finally { state.exerciseAnswerPending = false; }
 }
 
 function regenerarExerciciosTarefa() {
@@ -1909,7 +1944,7 @@ async function loadPlannedSimulados() {
     if (status) status.textContent = state.plannedSimulados.length ? `${state.plannedSimulados.length} simulado(s) planejado(s)` : 'Nenhum simulado planejado ainda.';
     if (list) list.innerHTML = state.plannedSimulados.length
       ? state.plannedSimulados.map(plannedSimCardHtml).join('')
-      : '<div class="empty-state"><p>Simulados do plano aparecem quando houver conteudo suficiente.</p><button class="btn-secondary btn-sm" type="button" onclick="gerarSimuladoDaSemana()">Gerar simulado da semana</button></div>';
+      : '<div class="empty-state"><p>Prepare o simulado pela tarefa do plano.</p><button class="btn-secondary btn-sm" type="button" onclick="showSection(\'plano\')">Abrir planejamento</button></div>';
   } catch (e) {
     if (status) status.textContent = e.message || 'Erro ao carregar simulados.';
     if (list) list.innerHTML = `<div class="empty-state"><p>${escapeHtml(e.message || 'Erro ao carregar simulados.')}</p></div>`;
@@ -1945,7 +1980,7 @@ function plannedSimCardHtml(sim) {
       <div class="task-main">
         <div class="task-title-row">
           <strong>${escapeHtml(sim.titulo)}</strong>
-          <span class="task-badge ${escapeHtml(sim.status)}">${escapeHtml(sim.status === 'bloqueado' ? 'Bloqueado' : sim.status === 'finalizado' ? 'Finalizado' : 'Liberado')}</span>
+          <span class="task-badge ${escapeHtml(sim.status)}">${escapeHtml(sim.status === 'bloqueado' ? 'Bloqueado' : sim.status === 'finalizado' ? 'Finalizado' : sim.status === 'iniciado' ? 'Em andamento' : 'Liberado')}</span>
         </div>
         <p>${escapeHtml(sim.descricao || '')}</p>
         <div class="task-meta">
@@ -2015,9 +2050,9 @@ function renderPlannedSimActive() {
     <div class="section-card-header">
       <div>
         <h3>${escapeHtml(sim.titulo)}</h3>
-        <p class="text-muted">${respondidas}/${total} respondidas | ${Math.max(0, total - respondidas)} pendentes</p>
+        <p class="text-muted">${respondidas}/${total} respondidas | ${Math.max(0, total - respondidas)} pendentes${sim.resultado ? ` | ${sim.resultado.acertos}/${sim.resultado.total} acertos (${sim.resultado.percentual}%)` : ''}</p>
       </div>
-      <button class="btn-primary btn-sm" type="button" onclick="finalizarSimuladoPlanejado(${sim.id})">Finalizar</button>
+      <button class="btn-primary btn-sm" type="button" ${sim.status === 'finalizado' ? 'disabled' : ''} onclick="finalizarSimuladoPlanejado(${Number(sim.id)})">Finalizar</button>
     </div>
     <div class="exercise-list">
       ${(sim.questoes || []).map((q, index) => `
@@ -2029,25 +2064,30 @@ function renderPlannedSimActive() {
           <div class="options compact-options">
             ${Object.entries(q.alternativas || {}).map(([letter, text]) => `
               <label class="option-label">
-                <input type="radio" name="planned-sim-${escapeHtml(q.id)}" value="${escapeHtml(letter)}" ${respostas[q.id]?.resposta_marcada === letter ? 'checked' : ''}>
+                <input type="radio" name="planned-sim-${escapeHtml(q.id)}" value="${escapeHtml(letter)}" ${respostas[q.id]?.resposta_marcada === letter ? 'checked' : ''} ${sim.status === 'finalizado' ? 'disabled' : ''}>
                 <span><strong>${escapeHtml(letter)}</strong> ${escapeHtml(text)}</span>
               </label>
             `).join('')}
           </div>
-          ${respostas[q.id] ? `<div class="explanation"><strong>${respostas[q.id].acertou ? 'Correta' : 'Revisar'}</strong><p>${escapeHtml(respostas[q.id].avaliacao?.explicacao || q.explicacao || '')}</p></div>` : ''}
-          <button class="btn-secondary btn-sm" type="button" onclick="responderSimuladoPlanejado(${sim.id}, ${JSON.stringify(q.id)})">Salvar resposta</button>
+          ${sim.status === 'finalizado' && respostas[q.id] ? `<div class="explanation visible"><strong>${respostas[q.id].acertou ? 'Correta' : 'Revisar'}</strong><p>${escapeHtml(respostas[q.id].avaliacao?.explicacao || q.explicacao || '')}</p></div>` : ''}
+          <button class="btn-secondary btn-sm" type="button" data-sim-question="${escapeHtml(q.id)}" ${sim.status === 'finalizado' ? 'disabled' : ''}>Salvar resposta</button>
         </article>
       `).join('')}
     </div>
   `;
+  el.querySelectorAll('[data-sim-question]').forEach(button => {
+    button.addEventListener('click', () => responderSimuladoPlanejado(Number(sim.id), button.dataset.simQuestion));
+  });
 }
 
 async function responderSimuladoPlanejado(simId, key) {
+  if (state.plannedAnswerPending || state.plannedSimAtivo?.status !== 'iniciado') return;
   const marcada = document.querySelector(`input[name="planned-sim-${CSS.escape(key)}"]:checked`)?.value || '';
   if (!marcada) {
     showToast('warning', 'Resposta pendente', 'Escolha uma alternativa.');
     return;
   }
+  state.plannedAnswerPending = true;
   try {
     const r = await apiFetch(apiEndpoint('simuladosPlanejados', 'action=responder'), {
       method: 'POST',
@@ -2062,14 +2102,16 @@ async function responderSimuladoPlanejado(simId, key) {
     renderPlannedSimActive();
   } catch (e) {
     showToast('error', 'Resposta nao salva', e.message || 'Tente novamente.');
-  }
+  } finally { state.plannedAnswerPending = false; }
 }
 
 async function finalizarSimuladoPlanejado(simId) {
+  if (state.plannedFinishing || state.plannedSimAtivo?.status === 'finalizado') return;
   const sim = state.plannedSimAtivo;
   const total = sim?.questoes?.length || 0;
   const respondidas = Object.keys(sim?.respostas || {}).length;
   if (!confirm(`Finalizar simulado planejado com ${respondidas}/${total} respondidas?`)) return;
+  state.plannedFinishing = true;
   try {
     const r = await apiFetch(apiEndpoint('simuladosPlanejados', 'action=finalizar'), {
       method: 'POST',
@@ -2078,15 +2120,15 @@ async function finalizarSimuladoPlanejado(simId) {
     });
     const d = await r.json();
     if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel finalizar.');
-    state.plannedSimAtivo = null;
+    state.plannedSimAtivo = d.simulado;
     renderPlannedSimActive();
     await loadPlannedSimulados();
-    await loadEstudaiStats();
+    await Promise.allSettled([loadEstudaiStats(), loadPlanoAtivo(), loadRotina()]);
     const pct = d.resultado.percentual || 0;
     showToast('success', 'Simulado finalizado', `${pct}% de acerto. Revise os conteudos com mais erro.`);
   } catch (e) {
     showToast('error', 'Simulado nao finalizado', e.message || 'Tente novamente.');
-  }
+  } finally { state.plannedFinishing = false; }
 }
 
 async function abrirRevisaoTarefa(tarefaId) {
@@ -2172,6 +2214,7 @@ async function loadQuestoes() {
   state.respostas = d.respostas || {};
   state.gabarito = d.gabarito || null;
   state.finalizado = d.finalizado;
+  state.currentIdx = Math.min(state.currentIdx, Math.max(0, state.questoes.length - 1));
 
   updateDashboard(d);
 
@@ -2184,7 +2227,7 @@ async function loadQuestoes() {
     const options = document.getElementById('q-options');
     const progress = document.getElementById('progress-txt');
     if (questionText) questionText.textContent = d.aviso;
-    if (options) options.innerHTML = '<div class="empty-state"><p>O treino de hoje ainda nao foi preparado.</p></div>';
+    if (options) options.innerHTML = '<div class="empty-state"><p>O treino de hoje ainda nao foi preparado.</p><button class="btn-primary" type="button" onclick="prepararQuestoes()">Preparar treino de hoje</button></div>';
     if (progress) progress.textContent = '0/0 respondidas';
   }
 }
@@ -2281,7 +2324,7 @@ function renderQuestion(idx) {
 
   // Explanation
   const exp = document.getElementById('q-explanation');
-  if (gab && state.finalizado) {
+  if (gab && isRespondida) {
     exp.innerHTML = `<strong>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -2295,7 +2338,7 @@ function renderQuestion(idx) {
 
   // Anotacao section
   document.getElementById('anotacao-section').style.display = state.finalizado ? 'block' : 'none';
-  loadAnotacaoQuestao(q.id);
+  if (!dashboardReadOnlyMode()) loadAnotacaoQuestao(q.id);
 
   // Nav buttons
   document.getElementById('btn-prev').disabled = idx === 0;
@@ -2320,56 +2363,78 @@ function navigateQ(dir) {
 }
 
 async function responder(questaoId, resposta) {
+  if (state.answerPending || state.respostas[questaoId]) return;
+  state.answerPending = true;
+  try {
   const fd = new FormData();
   fd.append('action', 'responder');
   fd.append('questao_id', questaoId);
   fd.append('resposta', resposta);
 
-  const r = await apiFetch(apiEndpoint('questoes'), { method: 'POST', body: fd });
+  const r = await apiFetch(apiEndpoint('questoes', 'action=responder'), { method: 'POST', body: fd });
   const d = await r.json();
+  if (!d.ok) throw new Error(d.erro || 'Nao foi possivel salvar a resposta.');
 
   if (d.ok) {
     state.respostas[questaoId] = { marcada: resposta, acertou: d.acertou };
+    state.gabarito = state.gabarito || {};
+    state.gabarito[questaoId] = { correta: d.correta, explicacao: d.explicacao };
     renderQuestion(state.currentIdx);
     renderDots();
     updateDashboard({ questoes: state.questoes, respostas: state.respostas, finalizado: false });
 
-    if (state.currentIdx < state.questoes.length - 1) {
-      setTimeout(() => { navigateQ(1); }, 600);
-    }
+    await Promise.allSettled([loadMeta(), loadRevisaoStats()]);
   }
+  } catch (e) { showToast('error', 'Resposta nao salva', e.message || 'Tente novamente.'); }
+  finally { state.answerPending = false; }
+}
+
+async function prepararQuestoes() {
+  if (state.preparingQuestions) return;
+  state.preparingQuestions = true;
+  try {
+    const r = await apiFetch(apiEndpoint('questoes', 'action=preparar'), { method: 'POST' });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.erro || 'Nao foi possivel preparar o treino.');
+    await loadQuestoes();
+  } catch (e) { showToast('error', 'Treino indisponivel', e.message); }
+  finally { state.preparingQuestions = false; }
 }
 
 async function finalizarDia() {
+  if (state.finishingQuestions || state.finalizado) return;
   if (!confirm('Finalizar o dia? Voce nao podera alterar suas respostas.')) return;
-
-  stopTimer();
+  state.finishingQuestions = true;
+  try {
 
   const fd = new FormData();
   fd.append('action', 'finalizar');
   fd.append('tempo_seg', state.timerSec);
 
-  const r = await apiFetch(apiEndpoint('questoes'), { method: 'POST', body: fd });
+  const r = await apiFetch(apiEndpoint('questoes', 'action=finalizar'), { method: 'POST', body: fd });
   const d = await r.json();
+  if (!d.ok) throw new Error(d.erro || 'Nao foi possivel finalizar o dia.');
 
   if (d.ok) {
+    stopTimer();
     state.gabarito = d.gabarito;
     state.finalizado = true;
     renderQuestion(state.currentIdx);
     renderDots();
-    showResultCard({ acertos: d.acertos, erros: d.erros, tempo_seg: state.timerSec });
-    await loadHistorico();
-    await loadMeta();
-    verificarConquistas();
+    showResultCard({ acertos: d.acertos, erros: d.erros, tempo_seg: d.tempo_seg });
+    updateDashboard({ questoes: state.questoes, respostas: state.respostas, finalizado: true });
+    await Promise.allSettled([loadHistorico(), loadMeta(), loadRevisaoStats()]);
   }
+  } catch (e) { showToast('error', 'Dia nao finalizado', e.message); }
+  finally { state.finishingQuestions = false; }
 }
 
 function showResultCard(desemp) {
   if (!desemp) return;
-  const total = state.questoes.length || 20;
+  const total = state.questoes.length;
   const acertos = desemp.acertos || 0;
   const erros = desemp.erros || 0;
-  const pct = Math.round(acertos / total * 100);
+  const pct = total ? Math.round(acertos / total * 100) : 0;
 
   const feedback = pct >= 80 ? 'Excelente desempenho! Voce arrasou!' : pct >= 50 ? 'Bom trabalho! Continue assim!' : 'Nao desista! Revise o conteudo e tente novamente.';
 
@@ -2503,8 +2568,9 @@ async function loadRevisaoStats() {
     const d = await r.json();
     if (d.ok) {
       const total = d.total || 0;
-      document.getElementById('revisao-mat').textContent = (d.pendentes?.matematica || 0) + ' matematica';
-      document.getElementById('revisao-por').textContent = (d.pendentes?.portugues || 0) + ' portugues';
+      const subjects = Object.fromEntries(Object.entries(d.pendentes || {}).map(([key, value]) => [key.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(), value]));
+      document.getElementById('revisao-mat').textContent = (subjects.matematica || 0) + ' matematica';
+      document.getElementById('revisao-por').textContent = (subjects.portugues || 0) + ' portugues';
       
       if (total > 0) {
         document.getElementById('revisao-count').textContent = `Revisao (${total})`;
@@ -2514,6 +2580,9 @@ async function loadRevisaoStats() {
           badge.className = 'nav-badge';
           navRevisao.appendChild(badge);
         }
+      } else {
+        document.getElementById('revisao-count').textContent = 'Revisao';
+        document.querySelector('#nav-revisao .nav-badge')?.remove();
       }
     }
   } catch (e) { dashboardModuleUnavailable('revisao', e); }
@@ -2531,8 +2600,10 @@ async function loadRevisao(materia, trigger) {
   try {
     const r = await apiFetch(url);
     const d = await r.json();
-    
-    if (!d.ok || !d.questoes?.length) {
+    if (!d.ok) throw new Error(d.erro || 'Nao foi possivel carregar a revisao.');
+    state.revisaoQuestoes = d.questoes || [];
+    state.revisaoRespostas = d.respostas || {};
+    if (!d.questoes?.length) {
       document.getElementById('revisao-content').innerHTML = `
         <div class="card">
           <div class="empty-state">
@@ -2548,10 +2619,9 @@ async function loadRevisao(materia, trigger) {
     
     state.revisaoQuestoes = d.questoes;
     state.revisaoIdx = 0;
-    state.revisaoRespostas = {};
     renderRevisao();
   } catch (e) {
-    console.error(e);
+    document.getElementById('revisao-content').innerHTML = `<div class="empty-state"><p>${escapeHtml(e.message || 'Revisao indisponivel.')}</p></div>`;
   }
 }
 
@@ -2627,13 +2697,17 @@ function renderRevisao() {
 }
 
 async function responderRevisao(questaoId, resposta) {
+  if (state.reviewAnswerPending || state.revisaoRespostas[questaoId]) return;
+  state.reviewAnswerPending = true;
+  try {
   const fd = new FormData();
   fd.append('action', 'responder');
   fd.append('questao_id', questaoId);
   fd.append('resposta', resposta);
   
-  const r = await apiFetch(apiEndpoint('revisao'), { method: 'POST', body: fd });
+  const r = await apiFetch(apiEndpoint('revisao', 'action=responder'), { method: 'POST', body: fd });
   const d = await r.json();
+  if (!d.ok) throw new Error(d.erro || 'Nao foi possivel salvar a revisao.');
   
   if (d.ok) {
     state.revisaoRespostas[questaoId] = {
@@ -2644,8 +2718,9 @@ async function responderRevisao(questaoId, resposta) {
     };
     renderRevisao();
     await loadRevisaoStats();
-    verificarConquistas();
   }
+  } catch (e) { showToast('error', 'Revisao nao salva', e.message); }
+  finally { state.reviewAnswerPending = false; }
 }
 
 function navigateRevisao(dir) {
@@ -2667,11 +2742,12 @@ async function loadSimulados() {
     const r = await apiFetch(apiEndpoint('simulados', 'action=listar'));
     const d = await r.json();
     
+    if (!d.ok) throw new Error(d.erro || 'Catalogo de simulados indisponivel.');
     if (d.ok) {
       state.simulados = d.simulados || [];
       renderSimuladosList();
     }
-  } catch (e) {}
+  } catch (e) { document.getElementById('simulados-list').innerHTML = '<div class="empty-state"><p>' + escapeHtml(e.message || 'Simulados indisponiveis.') + '</p></div>'; }
 }
 
 function renderSimuladosList() {
@@ -2702,14 +2778,14 @@ function renderSimuladosList() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          ${s.total_questoes} questoes
+          ${s.disponivel === false ? `${s.questoes_disponiveis}/${s.total_questoes} disponiveis` : `${s.total_questoes} questoes`}
         </span>
         ${s.tentativas > 0 ? `<span class="badge badge-success">${s.tentativas}x feito</span>` : ''}
       </div>
       ${s.melhor_nota ? `<p style="font-size:0.85rem;color:var(--text-muted)">Melhor nota: <strong style="color:var(--green)">${s.melhor_nota}%</strong></p>` : ''}
       <div class="simulado-actions">
-        <button class="btn-primary btn-sm" onclick="iniciarSimulado(${Number(s.id) || 0})">
-          Iniciar
+        <button class="btn-primary btn-sm" ${s.disponivel === false ? 'disabled' : ''} onclick="iniciarSimulado(${Number(s.id) || 0})">
+          ${Number(s.tentativas) ? 'Reabrir resultado' : 'Iniciar ou continuar'}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
@@ -2720,37 +2796,38 @@ function renderSimuladosList() {
 }
 
 async function iniciarSimulado(id) {
-  const fd = new FormData();
-  fd.append('action', 'iniciar');
-  fd.append('simulado_id', id);
-  
-  const r = await apiFetch(apiEndpoint('simulados'), { method: 'POST', body: fd });
-  const d = await r.json();
-  
-  if (d.ok) {
-    state.simAtivo = {
-      tentativa_id: d.tentativa_id,
-      titulo: d.simulado.titulo,
-      duracao_min: d.simulado.duracao_min,
-      total_questoes: d.simulado.total_questoes
-    };
-    state.simQuestoes = d.questoes;
-    state.simRespostas = d.respostas;
-    state.simIdx = 0;
-    state.simTimerSec = 0;
-    state.simFinalizado = false;
-    state.simGabarito = null;
-    
+  if (state.simStarting) return;
+  state.simStarting = true;
+  try {
+    const fd = new FormData(); fd.append('simulado_id', id);
+    const r = await apiFetch(apiEndpoint('simulados', 'action=iniciar'), { method: 'POST', body: fd });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.erro || 'Simulado indisponivel.');
+    state.simAtivo = { tentativa_id: d.tentativa_id, ...d.simulado };
+    state.simQuestoes = d.questoes; state.simRespostas = d.respostas || {};
+    state.simIdx = 0; state.simTimerSec = d.tempo_seg || 0;
+    state.simFinalizado = d.finalizado; state.simGabarito = d.gabarito;
     document.getElementById('simulados-list').classList.add('hidden');
     document.getElementById('simulado-active').classList.remove('hidden');
-    document.getElementById('simulado-result').classList.add('hidden');
-    document.getElementById('simulado-question').classList.remove('hidden');
     document.getElementById('simulado-titulo').textContent = d.simulado.titulo;
-    
-    renderSimuladoDots();
-    renderSimuladoQuestion();
-    startSimuladoTimer();
-  }
+    document.getElementById('simulado-result').classList.toggle('hidden', !d.finalizado);
+    document.getElementById('simulado-question').classList.remove('hidden');
+    renderSimuladoDots(); renderSimuladoQuestion();
+    if (d.finalizado) { stopSimuladoTimer(); showSimuladoResult({ ...d.resultado, tempo_seg: d.tempo_seg }); }
+    else startSimuladoTimer();
+  } catch (e) { showToast('error', 'Simulado indisponivel', e.message); }
+  finally { state.simStarting = false; }
+}
+
+function showSimuladoResult(d) {
+  const pct = d.percentual;
+  document.getElementById('sim-res-icon').innerHTML = resultIcon(pct);
+  document.getElementById('sim-res-score').textContent = d.acertos + '/' + d.total;
+  document.getElementById('sim-res-feedback').textContent = pct >= 80 ? 'Excelente!' : pct >= 50 ? 'Bom trabalho!' : 'Continue praticando!';
+  document.getElementById('sim-res-acertos').textContent = d.acertos;
+  document.getElementById('sim-res-erros').textContent = d.erros;
+  document.getElementById('sim-res-tempo').textContent = formatTime(d.tempo_seg);
+  document.getElementById('simulado-result').classList.remove('hidden');
 }
 
 function startSimuladoTimer() {
@@ -2854,58 +2931,30 @@ function navigateSimulado(dir) {
 }
 
 async function responderSimulado(questaoId, resposta) {
-  const fd = new FormData();
-  fd.append('action', 'responder');
-  fd.append('tentativa_id', state.simAtivo.tentativa_id);
-  fd.append('questao_id', questaoId);
-  fd.append('resposta', resposta);
-  
-  const r = await apiFetch(apiEndpoint('simulados'), { method: 'POST', body: fd });
-  const d = await r.json();
-  
-  if (d.ok) {
+  if (state.simAnswerPending || state.simFinalizado) return;
+  state.simAnswerPending = true;
+  try {
+    const fd = new FormData(); fd.append('tentativa_id', state.simAtivo.tentativa_id);
+    fd.append('questao_id', questaoId); fd.append('resposta', resposta);
+    const r = await apiFetch(apiEndpoint('simulados', 'action=responder'), { method: 'POST', body: fd });
+    const d = await r.json(); if (!d.ok) throw new Error(d.erro || 'Resposta nao salva.');
     state.simRespostas[questaoId] = { marcada: resposta };
-    renderSimuladoDots();
-    renderSimuladoQuestion();
-    
-    if (state.simIdx < state.simQuestoes.length - 1) {
-      setTimeout(() => { navigateSimulado(1); }, 400);
-    }
-  }
+    renderSimuladoDots(); renderSimuladoQuestion();
+  } catch (e) { showToast('error', 'Resposta nao salva', e.message); }
+  finally { state.simAnswerPending = false; }
 }
 
 async function finalizarSimulado() {
-  if (!confirm('Finalizar o simulado?')) return;
-  
-  stopSimuladoTimer();
-  
-  const fd = new FormData();
-  fd.append('action', 'finalizar');
-  fd.append('tentativa_id', state.simAtivo.tentativa_id);
-  fd.append('tempo_seg', state.simTimerSec);
-  
-  const r = await apiFetch(apiEndpoint('simulados'), { method: 'POST', body: fd });
-  const d = await r.json();
-  
-  if (d.ok) {
-    state.simFinalizado = true;
-    state.simGabarito = d.gabarito;
-    
-    const pct = d.percentual;
-    const feedback = pct >= 80 ? 'Excelente!' : pct >= 50 ? 'Bom trabalho!' : 'Continue praticando!';
-    
-    document.getElementById('sim-res-icon').innerHTML = resultIcon(pct);
-    document.getElementById('sim-res-score').textContent = `${d.acertos}/${d.total}`;
-    document.getElementById('sim-res-feedback').textContent = feedback;
-    document.getElementById('sim-res-acertos').textContent = d.acertos;
-    document.getElementById('sim-res-erros').textContent = d.erros;
-    document.getElementById('sim-res-tempo').textContent = formatTime(d.tempo_seg);
-    
-    document.getElementById('simulado-question').classList.add('hidden');
-    document.getElementById('simulado-result').classList.remove('hidden');
-    
-    verificarConquistas();
-  }
+  if (state.simFinalizado || state.simFinishing || !confirm('Finalizar o simulado?')) return;
+  state.simFinishing = true;
+  try {
+    const fd = new FormData(); fd.append('tentativa_id', state.simAtivo.tentativa_id); fd.append('tempo_seg', state.simTimerSec);
+    const r = await apiFetch(apiEndpoint('simulados', 'action=finalizar'), { method: 'POST', body: fd });
+    const d = await r.json(); if (!d.ok) throw new Error(d.erro || 'Nao foi possivel finalizar.');
+    stopSimuladoTimer(); state.simFinalizado = true; state.simGabarito = d.gabarito;
+    renderSimuladoDots(); renderSimuladoQuestion(); showSimuladoResult(d);
+  } catch (e) { showToast('error', 'Simulado nao finalizado', e.message); }
+  finally { state.simFinishing = false; }
 }
 
 function voltarSimulados() {
@@ -2954,8 +3003,9 @@ async function loadEstatisticas() {
       setText('est-questoes-respondidas', g.total_questoes);
       setText('est-dias-estudados', d.dias_estudados);
       
-      const mat = d.por_materia?.matematica;
-      const por = d.por_materia?.portugues;
+      const subjects = Object.fromEntries(Object.entries(d.por_materia || {}).map(([key, value]) => [key.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(), value]));
+      const mat = subjects.matematica;
+      const por = subjects.portugues;
       document.getElementById('est-mat-pct').textContent = (mat?.percentual || 0) + '%';
       document.getElementById('est-por-pct').textContent = (por?.percentual || 0) + '%';
       
@@ -3173,12 +3223,14 @@ function abrirRedacao(id) {
 }
 
 async function salvarRedacao() {
+  if (state.redacaoPending) return;
   const tema = document.getElementById('redacao-tema').value.trim();
   const texto = document.getElementById('redacao-texto').value.trim();
   if (!tema || !texto) {
     showToast('warning', 'Redacao incompleta', 'Informe tema e texto para salvar.');
     return;
   }
+  state.redacaoPending = true;
   try {
     const r = await apiFetch(apiEndpoint('redacao', 'action=salvar'), {
       method: 'POST',
@@ -3189,14 +3241,14 @@ async function salvarRedacao() {
     if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao foi possivel salvar.');
     state.redacaoAtualId = d.redacao_id || state.redacaoAtualId;
     await loadRedacoes();
-    verificarConquistas();
     showToast('success', 'Redacao salva', d.persistido === false ? 'Rascunho mantido nesta sessao; aplique a migration para historico.' : 'Historico atualizado.');
   } catch (e) {
     showToast('error', 'Redacao nao salva', e.message || 'Tente novamente.');
-  }
+  } finally { state.redacaoPending = false; }
 }
 
 async function analisarRedacao() {
+  if (state.redacaoPending) return;
   const tema = document.getElementById('redacao-tema').value.trim();
   const texto = document.getElementById('redacao-texto').value.trim();
   const status = document.getElementById('redacao-status');
@@ -3205,6 +3257,7 @@ async function analisarRedacao() {
     return;
   }
   if (status) status.textContent = 'Gerando analise orientativa...';
+  state.redacaoPending = true;
   try {
     const r = await apiFetch(apiEndpoint('redacao', 'action=analisar'), {
       method: 'POST',
@@ -3212,17 +3265,19 @@ async function analisarRedacao() {
       body: JSON.stringify({ redacao_id: state.redacaoAtualId, tema, texto })
     });
     const d = await r.json();
-    if (!r.ok || !d.ok) throw new Error(d.erro || 'Nao conseguimos analisar agora.');
+    if (!r.ok || !d.ok || !d.analise || typeof d.analise.resumo !== 'string') throw new Error(d.erro || 'Nao conseguimos analisar agora.');
     state.redacaoAtualId = d.redacao_id || state.redacaoAtualId;
     renderRedacaoAnalise(d.analise);
     await loadRedacoes();
-    verificarConquistas();
-    if (status) status.textContent = 'Analise orientativa pronta. Estimativa nao oficial.';
-    showToast('success', 'Analise pronta', 'Comentarios por competencia foram gerados como apoio ao estudo.');
+    const origem = d.origem || d.analise.origem;
+    const mensagem = origem === 'fallback' ? 'Orientacao local pronta. IA indisponivel. Estimativa nao oficial.' : 'Analise com IA pronta. Estimativa nao oficial.';
+    if (status) status.textContent = mensagem;
+    const aviso = origem === 'fallback' ? (d.reutilizado ? 'Orientacao local recuperada. Estimativa nao oficial.' : 'Orientacao local salva. Estimativa nao oficial.') : mensagem;
+    showToast(origem === 'fallback' ? 'warning' : 'success', 'Analise pronta', aviso);
   } catch (e) {
     if (status) status.textContent = 'Nao foi possivel analisar agora.';
     showToast('error', 'Analise indisponivel', e.message || 'Tente novamente em alguns minutos.');
-  }
+  } finally { state.redacaoPending = false; }
 }
 
 function renderRedacaoAnalise(analise) {
@@ -3244,7 +3299,7 @@ function renderRedacaoAnalise(analise) {
   el.className = 'structured-content';
   el.innerHTML = `
     <div class="notice-card warning compact-alert">
-      <p>Analise orientativa. Nao substitui corretor humano nem correcao oficial.</p>
+      <p>${analise.origem === 'fallback' ? 'Orientacao local. IA indisponivel. ' : ''}Analise orientativa. Nao substitui corretor humano nem correcao oficial.</p>
     </div>
     <p>${escapeHtml(analise.resumo || analise.aviso || '')}</p>
     <div>

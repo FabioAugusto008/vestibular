@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../helpers/helpers.php';
 require_once __DIR__ . '/../services/ai/estudaiService.php';
+require_once __DIR__ . '/../services/dailyQuestions.php';
 
 requireLogin();
 header('Content-Type: application/json; charset=utf-8');
@@ -38,6 +39,10 @@ function diagnosticoPerfil(PDO $db, int $uid): ?array {
         'preferencia_estudo' => $row['preferencia_estudo'] ?? 'misto',
         'meta_semanal' => $row['meta_semanal'] ?? '',
         'notificacoes' => !empty($row['notificacoes']),
+        'materias_base' => diagnosticoDecodeList($row['materias_base_json'] ?? ''),
+        'disponibilidade' => diagnosticoDecodeList($row['disponibilidade_json'] ?? ''),
+        'reforcos' => diagnosticoDecodeList($row['reforcos_json'] ?? ''),
+        'onboarding_completo' => !empty($row['onboarding_completo']),
     ];
 }
 
@@ -74,9 +79,7 @@ function diagnosticoRegistrarHistorico(PDO $db, int $uid, array $perfil, array $
     $usage = $resultado['usage'] ?? [];
     $status = ($resultado['origem'] ?? '') === 'ia' ? 'sucesso' : 'erro';
     $erro = $status === 'erro' ? sanitizeTextValue($resultado['erro_tecnico'] ?? ($resultado['erro'] ?? ''), 600) : null;
-    $entradaResumo = 'Objetivo: ' . ($perfil['objetivo'] ?? 'nao definido') .
-        '; horas/dia: ' . ($perfil['horas_dia'] ?? 'n/a') .
-        '; dificuldades: ' . implode(', ', array_slice($perfil['dificuldades'] ?? [], 0, 5));
+    $entradaResumo = 'perfil:' . hash('sha256', jsonEncodeSafe($perfil));
 
     $params = [
         ':usuario_id' => $uid,
@@ -117,7 +120,45 @@ function diagnosticoRegistrarHistorico(PDO $db, int $uid, array $perfil, array $
     $stmt->execute($params);
 }
 
+function diagnosticoGerarOuRecuperar(PDO $db, int $uid, ?callable $transport = null): array {
+    estudaiRequireTestDatabase($db);
+    $db->beginTransaction();
+    try {
+        questionLockUser($db, $uid);
+        $perfil = diagnosticoPerfil($db, $uid);
+        if (!$perfil || empty($perfil['onboarding_completo'])) {
+            questionFlowFail('Complete o onboarding antes do diagnostico.', 400);
+        }
+        $fingerprint = 'perfil:' . hash('sha256', jsonEncodeSafe($perfil));
+        $stmt = $db->prepare("SELECT resposta_json FROM ia_historico WHERE usuario_id = ? AND tipo = 'diagnostico' AND entrada_resumo = ? AND status = 'sucesso' ORDER BY id DESC LIMIT 1");
+        $stmt->execute([$uid, $fingerprint]);
+        $previous = $stmt->fetchColumn();
+        if ($previous) {
+            $result = json_decode($previous, true, 32, JSON_THROW_ON_ERROR);
+            $db->commit();
+            return $result + ['reutilizado' => true, 'persistido' => true];
+        }
+        rateLimitGuard('diagnostico_gerar', 8, 3600);
+        $result = estudaiGerarDiagnostico($perfil, $transport);
+        if (empty($result['ok'])) {
+            $db->rollBack();
+            return ['ok' => false, 'origem' => 'indisponivel', 'erro' => $result['erro'], 'categoria' => $result['categoria'] ?? 'unavailable'];
+        }
+        diagnosticoRegistrarHistorico($db, $uid, $perfil, $result);
+        $db->commit();
+        return [
+            'ok' => true, 'origem' => 'ia', 'diagnostico' => $result['diagnostico'],
+            'persistido' => true, 'reutilizado' => false,
+        ];
+    } catch (Throwable $error) {
+        if ($db->inTransaction()) $db->rollBack();
+        throw $error;
+    }
+}
+
 try {
+    [$action, $diagnosticPayload] = questionFlowAction(['GET' => ['status', 'carregar_ultimo'], 'POST' => ['gerar']]);
+    beginDashboardReadOnlyGet($db, ['status', 'carregar_ultimo']);
     if (!dbTableExists($db, 'estudo_perfis')) {
         jsonResponse(['erro' => 'Banco incompleto. Aplique database/schema.sql.'], 503);
     }
@@ -145,24 +186,9 @@ try {
         case 'gerar':
             requirePost();
             validateCsrfToken();
-            rateLimitGuard('diagnostico_gerar', 8, 3600);
 
-            $perfil = diagnosticoPerfil($db, $uid);
-            if (!$perfil) {
-                jsonResponse(['erro' => 'Complete o perfil de estudo antes de gerar o diagnostico.'], 400);
-            }
-
-            $resultado = estudaiGerarDiagnostico($perfil);
-            diagnosticoRegistrarHistorico($db, $uid, $perfil, $resultado);
-            if (empty($resultado['ok'])) {
-                jsonResponse(['erro' => $resultado['erro'] ?? 'Nao foi possivel gerar o diagnostico agora.'], 503);
-            }
-
-            jsonResponse([
-                'ok' => true,
-                'origem' => $resultado['origem'] ?? 'ia',
-                'diagnostico' => $resultado['diagnostico'] ?? [],
-            ]);
+            $resultado = diagnosticoGerarOuRecuperar($db, $uid);
+            jsonResponse($resultado, empty($resultado['ok']) ? 503 : 200);
             break;
 
         default:
@@ -170,15 +196,5 @@ try {
     }
 } catch (Throwable $e) {
     logTechnicalError('diagnostico_api_error', $e);
-    try {
-        if (dbTableExists($db, 'ia_historico')) {
-            $stmt = $db->prepare('
-                INSERT INTO ia_historico (usuario_id, provider, modelo, tipo, entrada_resumo, status, erro)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ');
-            $stmt->execute([$uid, 'openrouter', null, 'diagnostico', 'Falha ao gerar diagnostico', 'erro', sanitizeTextValue($e->getMessage(), 600)]);
-        }
-    } catch (Throwable $ignored) {
-    }
-    jsonResponse(['erro' => 'Nao foi possivel gerar o diagnostico agora.'], 500);
+    jsonResponse(['erro' => 'Nao foi possivel gerar o diagnostico agora.'], $e instanceof QuestionFlowError ? $e->getCode() : 503);
 }

@@ -10,6 +10,10 @@ date_default_timezone_set('America/Sao_Paulo');
 $db = getDB();
 $uid = currentUserId();
 $action = $_GET['action'] ?? $_POST['action'] ?? 'mes';
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+    jsonResponse(['erro' => 'Operacao de calendario nao autorizada nesta etapa.'], 403);
+}
+beginDashboardReadOnlyGet($db, ['mes', 'ano', 'dia', 'eventos']);
 
 function calendarioValidDate($value): string {
     $value = sanitizeTextValue($value, 10);
@@ -22,7 +26,7 @@ function calendarioValidDate($value): string {
 
 function calendarioValidMonth($value): string {
     $value = sanitizeTextValue($value ?: date('Y-m'), 7);
-    if (!preg_match('/^\d{4}-\d{2}$/', $value)) {
+    if (!preg_match('/^\d{4}-(?:0[1-9]|1[0-2])$/', $value)) {
         jsonResponse(['erro' => 'Mes invalido. Use YYYY-MM.'], 400);
     }
     return $value;
@@ -30,9 +34,13 @@ function calendarioValidMonth($value): string {
 
 function calendarioMapEvento(array $row): array {
     $metadata = [];
+    if (!empty($row['tarefa_contexto_json'])) {
+        $context = json_decode((string)$row['tarefa_contexto_json'], true);
+        $metadata = is_array($context) ? $context : [];
+    }
     if (!empty($row['metadata_json'])) {
         $decoded = json_decode((string)$row['metadata_json'], true);
-        $metadata = is_array($decoded) ? $decoded : [];
+        $metadata = array_replace($metadata, is_array($decoded) ? $decoded : []);
     }
     $status = $row['status'] ?? 'pendente';
     if ($status === 'pendente' && !empty($row['data_evento']) && $row['data_evento'] < date('Y-m-d')) {
@@ -140,7 +148,8 @@ function calendarioSyncTarefas(PDO $db, int $uid): void {
 }
 
 function calendarioFetch(PDO $db, int $uid, string $where, array $params): array {
-    calendarioSyncTarefas($db, $uid);
+    // Weekly creation already persists events with tasks in one transaction.
+    // Opening the calendar must not materialize or resynchronize records.
     $planFilter = '';
     if (
         dbTableExists($db, 'planos_estudo')
@@ -161,7 +170,13 @@ function calendarioFetch(PDO $db, int $uid, string $where, array $params): array
         ";
     }
     $stmt = $db->prepare("
-        SELECT *
+        SELECT eventos_calendario_estudai.*,
+               (SELECT JSON_OBJECT('materia', t.materia, 'tipo_tarefa', t.tipo,
+                                   'tempo_estimado', t.tempo_estimado, 'prioridade', t.prioridade)
+                FROM tarefas_estudo t
+                WHERE t.id = eventos_calendario_estudai.tarefa_id
+                  AND t.usuario_id = eventos_calendario_estudai.usuario_id
+                LIMIT 1) AS tarefa_contexto_json
         FROM eventos_calendario_estudai
         WHERE usuario_id = ? {$where} {$planFilter}
         ORDER BY data_evento ASC, hora_inicio ASC, id ASC
@@ -209,6 +224,7 @@ try {
         case 'eventos':
             $inicio = calendarioValidDate($_GET['inicio'] ?? date('Y-m-01'));
             $fim = calendarioValidDate($_GET['fim'] ?? date('Y-m-d'));
+            if ($fim < $inicio) jsonResponse(['erro' => 'Intervalo de calendario invalido.'], 400);
             jsonResponse([
                 'ok' => true,
                 'eventos' => calendarioFetch($db, $uid, 'AND data_evento BETWEEN ? AND ?', [$inicio, $fim]),
